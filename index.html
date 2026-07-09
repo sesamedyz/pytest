@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python 少儿编程练习</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(180deg, #f8fbff 0%, #e1f1ff 100%);
+      color: #1a2a4a;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      padding: 50px 20px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 3rem;
+      color: #0d3f92;
+    }
+    header p {
+      margin: 12px auto 0;
+      font-size: 1.1rem;
+      color: #3d5274;
+      max-width: 760px;
+      line-height: 1.7;
+    }
+    .btn-primary {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 14px 30px;
+      background: #2f7cff;
+      color: #fff;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(47, 124, 255, 0.25);
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-top: 40px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 14px 30px rgba(50, 84, 141, 0.08);
+      border: 1px solid rgba(47, 124, 255, 0.08);
+    }
+    .card h2 {
+      margin-top: 0;
+      color: #0f3a82;
+      font-size: 1.35rem;
+    }
+    .card p {
+      color: #4a5d81;
+      line-height: 1.7;
+    }
+    .section-title {
+      margin-top: 60px;
+      margin-bottom: 24px;
+      font-size: 2rem;
+      color: #163765;
+      text-align: center;
+    }
+    .examples {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .example-item {
+      background: #f3f8ff;
+      border-radius: 18px;
+      padding: 22px;
+      border: 1px solid #d8e7ff;
+    }
+    .example-item h3 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #1a3d7a;
+    }
+    .example-item code {
+      display: block;
+      margin-top: 12px;
+      padding: 14px;
+      background: #eef5ff;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-family: Consolas, "Courier New", monospace;
+      color: #092d6c;
+    }
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      padding: 24px 10px;
+      color: #5c6b8c;
+      font-size: 0.95rem;
+    }
+    @media (max-width: 900px) {
+      .container {
+        padding: 16px;
+      }
+      .section-title {
+        font-size: 1.75rem;
+        margin-top: 40px;
+      }
+      .features,
+      .examples {
+        gap: 16px;
+      }
+      .card,
+      .example-item {
+        padding: 18px;
+      }
+    }
+    @media (max-width: 640px) {
+      header {
+        padding: 36px 12px;
+      }
+      header h1 {
+        font-size: 2.2rem;
+      }
+      header p {
+        font-size: 1rem;
+      }
+      .btn-primary {
+        width: 100%;
+        padding: 14px;
+      }
+      .features,
+      .examples {
+        grid-template-columns: 1fr;
+      }
+      .card,
+      .example-item {
+        padding: 18px;
+      }
+      .example-item code {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Python 少儿编程练习</h1>
+      <p>欢迎来到孩子们的 Python 编程首页，这里有趣味练习、基础项目和图形化示例，帮助小朋友从零开始快乐学习编程。</p>
+      <a href="#practice" class="btn-primary">开始练习</a>
+    </header>
+
+    <section>
+      <h2 class="section-title">适合少儿的 Python 编程练习</h2>
+      <div class="features">
+        <div class="card">
+          <h2>简单易懂</h2>
+          <p>每个练习都专为孩子设计，用短小、清晰的说明引导学生一步步完成编程任务。</p>
+        </div>
+        <div class="card">
+          <h2>趣味项目</h2>
+          <p>从动画故事、小游戏到数学挑战，学 Python 的过程充满想象力和成就感。</p>
+        </div>
+        <div class="card">
+          <h2>可视化结果</h2>
+          <p>通过颜色、图形和文字展示程序效果，让孩子更直观地理解代码运行结果。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="practice">
+      <h2 class="section-title">练习示例</h2>
+      <div class="examples">
+        <div class="example-item">
+          <h3>1. 打印问候语</h3>
+          <p>学习如何用 Python 显示一句简单的问候。</p>
+          <code>print("你好，Python 小朋友！")</code>
+        </div>
+        <div class="example-item">
+          <h3>2. 计算喜欢的数字</h3>
+          <p>让孩子尝试把数字相加，认识变量和数学运算。</p>
+          <code>num = 7
+result = num + 3
+print(result)</code>
+        </div>
+        <div class="example-item">
+          <h3>3. 简单猜数字</h3>
+          <p>用输入和条件判断创建一个小游戏。</p>
+          <code>answer = 8
+guess = int(input("猜一个数字："))
+if guess == answer:
+    print("太棒了，答对了！")
+else:
+    print("再试一次吧！")</code>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">快速开始步骤</h2>
+      <div class="features">
+        <div class="card">
+          <h2>1. 安装 Python</h2>
+          <p>在电脑上安装 Python，推荐使用最新稳定版本。也可以使用在线编程平台直接练习。</p>
+        </div>
+        <div class="card">
+          <h2>2. 运行第一个程序</h2>
+          <p>打开编辑器，复制示例代码，按运行按钮查看输出结果。</p>
+        </div>
+        <div class="card">
+          <h2>3. 继续探索</h2>
+          <p>尝试修改示例、增加新功能，让编程变成创造故事和游戏的工具。</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Python 少儿编程练习首页 · 让孩子从趣味中发现编程的魔法。</p>
+    </footer>
+  </div>
+</body>
+</html>
