@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python 知识测试</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 30px 16px;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    .header p {
+      margin-top: 8px;
+      font-size: 1rem;
+      opacity: .85;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.12);
+      margin-bottom: 20px;
+    }
+
+    .progress-wrap {
+      margin-bottom: 28px;
+    }
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: .85rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e9ecef;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 4px;
+      transition: width .4s ease;
+    }
+
+    .question-block {
+      margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px dashed #e9ecef;
+    }
+    .question-block:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .question-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333;
+      line-height: 1.7;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 8px;
+    }
+    .q-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      border-radius: 8px;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: .95rem;
+      color: #444;
+    }
+    .option-label:hover {
+      border-color: #667eea;
+      background: #f5f4ff;
+    }
+    .option-label input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #667eea;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .option-label.wrong {
+      border-color: #dc3545;
+      background: #fff5f5;
+      color: #721c24;
+    }
+    .option-label.correct-hint {
+      border-color: #28a745;
+      background: #f0fff4;
+      color: #155724;
+    }
+
+    .answer-hint {
+      margin-top: 10px;
+      font-size: .88rem;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: none;
+    }
+    .answer-hint.show { display: block; }
+    .answer-hint.ok { background: #d4edda; color: #155724; }
+    .answer-hint.err { background: #f8d7da; color: #721c24; }
+
+    .explanation {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(0,0,0,.15);
+      font-size: .85rem;
+      line-height: 1.6;
+      color: inherit;
+      opacity: .85;
+    }
+
+    .btn-answer {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #fff;
+      color: #dc3545;
+      font-size: 1rem;
+      font-weight: 700;
+      border: 2px solid #dc3545;
+      border-radius: 12px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: background .2s, color .2s;
+      margin-top: 10px;
+    }
+    .btn-answer:hover { background: #dc3545; color: #fff; }
+    .btn-answer.hidden { display: none; }
+
+    .review-question-hidden {
+      display: none;
+    }
+    .review-question-hidden.show {
+      display: block;
+    }
+
+    .btn-all {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #fff;
+      color: #667eea;
+      font-size: 1rem;
+      font-weight: 700;
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: background .2s, color .2s;
+      margin-top: 12px;
+    }
+    .btn-all:hover { background: #667eea; color: #fff; }
+    .btn-all.hidden { display: none; }
+
+    .btn-submit {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: opacity .2s, transform .1s;
+      margin-top: 10px;
+    }
+    .btn-submit:hover { opacity: .92; transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    #result-section { display: none; }
+
+    .score-circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: conic-gradient(#667eea var(--pct, 0%), #e9ecef var(--pct, 0%));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .score-circle::after {
+      content: '';
+      width: 110px;
+      height: 110px;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+    }
+    .score-text {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    .score-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #667eea;
+    }
+    .score-label { font-size: .8rem; color: #888; }
+
+    .result-summary {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .result-summary h2 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    .result-summary p {
+      color: #666;
+      font-size: .95rem;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 28px;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-num {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    .stat-num.green { color: #28a745; }
+    .stat-num.red { color: #dc3545; }
+    .stat-label { font-size: .82rem; color: #888; }
+
+    .btn-retry {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #fff;
+      color: #667eea;
+      font-size: 1rem;
+      font-weight: 700;
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: background .2s, color .2s;
+    }
+    .btn-retry:hover { background: #667eea; color: #fff; }
+
+    code {
+      font-family: "Consolas", "Courier New", monospace;
+      background: #f0f0f0;
+      color: #c0392b;
+      border-radius: 5px;
+      padding: 2px 7px;
+      font-size: .92em;
+      border: 1px solid #e0e0e0;
+      white-space: nowrap;
+    }
+
+    pre {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-left: 4px solid #667eea;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: .92em;
+      color: #333;
+      margin: 10px 0 14px;
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: inherit;
+      font-size: 1em;
+    }
+
+    .warn {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffc107;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: .9rem;
+      display: none;
+    }
+    .warn.show { display: block; }
+
+    @media (max-width: 480px) {
+      .card { padding: 20px; }
+      .header h1 { font-size: 1.5rem; }
+      .stat-row { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🐍 Python 知识测试</h1>
+    <p>共 <span id="stat-total-header">15</span> 题 · 单选题 · 答完后点击提交查看成绩</p>
+  </div>
+
+  <!-- 答题区 -->
+  <div id="quiz-section">
+    <div class="card">
+      <div class="progress-wrap">
+        <div class="progress-info">
+          <span>答题进度</span>
+          <span id="progress-text">0 / 15</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="warn" id="warn-msg">⚠️ 请完成所有题目再提交！</div>
+
+      <div id="questions-container"></div>
+
+      <button class="btn-submit" id="btn-submit" onclick="submitQuiz()">提 交 答 卷</button>
+    </div>
+  </div>
+
+  <!-- 成绩区 -->
+  <div id="result-section">
+    <div class="card">
+      <div class="result-summary">
+        <h2 id="result-title">🎉 答题完成！</h2>
+        <p id="result-desc"></p>
+      </div>
+      <div class="score-circle" id="score-circle">
+        <div class="score-text">
+          <div class="score-number" id="score-number">0</div>
+          <div class="score-label">分</div>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="stat-num green" id="stat-correct">0</div>
+          <div class="stat-label">答对</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num red" id="stat-wrong">0</div>
+          <div class="stat-label">答错</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" style="color:#667eea" id="stat-total">15</div>
+          <div class="stat-label">总题数</div>
+        </div>
+      </div>
+      <button class="btn-retry" onclick="retryQuiz()">🔄 重新答题</button>
+    </div>
+
+    <!-- 答题详情 -->
+    <div class="card" id="review-card">
+      <h3 style="margin-bottom:20px;color:#333">📋 答题详情</h3>
+      <div id="review-container"></div>
+      <button class="btn-answer hidden" id="btn-show-answers" onclick="showWrongAnswers()">🔍 查看错题答案</button>
+      <button class="btn-all hidden" id="btn-show-all" onclick="showAllAnswers()">📖 查看全部答案</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== 题目数据 ====================
+const questions = [
+  {
+    id: 1,
+    text: "设置画笔 pen 颜色为红色的方法",
+    options: [
+      "A. <code>pen.fillcolor('red')</code>",
+      "B. <code>pen.pencolor('red')</code>",
+      "C. <code>pen.fillcolor(red)</code>",
+      "D. <code>pen.pencolor(red)</code>"
+    ],
+    answer: "B",
+    explanation: "<code>pencolor()</code> 用于设置画笔（线条）颜色，参数必须是字符串格式如 <code>'red'</code>。<code>fillcolor()</code> 是设置填充颜色，不是画笔颜色。"
+  },
+  {
+    id: 2,
+    text: "Python 中重置画笔的方法是",
+    options: [
+      "A. <code>reset()</code>方法",
+      "B. <code>rest()</code>方法",
+      "C. <code>ret()</code>方法",
+      "D. <code>replay()</code>方法"
+    ],
+    answer: "A",
+    explanation: "Turtle 库中 <code>reset()</code> 方法可以清空画布并将画笔状态重置到初始位置和方向。"
+  },
+  {
+    id: 3,
+    text: "绘制圆形的方法是",
+    options: [
+      "A. <code>cirrcle()</code>",
+      "B. <code>circle()</code>",
+      "C. <code>turtle.circle()</code>",
+      "D. <code>turtle.cirrcle()</code>"
+    ],
+    answer: "C",
+    explanation: "在 Turtle 绘图中，绘制圆形使用 <code>turtle.circle(radius)</code> 方法，其中 radius 参数表示圆的半径。选项 A 和 D 存在拼写错误（多了个 r）。"
+  },
+  {
+    id: 4,
+    text: "执行以下代码后，画笔 pen 最后是什么颜色<br><pre><code>pen.pencolor('red')\npen.pencolor('green')\npen.pencolor('yellow')\npen.pencolor('blue')</code></pre>",
+    options: [
+      "A. 红色",
+      "B. 绿色",
+      "C. 蓝色",
+      "D. 黄色"
+    ],
+    answer: "C",
+    explanation: "<code>pencolor()</code> 每次调用都会覆盖之前的颜色设置。代码按顺序执行了四次赋值，最终颜色由最后一次赋值决定，即蓝色（<code>'blue'</code>）。"
+  },
+  {
+    id: 5,
+    text: "执行 <code>for i in range(5):</code> 语句，哪个值在不断变化",
+    options: [
+      "A. for",
+      "B. i",
+      "C. in",
+      "D. range"
+    ],
+    answer: "B",
+    explanation: "在 <code>for</code> 循环中，循环变量（此处为 <code>i</code>）会在每次迭代时被赋值为 <code>range()</code> 序列中的下一个值。<code>for</code>、<code>in</code>、<code>range</code> 都是固定的关键字或函数名，不会变化。"
+  },
+  {
+    id: 6,
+    text: "执行 <code>for i in range(3):</code> 语句，输出 i 的值分别是",
+    options: [
+      "A. 0、1、2、3、4",
+      "B. 0、1、2、3",
+      "C. 0、1、2",
+      "D. 1、2、3"
+    ],
+    answer: "C",
+    explanation: "<code>range(n)</code> 生成从 <code>0</code> 到 <code>n-1</code> 的整数序列。<code>range(3)</code> 产生的序列是 0、1、2，共 3 个值。注意不包含 3 本身。"
+  },
+  {
+    id: 7,
+    text: "下列关于 for 循环语句书写正确的是",
+    options: [
+      "A. <code>for i in range(3):</code>",
+      "B. <code>for i in range(3)</code>",
+      "C. <code>for i in range('3'):</code>",
+      "D. <code>for i in range('3')</code>"
+    ],
+    answer: "A",
+    explanation: "<code>for</code> 循环的正确语法要求：① 行末必须有冒号 <code>:</code>；② <code>range()</code> 的参数应该是整数，不能是字符串。<code>range('3')</code> 会报 TypeError。"
+  },
+  {
+    id: 8,
+    text: "<code>for i in range(3, 6):</code> 中，i 的取值范围是",
+    options: [
+      "A. 大于等于3，小于等于6",
+      "B. 大于3，小于等于6",
+      "C. 大于3，小于6",
+      "D. 大于等于3，小于6"
+    ],
+    answer: "D",
+    explanation: "<code>range(start, stop)</code> 生成的序列包含 start（起点），但不包含 stop（终点）。因此 <code>range(3, 6)</code> 产生 [3, 4, 5]，即大于等于 3 且小于 6。"
+  },
+  {
+    id: 9,
+    text: "以下哪行代码可以设置画板背景颜色为 red",
+    options: [
+      "A. <code>turtle.color('red')</code>",
+      "B. <code>python.color('red')</code>",
+      "C. <code>pen.color('red')</code>",
+      "D. <code>turtle.bgcolor('red')</code>"
+    ],
+    answer: "D",
+    explanation: "<code>turtle.bgcolor(color)</code> 专门用于设置画板（窗口）的背景颜色。<code>turtle.color()</code> 同时设置画笔颜色和填充颜色，<code>python</code> 不是有效的绘图对象。"
+  },
+  {
+    id: 10,
+    text: "编写代码，在 0~100 之间获取随机整数",
+    options: [
+      "A. <code>num=random.randint(0,100)</code>",
+      "B. <code>num=random.randint(1,100)</code>",
+      "C. <code>num=random.randint(0,99)</code>",
+      "D. <code>num=random.randint(1,99)</code>"
+    ],
+    answer: "A",
+    explanation: "<code>random.randint(a, b)</code> 返回 a 到 b 之间的随机整数（包含 a 和 b）。要获取 0~100 的随机整数（含两端），应使用 <code>random.randint(0, 100)</code>。"
+  },
+  {
+    id: 11,
+    text: "在使用 random 模块的函数之前，需要先做什么",
+    options: [
+      "A. 直接使用即可，不需要任何操作",
+      "B. 执行 <code>import random</code>",
+      "C. 执行 <code>from random import *</code> 或 <code>import random</code>",
+      "D. 执行 <code>include random</code>"
+    ],
+    answer: "C",
+    explanation: "Python 使用模块前必须先导入。<code>import random</code> 或 <code>from random import *</code> 都可以导入 random 模块。<code>include</code> 不是 Python 关键字（那是 C 语言的写法）。"
+  },
+  {
+    id: 12,
+    text: "<code>random.random()</code> 函数返回值的范围是",
+    options: [
+      "A. 0 ~ 1（包含 0 和 1）",
+      "B. 0 ~ 1（包含 0，不包含 1）",
+      "C. -1 ~ 1",
+      "D. 0 ~ 100"
+    ],
+    answer: "B",
+    explanation: "<code>random.random()</code> 返回一个 [0.0, 1.0) 范围内的随机浮点数——即大于等于 0.0，小于 1.0（不包含 1.0）。如需生成其他范围的随机小数，可用公式进行缩放。"
+  },
+  {
+    id: 13,
+    text: "下列代码运行后，<code>num</code> 不可能出现的值是<br><pre><code>import random\nnum = random.randint(1, 10)</code></pre>",
+    options: [
+      "A. 1",
+      "B. 5",
+      "C. 10",
+      "D. 0"
+    ],
+    answer: "D",
+    explanation: "<code>random.randint(1, 10)</code> 返回 1 到 10 之间（含 1 和 10）的随机整数。可能的值有：1, 2, 3, 4, 5, 6, 7, 8, 9, 10。0 不在这个范围内，所以不可能出现。"
+  },
+  {
+    id: 14,
+    text: "执行以下代码后，num 的值可能是<br><pre><code>import random\nnum = random.randint(1, 5) + random.randint(1, 5)</code></pre>",
+    options: [
+      "A. 只能是 2~10 之间的整数",
+      "B. 只能是 1~5 之间的整数",
+      "C. 只能是 2~10 之间的小数",
+      "D. 只能是 1~10 之间的整数"
+    ],
+    answer: "A",
+    explanation: "两个 <code>random.randint(1, 5)</code> 各自返回 1~5 的随机整数（如 3 和 4）。它们相加后最小值为 1+1=2，最大值为 5+5=10，且两个整数相加结果仍是整数，所以 num 只能是 2~10 之间的整数。"
+  },
+  {
+    id: 15,
+    text: "<code>random.uniform(1, 5)</code> 可能返回以下哪个值",
+    options: [
+      "A. 3",
+      "B. 3.14159",
+      "C. 5.0",
+      "D. 以上都有可能"
+    ],
+    answer: "D",
+    explanation: "<code>random.uniform(a, b)</code> 返回 a 到 b 之间的随机浮点数（可能包含 a 或 b）。它既可以返回整数（如 3），也可以返回小数（如 3.14159），还可能返回端点值（如 5.0）。所以以上都可能。"
+  }
+];
+
+// ==================== 渲染题目 ====================
+function renderQuestions() {
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+
+  questions.forEach((q, idx) => {
+    const block = document.createElement('div');
+    block.className = 'question-block';
+    block.id = `q-block-${q.id}`;
+
+    const optionsHtml = q.options.map((opt, i) => {
+      const letter = ['A','B','C','D'][i];
+      return `
+        <label class="option-label" id="opt-${q.id}-${letter}">
+          <input type="radio" name="q${q.id}" value="${letter}" onchange="onOptionChange(${q.id})">
+          ${opt}
+        </label>`;
+    }).join('');
+
+    const displayNum = idx + 1;
+    block.innerHTML = `
+      <div class="question-title">
+        <span class="q-num">${displayNum}</span>
+        <span>${q.text}（&nbsp;&nbsp;&nbsp;&nbsp;）</span>
+      </div>
+      <div class="options">${optionsHtml}</div>
+      <div class="answer-hint" id="hint-${q.id}"></div>
+    `;
+    container.appendChild(block);
+  });
+
+  updateProgress();
+}
+
+// ==================== 进度更新 ====================
+function onOptionChange(qId) {
+  updateProgress();
+}
+
+function countAnswered() {
+  return questions.filter(q => {
+    const sel = document.querySelector(`input[name="q${q.id}"]:checked`);
+    return sel !== null;
+  }).length;
+}
+
+function updateProgress() {
+  const done = countAnswered();
+  const total = questions.length;
+  document.getElementById('progress-text').textContent = `${done} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${(done / total * 100).toFixed(1)}%`;
+}
+
+// ==================== 提交 ====================
+function submitQuiz() {
+  const answered = countAnswered();
+  const total = questions.length;
+
+  if (answered < total) {
+    const warn = document.getElementById('warn-msg');
+    warn.classList.add('show');
+    warn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  document.getElementById('warn-msg').classList.remove('show');
+
+  let correct = 0;
+  const details = [];
+
+  questions.forEach(q => {
+    const sel = document.querySelector(`input[name="q${q.id}"]:checked`);
+    const userAns = sel ? sel.value : null;
+    const isCorrect = userAns === q.answer;
+    if (isCorrect) correct++;
+    details.push({ q, userAns, isCorrect });
+  });
+
+  const score = Math.round(correct / total * 100);
+
+  showResult(score, correct, total - correct, details);
+}
+
+function showResult(score, correctCount, wrongCount, details) {
+  document.getElementById('quiz-section').style.display = 'none';
+  const resultSec = document.getElementById('result-section');
+  resultSec.style.display = 'block';
+
+  document.getElementById('score-number').textContent = score;
+  document.getElementById('score-circle').style.setProperty('--pct', `${score}%`);
+
+  let title, desc;
+  if (score === 100) {
+    title = '🎉 满分！太厉害了！';
+    desc = '你完全掌握了这些知识，继续保持！';
+  } else if (score >= 85) {
+    title = '🌟🌟 非常棒！';
+    desc = '答题很不错，还有一点小错误，再复习一下吧！';
+  } else if (score >= 70) {
+    title = '👍 良好！';
+    desc = '基础掌握得不错，继续努力！';
+  } else if (score >= 60) {
+    title = '😊 还不错，继续加油！';
+    desc = '刚刚过关，多练习巩固一下吧！';
+  } else {
+    title = '💪 加油！继续努力！';
+    desc = '还需要多复习哦，不要气馁！';
+  }
+
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-desc').textContent = desc;
+  document.getElementById('stat-correct').textContent = correctCount;
+  document.getElementById('stat-wrong').textContent = wrongCount;
+
+  renderReview(details);
+
+  resultSec.scrollIntoView({ behavior: 'smooth' });
+}
+
+function renderReview(details) {
+  const container = document.getElementById('review-container');
+  container.innerHTML = '';
+
+  const hasWrong = details.some(d => !d.isCorrect);
+
+  details.forEach(({ q, userAns, isCorrect }, idx) => {
+    const block = document.createElement('div');
+    const displayNum = idx + 1;
+    block.className = 'question-block';
+
+    const optionsHtml = q.options.map((opt, i) => {
+      const letter = ['A','B','C','D'][i];
+      let cls = '';
+      if (letter === userAns && !isCorrect) cls = 'wrong';
+      return `<div class="option-label ${cls}" data-is-answer="${letter === q.answer ? '1' : '0'}">${opt}${letter === userAns && !isCorrect ? ' ✗' : ''}</div>`;
+    }).join('');
+
+    const hintHtml = isCorrect
+      ? `<div class="answer-hint ok" data-correct-hint="true" style="display:none">✅ 回答正确！<div class="explanation">💡 <b>解析：</b>${q.explanation}</div></div>`
+      : `<div class="answer-hint err" data-wrong-hint="true" style="display:none">❌ 你的答案是 <b>${userAns}</b>，正确答案是 <b>${q.answer}</b><div class="explanation">💡 <b>解析：</b>${q.explanation}</div></div>`;
+
+    block.innerHTML = `
+      <div class="question-title">
+        <span class="q-num" style="background:${isCorrect ? '#28a745' : '#dc3545'}">${displayNum}</span>
+        <span>${q.text}</span>
+      </div>
+      <div class="options">${optionsHtml}</div>
+      ${hintHtml}
+    `;
+    container.appendChild(block);
+  });
+
+  const btnShowAnswers = document.getElementById('btn-show-answers');
+  const btnShowAll = document.getElementById('btn-show-all');
+  if (hasWrong) {
+    btnShowAnswers.classList.remove('hidden');
+    btnShowAll.classList.remove('hidden');
+  } else {
+    btnShowAnswers.classList.add('hidden');
+    btnShowAll.classList.remove('hidden');
+  }
+}
+
+function showWrongAnswers() {
+  document.querySelectorAll('#review-container .option-label[data-is-answer="1"]').forEach(el => {
+    el.classList.add('correct-hint');
+  });
+  document.querySelectorAll('#review-container .answer-hint[data-wrong-hint]').forEach(el => {
+    el.style.display = 'block';
+  });
+  document.getElementById('btn-show-answers').classList.add('hidden');
+}
+
+function showAllAnswers() {
+  document.querySelectorAll('#review-container .option-label[data-is-answer="1"]').forEach(el => {
+    el.classList.add('correct-hint');
+  });
+  document.querySelectorAll('#review-container .answer-hint[data-wrong-hint]').forEach(el => {
+    el.style.display = 'block';
+  });
+  document.querySelectorAll('#review-container .answer-hint[data-correct-hint]').forEach(el => {
+    el.style.display = 'block';
+  });
+  document.getElementById('btn-show-answers').classList.add('hidden');
+  document.getElementById('btn-show-all').classList.add('hidden');
+}
+
+function retryQuiz() {
+  document.getElementById('result-section').style.display = 'none';
+  document.getElementById('quiz-section').style.display = 'block';
+  document.getElementById('btn-show-answers').classList.add('hidden');
+  document.getElementById('btn-show-all').classList.add('hidden');
+  shuffleArray(questions);
+  renderQuestions();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ==================== 随机打乱题目顺序 ====================
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+shuffleArray(questions);
+renderQuestions();
+</script>
+</body>
+</html>
