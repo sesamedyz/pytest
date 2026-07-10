@@ -5,76 +5,192 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>绘本故事合集</title>
   <style>
+    :root {
+      --sky: #8edcff;
+      --sky-deep: #57b8ff;
+      --sun: #ffcf4d;
+      --pink: #ff8fb1;
+      --green: #7ed957;
+      --cream: #fff8ea;
+      --text: #5a3a1a;
+      --text-soft: #7a552a;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: "Microsoft YaHei", Arial, sans-serif;
-      background: linear-gradient(180deg, #fff8ec 0%, #ffe8c7 100%);
-      color: #5a3a1a;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.7) 0 8%, transparent 9%),
+        radial-gradient(circle at 20% 20%, #fff7a8 0 10px, transparent 11px),
+        radial-gradient(circle at 80% 15%, #ffd8e8 0 12px, transparent 13px),
+        linear-gradient(180deg, var(--sky) 0%, #c8f1ff 45%, #fff0c9 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
     }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::before {
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(255,207,77,0.9) 0%, rgba(255,207,77,0.2) 70%, transparent 71%);
+      top: 40px;
+      right: -20px;
+      border-radius: 50%;
+    }
+
+    body::after {
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(255,143,177,0.18) 0%, transparent 70%);
+      bottom: -40px;
+      left: -40px;
+      border-radius: 50%;
+    }
+
     .container {
-      max-width: 980px;
+      position: relative;
+      z-index: 1;
+      max-width: 1040px;
       margin: 0 auto;
       padding: 24px 20px 60px;
     }
-    h1 {
+
+    .banner {
       text-align: center;
-      color: #9a4e00;
-      margin-bottom: 12px;
+      background: rgba(255, 248, 234, 0.9);
+      border: 3px solid #ffd28f;
+      border-radius: 28px;
+      padding: 28px 24px 20px;
+      box-shadow: 0 12px 30px rgba(90, 58, 26, 0.16);
+      margin-bottom: 24px;
     }
+
+    h1 {
+      margin: 0 0 10px;
+      text-align: center;
+      color: #a64800;
+      font-size: 2.1rem;
+      text-shadow: 2px 2px 0 #fff2c7;
+    }
+
     .intro {
       text-align: center;
-      margin-bottom: 28px;
-      color: #7a552a;
-      line-height: 1.7;
+      margin: 0 auto 8px;
+      color: var(--text-soft);
+      line-height: 1.75;
+      max-width: 720px;
+      font-size: 1rem;
     }
+
+    .decor {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 1.4rem;
+    }
+
     .story-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 18px;
     }
+
     .story-card {
-      background: #fff;
-      border-radius: 16px;
+      position: relative;
+      background: linear-gradient(180deg, #fffdf7 0%, #fff0c8 100%);
+      border-radius: 22px;
       padding: 20px;
-      box-shadow: 0 10px 24px rgba(122, 85, 42, 0.12);
-      border: 1px solid #f2d7b2;
+      box-shadow: 0 12px 24px rgba(90, 58, 26, 0.12);
+      border: 2px solid #ffd89b;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+
+    .story-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 28px rgba(90, 58, 26, 0.18);
+    }
+
+    .story-card::before {
+      content: "📚";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.3rem;
+      opacity: 0.7;
+    }
+
     .story-card h2 {
       margin-top: 0;
       font-size: 1.2rem;
-      color: #8a4700;
+      color: #8f4200;
     }
+
     .story-card p {
       color: #6d4a23;
       line-height: 1.7;
       margin-bottom: 12px;
+      min-height: 54px;
     }
+
     .story-card a {
       display: inline-block;
-      color: #b85c00;
+      color: #fff;
+      background: linear-gradient(135deg, var(--pink), #ff9a6c);
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 999px;
+      box-shadow: 0 6px 12px rgba(255, 143, 177, 0.24);
     }
+
     .story-card a:hover {
-      text-decoration: underline;
+      transform: translateY(-1px);
     }
+
     .back-link {
       display: inline-block;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       color: #0d3f92;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 700;
+      background: rgba(255,255,255,0.8);
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(13,63,146,0.15);
     }
+
     .back-link:hover {
       text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .banner { padding: 22px 16px 16px; }
+      h1 { font-size: 1.7rem; }
+      .story-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <a href="../index.html" class="back-link">← 返回首页</a>
-    <h1>绘本故事合集</h1>
-    <p class="intro">这里收集了多篇有趣的绘本故事，点击故事卡片即可进入对应的单独页面阅读。</p>
+    <div class="banner">
+      <h1>🌈 绘本故事合集</h1>
+      <p class="intro">这里有许多可爱的故事等你来探索，点进卡片就能进入属于小朋友的奇妙阅读世界哦！</p>
+      <div class="decor">⭐ 🌼 🌟 🐰 ☁️</div>
+    </div>
 
     <div class="story-grid">
       <div class="story-card">
