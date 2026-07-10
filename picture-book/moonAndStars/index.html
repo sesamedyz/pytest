@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>月亮船和小星星 🌙✨</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Long+Cang&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --night-deep: #0a0e27;
+    --night-mid: #1a1f4e;
+    --night-soft: #2d2f6e;
+    --moon-gold: #f9e79f;
+    --moon-warm: #fef3d0;
+    --star-yellow: #fff4b3;
+    --star-glow: #ffe082;
+    --cloud-white: #e8eaf6;
+    --text-light: #f5f5f5;
+    --text-warm: #fff8e1;
+    --text-soft: #e0e0e0;
+    --accent-purple: #b39ddb;
+    --accent-pink: #f8bbd0;
+    --dawn-orange: #ffab91;
+    --dawn-pink: #ffccbc;
+  }
+
+  body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--night-deep);
+    font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* ===== Starfield Background ===== */
+  #starfield {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ===== Book Container ===== */
+  #book {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .page {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+    padding: 20px;
+  }
+
+  .page.active {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+
+  /* ===== Cover Page ===== */
+  .cover-page {
+    background: radial-gradient(ellipse at center, var(--night-mid) 0%, var(--night-deep) 100%);
+  }
+
+  .cover-content {
+    text-align: center;
+    z-index: 2;
+    animation: floatIn 1.5s ease;
+  }
+
+  .cover-title {
+    font-family: 'Ma Shan Zheng', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    color: var(--moon-warm);
+    text-shadow: 0 0 20px rgba(249, 231, 159, 0.5), 0 0 40px rgba(249, 231, 159, 0.3);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.15em;
+  }
+
+  .cover-subtitle {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    color: var(--star-glow);
+    opacity: 0.85;
+    margin-bottom: 2rem;
+    letter-spacing: 0.3em;
+  }
+
+  .cover-emojis {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: 2rem;
+    animation: twinkle 2s ease-in-out infinite;
+  }
+
+  .cover-image-wrapper {
+    width: clamp(250px, 40vw, 420px);
+    height: clamp(250px, 40vw, 420px);
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 2rem;
+    border: 3px solid rgba(249, 231, 159, 0.3);
+    box-shadow: 0 0 40px rgba(249, 231, 159, 0.2), inset 0 0 30px rgba(0,0,0,0.3);
+    animation: gentlePulse 4s ease-in-out infinite;
+  }
+
+  .cover-image-wrapper img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+
+  .cover-start-btn {
+    font-family: 'ZCOOL KuaiLe', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    padding: 12px 40px;
+    background: linear-gradient(135deg, var(--moon-gold), var(--star-glow));
+    color: var(--night-deep);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(249, 231, 159, 0.4);
+    transition: all 0.3s ease;
+    letter-spacing: 0.1em;
+  }
+
+  .cover-start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(249, 231, 159, 0.6);
+  }
+
+  /* ===== Story Pages ===== */
+  .story-page {
+    background: linear-gradient(180deg, var(--night-deep) 0%, var(--night-mid) 50%, var(--night-soft) 100%);
+  }
+
+  .story-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 700px;
+    width: 100%;
+    z-index: 2;
+  }
+
+  .story-image-wrapper {
+    width: clamp(220px, 42vw, 380px);
+    height: clamp(220px, 42vw, 380px);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(179, 157, 219, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+  }
+
+  .story-image-wrapper img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 8s ease;
+  }
+
+  .page.active .story-image-wrapper img {
+    transform: scale(1.08);
+  }
+
+  .story-text {
+    font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+    font-size: clamp(1rem, 1.8vw, 1.3rem);
+    line-height: 2.2;
+    color: var(--text-warm);
+    text-align: center;
+    max-width: 580px;
+    padding: 1.2rem 2rem;
+    background: rgba(26, 31, 78, 0.4);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    letter-spacing: 0.05em;
+  }
+
+  .story-text .dialogue {
+    color: var(--star-glow);
+    font-style: italic;
+  }
+
+  .story-text .emphasis {
+    color: var(--accent-pink);
+  }
+
+  .page-number {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Ma Shan Zheng', serif;
+  }
+
+  /* ===== Moral Page ===== */
+  .moral-page {
+    background: radial-gradient(ellipse at center, var(--night-mid) 0%, var(--night-deep) 70%);
+  }
+
+  .moral-content {
+    text-align: center;
+    max-width: 600px;
+    z-index: 2;
+    animation: floatIn 1.5s ease;
+  }
+
+  .moral-emojis {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    animation: twinkle 2s ease-in-out infinite;
+  }
+
+  .moral-title {
+    font-family: 'Ma Shan Zheng', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    color: var(--moon-warm);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .moral-text {
+    font-family: 'ZCOOL KuaiLe', sans-serif;
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 2.4;
+    color: var(--text-warm);
+    padding: 2rem;
+    background: rgba(26, 31, 78, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(249, 231, 159, 0.2);
+    margin-bottom: 2rem;
+  }
+
+  .moral-goodnight {
+    font-family: 'Long Cang', 'Ma Shan Zheng', cursive;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--star-glow);
+    opacity: 0.9;
+  }
+
+  /* ===== Navigation ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 100;
+    background: linear-gradient(180deg, transparent, rgba(10, 14, 39, 0.8));
+    pointer-events: none;
+  }
+
+  .nav-btn {
+    pointer-events: auto;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid rgba(249, 231, 159, 0.3);
+    background: rgba(26, 31, 78, 0.7);
+    color: var(--moon-warm);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: rgba(249, 231, 159, 0.2);
+    border-color: var(--moon-gold);
+    transform: scale(1.1);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .page-indicator {
+    pointer-events: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .dot.active {
+    background: var(--moon-gold);
+    width: 24px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(249, 231, 159, 0.5);
+  }
+
+  /* ===== Floating Decorations ===== */
+  .floating-moon {
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    font-size: 2rem;
+    z-index: 50;
+    opacity: 0.5;
+    animation: gentleFloat 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  /* ===== Animations ===== */
+  @keyframes twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+  }
+
+  @keyframes gentlePulse {
+    0%, 100% { box-shadow: 0 0 40px rgba(249, 231, 159, 0.2), inset 0 0 30px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 60px rgba(249, 231, 159, 0.4), inset 0 0 30px rgba(0,0,0,0.3); }
+  }
+
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes gentleFloat {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+  }
+
+  @keyframes starTwinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 600px) {
+    .story-text { font-size: 0.95rem; line-height: 2; padding: 1rem 1.2rem; }
+    .story-image-wrapper { width: 200px; height: 200px; }
+    .cover-image-wrapper { width: 220px; height: 220px; }
+    .nav-btn { width: 40px; height: 40px; font-size: 1.1rem; }
+  }
+
+  @media (orientation: landscape) and (max-height: 500px) {
+    .story-content { flex-direction: row; gap: 2rem; }
+    .story-image-wrapper { width: 180px; height: 180px; margin-bottom: 0; flex-shrink: 0; }
+    .story-text { font-size: 0.9rem; line-height: 1.8; text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Starfield Canvas -->
+<canvas id="starfield"></canvas>
+
+<!-- Floating Moon Decoration -->
+<div class="floating-moon">🌙</div>
+
+<!-- Book -->
+<div id="book">
+
+  <!-- ===== Cover Page ===== -->
+  <div class="page cover-page active" data-page="0">
+    <div class="cover-content">
+      <div class="cover-emojis">🌙 ✨ 🌟</div>
+      <h1 class="cover-title">月亮船和小星星</h1>
+      <p class="cover-subtitle">一 个 关 于 陪 伴 的 故 事</p>
+      <div class="cover-image-wrapper">
+        <img src="images/01_cover.png" alt="月亮船在星空中">
+      </div>
+      <button class="cover-start-btn" onclick="nextPage()">开始阅读 ✨</button>
+    </div>
+  </div>
+
+  <!-- ===== Page 1: 月亮船的工作 ===== -->
+  <div class="page story-page" data-page="1">
+    <div class="story-content">
+      <div class="story-image-wrapper">
+        <img src="images/01_cover.png" alt="月亮船划过天空">
+      </div>
+      <div class="story-text">
+        从前，在一片很高的天上，有一只弯弯的<span class="emphasis">月亮船</span>。<br>
+        每天晚上，月亮船都会慢慢地从东边划到西边，给大地洒下柔和的银光。
+      </div>
+    </div>
+    <span class="page-number">— 1 —</span>
+  </div>
+
+  <!-- ===== Page 2: 月亮船的烦恼 ===== -->
+  <div class="page story-page" data-page="2">
+    <div class="story-content">
+      <div class="story-image-wrapper">
+        <img src="images/02_lonely_moon.png" alt="孤独的月亮船">
+      </div>
+      <div class="story-text">
+        月亮船很喜欢自己的工作，但他有一个小小的烦恼——他太安静了。<br>
+        漫漫长夜，只有风儿偶尔路过，跟他说一两句话，然后又匆匆飞走了。<br><br>
+        <span class="dialogue">"要是有人能陪我一起划船就好了。"</span>月亮船轻轻叹了口气。
+      </div>
+    </div>
+    <span class="page-number">— 2 —</span>
+  </div>
+
+  <!-- ===== Page 3: 小闪出场 ===== -->
+  <div class="page story-page" data-page="3">
+    <div class="story-content">
+      <div class="story-image-wrapper">
+        <img src="images/03_shy_star.png" alt="小星星躲在云后">
+      </div>
+      <div class="story-text">
+        就在这时，一颗小小的星星从云朵后面探出了头。她叫<span class="emphasis">小闪</span>，是天上最小最胆怯的星星。<br>
+        别的星星都大大方方地挂在天空中间，闪闪发亮，可小闪总是躲在云朵后面，觉得自己太小了，没人会注意到她。<br><br>
+        <span class="dialogue">"你……你在叹气吗？"</span>小闪小声地问。
+      </div>
+    </div>
+    <span class="page-number">— 3 —</span>
+  </div>
+
+  <!-- ===== Page 4: 月亮船的邀请 ===== -->
+  <div class="page story-page" data-page="4">
+    <div class="story-content">
+      <div class="story-image-wrapper">
+        <img src="images/04_invitation.png" alt="月亮船邀请小星星">
+      </div>
+      <div class="story-text">
+        月亮船吓了一跳，然后笑了：<br>
+        <span class="dialogue">"是呀，长夜漫漫，有点孤单。你愿意坐到我的船上来吗？"</span><br><br>
+        小闪犹豫了一下：<span class="dialogue">"可是我太小了，我的光也很微弱……"</span><br><br>
+        <span class="dialogue">"没关系呀！船大船小都能划，光强光弱都能亮。来吧！"</span>月亮船温柔地说。
+      </div>
+    </div>
+    <span class="page-number">— 4 —</span>
+  </div>
+
+  <!-- ===== Page 5: 船上的美景 ===== -->
+  <div class="page story-page" data-page="5">
+    <div class="story-content">
+      <div class="story-image-wrapper">
+        <img src="images/05_beautiful_view.png" alt="从船上看美景">
+      </div>
+      <div class="story-text">
+        小闪鼓起勇气，轻轻地跳上了月亮船的弯弯船身。哇——从船上看下去，整个世界好美呀！<br>
+        山峦像睡着的巨兽，河流像闪闪的丝带，小镇里的灯火像一颗颗橘黄色的小糖豆。<br><br>
+        <span class="dialogue">"好漂亮！"</span>小闪忍不住轻轻叫了起来，她的光也亮了一点点。<br><br>
+        月亮船笑着说：<span class="dialogue">"你看，你的光并不弱嘛。"</span>
+      </div>
+    </div>
+    <span class="page-number">— 5 —</span>
+  </div>
+
+  <!-- ===== Page 6: 一起讲故事 ===== -->
+  <div class="page story-page" data-page="6">
+    <div class="story-content">
+      <div class="story-image-wrapper">
+        <img src="images/06_stories.png" alt="一起讲故事">
+      </div>
+      <div class="story-text">
+        那一夜，月亮船和小闪一起慢慢地划过天空。<br>
+        小闪给月亮船讲天上星星们的故事——谁爱跳舞，谁爱捉迷藏，谁总是打瞌睡。<br>
+        月亮船给小闪讲大地上的故事——哪条河最温柔，哪座山最沉稳，哪个小镇的孩子最爱笑。<br><br>
+        风儿路过的时候，听到了他们的笑声，忍不住也留下来听了一会儿。
+      </div>
+    </div>
+    <span class="page-number">— 6 —</span>
+  </div>
+
+  <!-- ===== Page 7: 天亮道别 ===== -->
+  <div class="page story-page" data-page="7">
+    <div class="story-content">
+      <div class="story-image-wrapper">
+        <img src="images/07_farewell.png" alt="天亮道别">
+      </div>
+      <div class="story-text">
+        不知不觉，天边泛起了淡淡的橘红色。新的一天要来了。<br><br>
+        <span class="dialogue">"我要回去啦。"</span>小闪有点不舍地说。<br><br>
+        <span class="dialogue">"明天晚上再来吧！"</span>月亮船说，<span class="dialogue">"我每晚都在这里。"</span><br><br>
+        小闪用力点了点头，然后轻轻地从船边跳回云朵里。但她不再躲在最深处了——她选了一片薄薄的云，刚好能让她小小的光透出来。
+      </div>
+    </div>
+    <span class="page-number">— 7 —</span>
+  </div>
+
+  <!-- ===== Page 8: 不再孤单 ===== -->
+  <div class="page story-page" data-page="8">
+    <div class="story-content">
+      <div class="story-image-wrapper">
+        <img src="images/08_friends.png" alt="朋友们一起来">
+      </div>
+      <div class="story-text">
+        从那以后，每天晚上，小闪都会准时跳上月亮船。有时候还会带上两三颗别的星星朋友一起来。<br><br>
+        月亮船再也不孤单了，而小闪呢，也不再觉得自己太小了——<br>
+        因为她发现，<span class="emphasis">陪伴本身就是一种光</span>。
+      </div>
+    </div>
+    <span class="page-number">— 8 —</span>
+  </div>
+
+  <!-- ===== Moral Page ===== -->
+  <div class="page moral-page" data-page="9">
+    <div class="moral-content">
+      <div class="moral-emojis">🌟🌙</div>
+      <h2 class="moral-title">小 寓 意</h2>
+      <div class="moral-text">
+        每个人都有自己独特的光，哪怕很小很微弱。<br>
+        当你愿意走出来，陪伴别人的时候，<br>
+        你的光就会变得更亮。<br><br>
+        而那些看起来很强大的人，<br>
+        有时也需要一颗小小的星星，<br>
+        让夜空不再孤单。
+      </div>
+      <p class="moral-goodnight">晚安，小星星们 🌙</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation Bar -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="prevPage()" disabled>‹</button>
+  <div class="page-indicator" id="pageIndicator"></div>
+  <button class="nav-btn" id="nextBtn" onclick="nextPage()">›</button>
+</div>
+
+<script>
+  // ===== Page Navigation =====
+  const pages = document.querySelectorAll('.page');
+  const totalPages = pages.length;
+  let currentPage = 0;
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const pageIndicator = document.getElementById('pageIndicator');
+
+  // Create dots
+  for (let i = 0; i < totalPages; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToPage(i);
+    pageIndicator.appendChild(dot);
+  }
+
+  function updateNav() {
+    prevBtn.disabled = currentPage === 0;
+    nextBtn.disabled = currentPage === totalPages - 1;
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === currentPage);
+    });
+  }
+
+  function goToPage(index) {
+    if (index < 0 || index >= totalPages) return;
+    pages[currentPage].classList.remove('active');
+    currentPage = index;
+    pages[currentPage].classList.add('active');
+    updateNav();
+  }
+
+  function nextPage() {
+    goToPage(currentPage + 1);
+  }
+
+  function prevPage() {
+    goToPage(currentPage - 1);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') nextPage();
+    if (e.key === 'ArrowLeft') prevPage();
+  });
+
+  // Touch / Swipe navigation
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+
+  document.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextPage();
+      else prevPage();
+    }
+  });
+
+  // ===== Starfield Animation =====
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  // Create stars
+  const stars = [];
+  const starCount = 80;
+
+  for (let i = 0; i < starCount; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.5 + 0.3,
+      opacity: Math.random() * 0.8 + 0.2,
+      twinkleSpeed: Math.random() * 0.02 + 0.005,
+      twinklePhase: Math.random() * Math.PI * 2,
+      driftX: (Math.random() - 0.5) * 0.15,
+      driftY: (Math.random() - 0.5) * 0.1,
+      color: Math.random() > 0.7 ? 'rgba(255, 240, 180,' : 'rgba(220, 220, 255,'
+    });
+  }
+
+  // Create shooting stars occasionally
+  let shootingStar = null;
+
+  function maybeCreateShootingStar() {
+    if (!shootingStar && Math.random() < 0.003) {
+      shootingStar = {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height * 0.5,
+        length: 80 + Math.random() * 60,
+        speed: 8 + Math.random() * 6,
+        angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
+        opacity: 1
+      };
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw stars
+    stars.forEach(star => {
+      star.twinklePhase += star.twinkleSpeed;
+      const currentOpacity = star.opacity * (0.5 + 0.5 * Math.sin(star.twinklePhase));
+
+      star.x += star.driftX;
+      star.y += star.driftY;
+
+      // Wrap around
+      if (star.x < 0) star.x = canvas.width;
+      if (star.x > canvas.width) star.x = 0;
+      if (star.y < 0) star.y = canvas.height;
+      if (star.y > canvas.height) star.y = 0;
+
+      // Glow
+      const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.radius * 4);
+      gradient.addColorStop(0, star.color + currentOpacity + ')');
+      gradient.addColorStop(0.5, star.color + (currentOpacity * 0.3) + ')');
+      gradient.addColorStop(1, star.color + '0)');
+
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius * 4, 0, Math.PI * 2);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // Core
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fillStyle = star.color + currentOpacity + ')';
+      ctx.fill();
+    });
+
+    // Shooting star
+    maybeCreateShootingStar();
+    if (shootingStar) {
+      const tailX = shootingStar.x - Math.cos(shootingStar.angle) * shootingStar.length;
+      const tailY = shootingStar.y - Math.sin(shootingStar.angle) * shootingStar.length;
+
+      const grad = ctx.createLinearGradient(shootingStar.x, shootingStar.y, tailX, tailY);
+      grad.addColorStop(0, 'rgba(255, 255, 220, ' + shootingStar.opacity + ')');
+      grad.addColorStop(1, 'rgba(255, 255, 220, 0)');
+
+      ctx.beginPath();
+      ctx.moveTo(shootingStar.x, shootingStar.y);
+      ctx.lineTo(tailX, tailY);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      shootingStar.x += Math.cos(shootingStar.angle) * shootingStar.speed;
+      shootingStar.y += Math.sin(shootingStar.angle) * shootingStar.speed;
+      shootingStar.opacity -= 0.015;
+
+      if (shootingStar.opacity <= 0 || shootingStar.x > canvas.width || shootingStar.y > canvas.height) {
+        shootingStar = null;
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+
+</body>
+</html>
