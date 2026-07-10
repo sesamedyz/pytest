@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>绘本故事合集</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(180deg, #fff8ec 0%, #ffe8c7 100%);
+      color: #5a3a1a;
+    }
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+    }
+    h1 {
+      text-align: center;
+      color: #9a4e00;
+      margin-bottom: 12px;
+    }
+    .intro {
+      text-align: center;
+      margin-bottom: 28px;
+      color: #7a552a;
+      line-height: 1.7;
+    }
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+    .story-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 24px rgba(122, 85, 42, 0.12);
+      border: 1px solid #f2d7b2;
+    }
+    .story-card h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #8a4700;
+    }
+    .story-card p {
+      color: #6d4a23;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .story-card a {
+      display: inline-block;
+      color: #b85c00;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .story-card a:hover {
+      text-decoration: underline;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 24px;
+      color: #0d3f92;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../index.html" class="back-link">← 返回首页</a>
+    <h1>绘本故事合集</h1>
+    <p class="intro">这里收集了多篇有趣的绘本故事，点击故事卡片即可进入对应的单独页面阅读。</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <h2>小兔子找月亮</h2>
+        <p>一个关于勇敢和坚持的小故事，适合和孩子一起阅读。</p>
+        <a href="storybook_little_rabbit.html">查看绘本页面</a>
+      </div>
+      <div class="story-card">
+        <h2>小熊的生日派对</h2>
+        <p>讲述朋友之间分享快乐、一起庆祝的温暖故事。</p>
+        <a href="storybook_bear_party.html">查看绘本页面</a>
+      </div>
+      <div class="story-card">
+        <h2>云朵小船</h2>
+        <p>一个充满想象力的冒险故事，带孩子去看云海和星星。</p>
+        <a href="storybook_cloud_boat.html">查看绘本页面</a>
+      </div>
+      <div class="story-card">
+        <h2>小星星与月亮船</h2>
+        <p>跟随小星星和月亮船一起遨游夜空，体验温暖而梦幻的故事。</p>
+        <a href="moonAndStars/index.html">查看绘本页面</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
