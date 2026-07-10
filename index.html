@@ -43,6 +43,29 @@
       font-weight: 600;
       box-shadow: 0 12px 30px rgba(47, 124, 255, 0.25);
     }
+    .page-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .page-links a {
+      display: inline-block;
+      padding: 10px 16px;
+      background: #fff;
+      color: #0d3f92;
+      border: 1px solid rgba(47, 124, 255, 0.2);
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .page-links a:hover {
+      background: #2f7cff;
+      color: #fff;
+      transform: translateY(-2px);
+    }
     .features {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -156,6 +179,11 @@
       <h1>Python 少儿编程练习</h1>
       <p>欢迎来到孩子们的 Python 编程首页，这里有趣味练习、基础项目和图形化示例，帮助小朋友从零开始快乐学习编程。</p>
       <a href="#practice" class="btn-primary">开始练习</a>
+      <div class="page-links">
+        <a href="Python_for.html">Python for 循环练习</a>
+        <a href="python_random.html">Python 随机练习</a>
+        <a href="test1.html">Python 知识测试</a>
+      </div>
     </header>
 
     <section>
