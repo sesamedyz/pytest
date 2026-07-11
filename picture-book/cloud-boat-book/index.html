@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>云朵小船</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --sky-deep: #0a1428;
+  --sky-mid: #1a2f5c;
+  --cloud-white: #f0f4ff;
+  --gold: #ffd97d;
+  --gold-warm: #ff9d4d;
+  --pink-dawn: #ffb3ba;
+  --text-soft: rgba(240, 244, 255, 0.92);
+  --text-dim: rgba(240, 244, 255, 0.6);
+}
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  background: linear-gradient(180deg, var(--sky-deep) 0%, var(--sky-mid) 50%, #2a1a4c 100%);
+  min-height: 100vh;
+  overflow: hidden;
+  color: var(--text-soft);
+}
+
+/* Animated background canvas */
+#bg-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Book container */
+#book {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1500px;
+}
+
+/* Page */
+.page {
+  position: absolute;
+  width: 90%;
+  max-width: 700px;
+  height: 88vh;
+  max-height: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateX(60px) scale(0.95);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  pointer-events: none;
+}
+
+.page.active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+.page.prev {
+  transform: translateX(-60px) scale(0.95);
+  opacity: 0;
+}
+
+/* Image */
+.page-img-wrap {
+  width: 100%;
+  max-height: 58vh;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 60px rgba(255, 217, 125, 0.08);
+  position: relative;
+  background: rgba(255,255,255,0.05);
+}
+
+.page-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Text */
+.page-text {
+  margin-top: 1.2rem;
+  padding: 0 1rem;
+  text-align: center;
+  max-width: 600px;
+}
+
+.page-text p {
+  font-size: 1.05rem;
+  line-height: 2;
+  letter-spacing: 0.5px;
+  color: var(--text-soft);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.page-num {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 0.8rem;
+  letter-spacing: 2px;
+}
+
+/* Cover page special */
+.page-cover .page-img-wrap {
+  max-height: 50vh;
+  border-radius: 24px;
+}
+
+.page-cover .page-text h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gold), var(--gold-warm), var(--pink-dawn));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  letter-spacing: 4px;
+}
+
+.page-cover .page-text .subtitle {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  letter-spacing: 6px;
+}
+
+/* Moral page */
+.page-moral .page-img-wrap {
+  display: none;
+}
+
+.page-moral .page-text {
+  margin-top: 0;
+}
+
+.moral-box {
+  background: rgba(255, 217, 125, 0.08);
+  border: 1px solid rgba(255, 217, 125, 0.2);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  margin-top: 1rem;
+}
+
+.moral-box .moral-title {
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+.moral-box .moral-text {
+  font-size: 1rem;
+  line-height: 2.2;
+  color: var(--text-soft);
+}
+
+.moral-emojis {
+  font-size: 2rem;
+  margin-top: 1.5rem;
+  letter-spacing: 8px;
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  z-index: 10;
+  background: rgba(10, 20, 40, 0.6);
+  backdrop-filter: blur(12px);
+  padding: 0.6rem 1.5rem;
+  border-radius: 40px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav button {
+  background: rgba(255, 217, 125, 0.15);
+  border: 1px solid rgba(255, 217, 125, 0.3);
+  color: var(--gold);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.nav button:hover {
+  background: rgba(255, 217, 125, 0.3);
+  transform: scale(1.1);
+}
+
+.nav button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.nav-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-dot.active {
+  background: var(--gold);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Progress bar */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-warm));
+  z-index: 20;
+  transition: width 0.5s ease;
+  border-radius: 0 3px 3px 0;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .page { width: 94%; height: 90vh; }
+  .page-img-wrap { max-height: 45vh; border-radius: 14px; }
+  .page-text p { font-size: 0.95rem; line-height: 1.8; }
+  .page-cover .page-text h1 { font-size: 1.8rem; }
+  .moral-box { padding: 1.5rem; }
+  .moral-box .moral-text { font-size: 0.9rem; }
+  .nav { bottom: 1rem; gap: 1rem; padding: 0.5rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+
+<div id="book">
+
+  <!-- Cover -->
+  <div class="page page-cover active" data-page="0">
+    <div class="page-img-wrap">
+      <img src="images/01_cover.webp" alt="封面" loading="eager" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <h1>云朵小船</h1>
+      <p class="subtitle">一 场 关 于 勇 气 与 星 星 的 旅 行</p>
+    </div>
+  </div>
+
+  <!-- Page 1: 小朵看云 -->
+  <div class="page" data-page="1">
+    <div class="page-img-wrap">
+      <img src="images/02_cloud_comes.webp" alt="小朵看云" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>在一个被群山环抱的小村庄里，住着一个叫小朵的小女孩。小朵最喜欢的事情，就是躺在草地上看天上的云。</p>
+      <p>有一天傍晚，天边飘来一朵特别特别白的云。它比棉花糖还软，比雪还亮，慢慢地、慢慢地，落在了小朵家的屋顶上。</p>
+      <div class="page-num">01</div>
+    </div>
+  </div>
+
+  <!-- Page 2: 云朵变船 -->
+  <div class="page" data-page="2">
+    <div class="page-img-wrap">
+      <img src="images/03_climb_aboard.webp" alt="云朵小船" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>小朵好奇地爬上屋顶，发现这朵云竟然变成了一艘小船的形状！船头翘翘的，船身软绵绵的，还有两片小云朵当船桨。</p>
+      <p>"你……你是云朵小船吗？"小朵轻轻摸了摸船身，软软的，暖暖的。云朵小船微微晃了晃，好像在说："上来吧。"</p>
+      <div class="page-num">02</div>
+    </div>
+  </div>
+
+  <!-- Page 3: 云海 -->
+  <div class="page" data-page="3">
+    <div class="page-img-wrap">
+      <img src="images/04_cloud_sea.webp" alt="云海" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>小朵鼓起勇气，跳了上去。哇！云朵小船轻轻地飘了起来，越飞越高。村庄变小了，群山变小了，整个大地变成了一块五彩的拼图。</p>
+      <p>好大好大的云海呀！白色的云朵像翻滚的波浪，一层叠着一层，一直铺到天边。金色的夕阳给云海镶上了一道亮亮的金边，美得像一幅画。</p>
+      <div class="page-num">03</div>
+    </div>
+  </div>
+
+  <!-- Page 4: 云朵鲸鱼 -->
+  <div class="page" data-page="4">
+    <div class="page-img-wrap">
+      <img src="images/05_cloud_whale.webp" alt="云朵鲸鱼" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>忽然，前方的云朵拱起一个大大的弧形——一条巨大的云朵鲸鱼从云海里跃了出来！它的身体是银灰色的，尾巴甩出一道漂亮的弧线。</p>
+      <p>"我要去云海尽头，那里有通往星星的路。"鲸鱼说完，摆摆尾巴，潜入了云海，只留下一串圆圆的云泡泡。</p>
+      <p>小朵的眼睛亮了。通往星星的路！她也想去！</p>
+      <div class="page-num">04</div>
+    </div>
+  </div>
+
+  <!-- Page 5: 暴风雨 -->
+  <div class="page" data-page="5">
+    <div class="page-img-wrap">
+      <img src="images/06_storm_song.webp" alt="暴风雨中唱歌" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>可是，云海并不是一直那么温柔。天渐渐暗了下来，前方出现了一大片黑压压的暴风云。乌云翻滚着，闪电在云层里穿来穿去。</p>
+      <p>"我……我该怎么办？"小朵的声音在发抖。就在她快要哭出来的时候，她想起了妈妈常说的那句话："害怕的时候，就唱一首歌吧。"</p>
+      <p>小朵深吸一口气，开始小声唱歌："小云朵，轻轻飘，带着我去找星星……"</p>
+      <div class="page-num">05</div>
+    </div>
+  </div>
+
+  <!-- Page 6: 星空 -->
+  <div class="page" data-page="6">
+    <div class="page-img-wrap">
+      <img src="images/07_starry_sky.webp" alt="满天繁星" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>奇妙的事情发生了！云朵小船开始发光了，柔和的白光从船身散发出来。暴风云好像被这温柔的光安抚了，慢慢散开了一条通道。</p>
+      <p>当最后一片乌云散去，小朵眼前豁然开朗——满天繁星！数不清的星星密密麻麻地铺满了天空，有的金色，有的蓝色，有的粉色，像一颗颗彩色的糖果洒在黑丝绒上。</p>
+      <p>她伸出小手，轻轻碰了碰最近的一颗星星。那颗星星是暖的，像捧着一小团阳光。</p>
+      <div class="page-num">06</div>
+    </div>
+  </div>
+
+  <!-- Page 7: 入睡 -->
+  <div class="page" data-page="7">
+    <div class="page-img-wrap">
+      <img src="images/08_dreaming.webp" alt="甜甜入睡" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>不知过了多久，星星们渐渐飞回了天上。云朵小船载着小朵，慢慢地、轻轻地往回飞。当小朵回到屋顶的时候，手心里还留着一点星星的余温。</p>
+      <p>那一晚，小朵睡得特别香。她梦见自己又乘着云朵小船，在星星中间飞呀飞。因为她知道，勇敢的心，能带你去任何地方。</p>
+      <div class="page-num">07</div>
+    </div>
+  </div>
+
+  <!-- Moral -->
+  <div class="page page-moral" data-page="8">
+    <div class="page-text">
+      <div class="moral-box">
+        <div class="moral-title">🌟 小寓意</div>
+        <div class="moral-text">
+          每一次冒险都需要勇气。当你害怕的时候，不要退缩，唱一首歌，给自己一点光。你会发现，黑暗的尽头，总有一片星星在等你。
+        </div>
+        <div class="moral-emojis">☁️ ⛵ ✨ ⭐ 🌙</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button id="prevBtn" onclick="changePage(-1)">‹</button>
+  <div class="nav-dots" id="navDots"></div>
+  <button id="nextBtn" onclick="changePage(1)">›</button>
+</div>
+
+<script>
+// ===== Page Navigation =====
+let currentPage = 0;
+const pages = document.querySelectorAll('.page');
+const totalPages = pages.length;
+const navDots = document.getElementById('navDots');
+const progressBar = document.getElementById('progressBar');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+// Create nav dots
+for (let i = 0; i < totalPages; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goToPage(i);
+  navDots.appendChild(dot);
+}
+
+function updateUI() {
+  pages.forEach((p, i) => {
+    p.classList.remove('active', 'prev');
+    if (i === currentPage) p.classList.add('active');
+    else if (i < currentPage) p.classList.add('prev');
+  });
+  document.querySelectorAll('.nav-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === currentPage);
+  });
+  progressBar.style.width = ((currentPage + 1) / totalPages * 100) + '%';
+  prevBtn.disabled = currentPage === 0;
+  nextBtn.disabled = currentPage === totalPages - 1;
+}
+
+function goToPage(idx) {
+  currentPage = Math.max(0, Math.min(totalPages - 1, idx));
+  updateUI();
+}
+
+function changePage(dir) {
+  goToPage(currentPage + dir);
+}
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changePage(-1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') changePage(1);
+});
+
+// Touch / Swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', (e) => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) changePage(diff > 0 ? 1 : -1);
+});
+
+// ===== Animated Background: Floating Clouds + Stars =====
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Stars
+const stars = [];
+for (let i = 0; i < 60; i++) {
+  stars.push({
+    x: Math.random() * W,
+    y: Math.random() * H * 0.7,
+    r: Math.random() * 1.5 + 0.3,
+    twinkle: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.02 + 0.01,
+    color: ['#ffd97d', '#a8c8ff', '#ffb3ba', '#ffffff'][Math.floor(Math.random() * 4)]
+  });
+}
+
+// Clouds
+const clouds = [];
+for (let i = 0; i < 5; i++) {
+  clouds.push({
+    x: Math.random() * W,
+    y: Math.random() * H * 0.5 + H * 0.1,
+    w: Math.random() * 120 + 80,
+    h: Math.random() * 30 + 20,
+    speed: Math.random() * 0.15 + 0.05,
+    alpha: Math.random() * 0.06 + 0.03
+  });
+}
+
+// Shooting star
+let shootingStar = null;
+let shootingTimer = 0;
+
+function drawCloud(x, y, w, h, alpha) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = '#f0f4ff';
+  ctx.beginPath();
+  ctx.arc(x, y, h, 0, Math.PI * 2);
+  ctx.arc(x + w * 0.25, y - h * 0.3, h * 0.9, 0, Math.PI * 2);
+  ctx.arc(x + w * 0.5, y, h * 1.1, 0, Math.PI * 2);
+  ctx.arc(x + w * 0.75, y - h * 0.2, h * 0.8, 0, Math.PI * 2);
+  ctx.arc(x + w, y, h * 0.7, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Draw clouds
+  clouds.forEach(c => {
+    drawCloud(c.x, c.y, c.w, c.h, c.alpha);
+    c.x += c.speed;
+    if (c.x - c.w > W) c.x = -c.w;
+  });
+
+  // Draw stars
+  stars.forEach(s => {
+    s.twinkle += s.speed;
+    const opacity = 0.3 + Math.abs(Math.sin(s.twinkle)) * 0.7;
+    ctx.save();
+    ctx.globalAlpha = opacity;
+    ctx.fillStyle = s.color;
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = s.color;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+
+  // Shooting star
+  shootingTimer++;
+  if (shootingTimer > 400 && !shootingStar && Math.random() < 0.01) {
+    shootingStar = {
+      x: Math.random() * W * 0.6,
+      y: Math.random() * H * 0.3,
+      len: 0,
+      maxLen: 80 + Math.random() * 60,
+      angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3
+    };
+  }
+  if (shootingStar) {
+    shootingStar.len += 6;
+    const sx = shootingStar.x + Math.cos(shootingStar.angle) * shootingStar.len;
+    const sy = shootingStar.y + Math.sin(shootingStar.angle) * shootingStar.len;
+    const grad = ctx.createLinearGradient(
+      shootingStar.x + Math.cos(shootingStar.angle) * Math.max(0, shootingStar.len - shootingStar.maxLen),
+      shootingStar.y + Math.sin(shootingStar.angle) * Math.max(0, shootingStar.len - shootingStar.maxLen),
+      sx, sy
+    );
+    grad.addColorStop(0, 'rgba(255, 217, 125, 0)');
+    grad.addColorStop(1, 'rgba(255, 217, 125, 0.8)');
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(
+      shootingStar.x + Math.cos(shootingStar.angle) * Math.max(0, shootingStar.len - shootingStar.maxLen),
+      shootingStar.y + Math.sin(shootingStar.angle) * Math.max(0, shootingStar.len - shootingStar.maxLen)
+    );
+    ctx.lineTo(sx, sy);
+    ctx.stroke();
+
+    // Head glow
+    ctx.fillStyle = 'rgba(255, 217, 125, 0.9)';
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = '#ffd97d';
+    ctx.beginPath();
+    ctx.arc(sx, sy, 1.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    if (shootingStar.len > shootingStar.maxLen + 100) {
+      shootingStar = null;
+      shootingTimer = 0;
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+updateUI();
+</script>
+</body>
+</html>

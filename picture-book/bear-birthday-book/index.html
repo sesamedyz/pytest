@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小熊的生日派对</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #2a1a3e;
+  --bg-mid: #3d2b1f;
+  --bg-warm: #4a3228;
+  --honey: #ffc857;
+  --berry: #e85d75;
+  --leaf: #7fb069;
+  --sky: #6ec5e9;
+  --cream: #fff5e6;
+  --text-soft: rgba(255, 245, 230, 0.92);
+  --text-dim: rgba(255, 245, 230, 0.55);
+}
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  background: linear-gradient(160deg, var(--bg-deep) 0%, var(--bg-warm) 50%, #3a1f2e 100%);
+  min-height: 100vh;
+  overflow: hidden;
+  color: var(--text-soft);
+}
+
+#bg-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#book {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1500px;
+}
+
+.page {
+  position: absolute;
+  width: 90%;
+  max-width: 700px;
+  height: 88vh;
+  max-height: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateX(60px) scale(0.95);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  pointer-events: none;
+}
+
+.page.active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+.page.prev {
+  transform: translateX(-60px) scale(0.95);
+  opacity: 0;
+}
+
+.page-img-wrap {
+  width: 100%;
+  max-height: 55vh;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 60px rgba(255, 200, 87, 0.06);
+  position: relative;
+  background: rgba(255,255,255,0.05);
+}
+
+.page-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.page-text {
+  margin-top: 1rem;
+  padding: 0 1rem;
+  text-align: center;
+  max-width: 620px;
+}
+
+.page-text p {
+  font-size: 1rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+  color: var(--text-soft);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  margin-bottom: 0.3rem;
+}
+
+.page-num {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 0.6rem;
+  letter-spacing: 2px;
+}
+
+/* Cover */
+.page-cover .page-img-wrap { max-height: 48vh; border-radius: 24px; }
+
+.page-cover .page-text h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--honey), var(--berry), #ff9a76);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.3rem;
+  letter-spacing: 4px;
+}
+
+.page-cover .page-text .subtitle {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  letter-spacing: 6px;
+}
+
+/* Moral */
+.page-moral .page-img-wrap { display: none; }
+.page-moral .page-text { margin-top: 0; }
+
+.moral-box {
+  background: rgba(255, 200, 87, 0.08);
+  border: 1px solid rgba(255, 200, 87, 0.2);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  margin-top: 1rem;
+}
+
+.moral-title {
+  font-size: 1.1rem;
+  color: var(--honey);
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+.moral-text {
+  font-size: 1rem;
+  line-height: 2.2;
+  color: var(--text-soft);
+}
+
+.moral-emojis {
+  font-size: 2rem;
+  margin-top: 1.5rem;
+  letter-spacing: 8px;
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  z-index: 10;
+  background: rgba(42, 26, 62, 0.6);
+  backdrop-filter: blur(12px);
+  padding: 0.6rem 1.5rem;
+  border-radius: 40px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav button {
+  background: rgba(255, 200, 87, 0.15);
+  border: 1px solid rgba(255, 200, 87, 0.3);
+  color: var(--honey);
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.nav button:hover {
+  background: rgba(255, 200, 87, 0.3);
+  transform: scale(1.1);
+}
+
+.nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.nav-dots { display: flex; gap: 6px; }
+
+.nav-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-dot.active {
+  background: var(--honey);
+  width: 24px;
+  border-radius: 4px;
+}
+
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--honey), var(--berry), #ff9a76);
+  z-index: 20;
+  transition: width 0.5s ease;
+  border-radius: 0 3px 3px 0;
+}
+
+@media (max-width: 600px) {
+  .page { width: 94%; height: 90vh; }
+  .page-img-wrap { max-height: 42vh; border-radius: 14px; }
+  .page-text p { font-size: 0.9rem; line-height: 1.7; }
+  .page-cover .page-text h1 { font-size: 1.7rem; }
+  .moral-box { padding: 1.5rem; }
+  .moral-text { font-size: 0.9rem; }
+  .nav { bottom: 1rem; gap: 1rem; padding: 0.5rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+
+<div id="book">
+
+  <!-- Cover -->
+  <div class="page page-cover active" data-page="0">
+    <div class="page-img-wrap">
+      <img src="images/01_cover.webp" alt="封面" loading="eager" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <h1>小熊的生日派对</h1>
+      <p class="subtitle">一 场 关 于 友 谊 与 分 享 的 盛 会</p>
+    </div>
+  </div>
+
+  <!-- Page 1 -->
+  <div class="page" data-page="1">
+    <div class="page-img-wrap">
+      <img src="images/02_decorating.webp" alt="布置派对" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>春天的一个早晨，阳光透过树叶洒进小熊的树洞小屋。今天是一个特别的日子——小熊满满五岁啦！</p>
+      <p>"今天是我的生日！"小熊满满从床上跳起来，开心地转了三个圈。</p>
+      <p>满满和妈妈一起忙碌起来，在墙上挂满了彩色气球和亮闪闪的彩带。满满还亲手画了一张大大的横幅："欢迎来满满的生日派对！"</p>
+      <div class="page-num">01</div>
+    </div>
+  </div>
+
+  <!-- Page 2 -->
+  <div class="page" data-page="2">
+    <div class="page-img-wrap">
+      <img src="images/03_waiting.webp" alt="等朋友" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>最让人期待的是那个生日蛋糕。熊妈妈烤了一个圆圆的蜂蜜蛋糕，上面铺满了红红的草莓和金黄的奶油，还插了五根彩色的蜡烛。甜甜的香味飘满了整个房间。</p>
+      <p>满满坐在门口的小凳子上，两只小脚晃啊晃。"朋友们什么时候来呢？"满满有点着急。</p>
+      <p>"叮咚——"门铃响了！</p>
+      <div class="page-num">02</div>
+    </div>
+  </div>
+
+  <!-- Page 3 -->
+  <div class="page" data-page="3">
+    <div class="page-img-wrap">
+      <img src="images/04_bunny_arrives.webp" alt="小兔到来" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>满满飞快地跑去开门。门口站着小兔子棉棉，她穿着粉色的小围裙，手里捧着一个小小的篮子。</p>
+      <p>"满满，生日快乐！"棉棉把篮子递过来，"这是我亲手种的胡萝卜，又甜又脆，送给你！"</p>
+      <p>"谢谢你，棉棉！"满满接过篮子，胡萝卜上还带着泥土的清香，真新鲜呀。</p>
+      <div class="page-num">03</div>
+    </div>
+  </div>
+
+  <!-- Page 4 -->
+  <div class="page" data-page="4">
+    <div class="page-img-wrap">
+      <img src="images/05_friends_arrive.webp" alt="朋友们到来" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>"叮咚——"小松鼠果果蹦蹦跳跳地跑进来，脖子上挂着一串亮晶晶的松果项链："满满，生日快乐！"</p>
+      <p>小狐狸暖暖抱着一束野花："这束花是我在山坡上采的，每一朵都是我精心挑的！"</p>
+      <p>小鹿丫丫举着一幅画："这是我画的我们一起玩的画，送给你当生日礼物！"画上大家手拉手，笑得可开心了。</p>
+      <div class="page-num">04</div>
+    </div>
+  </div>
+
+  <!-- Page 5 -->
+  <div class="page" data-page="5">
+    <div class="page-img-wrap">
+      <img src="images/06_games.webp" alt="玩游戏" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>朋友们都到齐了，派对正式开始！满满和朋友们先玩了"抢椅子"的游戏。音乐一停，所有人都去抢椅子——哈哈，果果没抢到，一屁股坐在了地上，逗得大家哈哈大笑。</p>
+      <p>然后是"猜谜语"游戏。暖暖出了一个谜语，大家想了半天，满满最聪明，第一个答对了！"答对啦！"大家鼓起掌来。</p>
+      <div class="page-num">05</div>
+    </div>
+  </div>
+
+  <!-- Page 6 -->
+  <div class="page" data-page="6">
+    <div class="page-img-wrap">
+      <img src="images/07_wish.webp" alt="许愿吹蜡烛" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>熊妈妈端出了那个漂亮的蜂蜜蛋糕。五根蜡烛被点燃，火苗一跳一跳的，把每个人的脸都映得暖暖的。</p>
+      <p>"满满，许个愿吧！"满满闭上眼睛，双手合十，许了一个很小很小、却很温暖很温暖的愿望。</p>
+      <p>"呼——"满满一口气吹灭了所有蜡烛。熊妈妈把蛋糕分给每一个人，蜂蜜蛋糕甜甜的，草莓酸酸的——"这是我吃过的最好吃的蛋糕！"</p>
+      <div class="page-num">06</div>
+    </div>
+  </div>
+
+  <!-- Page 7 -->
+  <div class="page" data-page="7">
+    <div class="page-img-wrap">
+      <img src="images/08_dreaming.webp" alt="甜甜入睡" loading="lazy" width="800" height="800">
+    </div>
+    <div class="page-text">
+      <p>吃完蛋糕，满满小心翼翼地拆开每一份礼物，每一样他都看了又看，摸了又摸。</p>
+      <p>"谢谢你们，"满满声音有点哽咽，"这是我过得最开心的一个生日。不是因为蛋糕，也不是因为礼物，而是因为你们都来了。"</p>
+      <p>棉棉搂住满满："因为我们是好朋友呀！好朋友就是要一起分享快乐的！"那天晚上，满满做了一个甜甜的梦——梦里，好朋友们永远在一起。</p>
+      <div class="page-num">07</div>
+    </div>
+  </div>
+
+  <!-- Moral -->
+  <div class="page page-moral" data-page="8">
+    <div class="page-text">
+      <div class="moral-box">
+        <div class="moral-title">🌟 小寓意</div>
+        <div class="moral-text">
+          真正的快乐，不在于收到多少礼物，而在于和好朋友一起分享。当你把快乐分给别人，快乐就会像气球一样，越变越大，飞得越来越高。陪伴，就是最好的生日礼物。
+        </div>
+        <div class="moral-emojis">🐻 🎂 🎈 🎁 🌸</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button id="prevBtn" onclick="changePage(-1)">&#8249;</button>
+  <div class="nav-dots" id="navDots"></div>
+  <button id="nextBtn" onclick="changePage(1)">&#8250;</button>
+</div>
+
+<script>
+let currentPage = 0;
+const pages = document.querySelectorAll('.page');
+const totalPages = pages.length;
+const navDots = document.getElementById('navDots');
+const progressBar = document.getElementById('progressBar');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+for (let i = 0; i < totalPages; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goToPage(i);
+  navDots.appendChild(dot);
+}
+
+function updateUI() {
+  pages.forEach((p, i) => {
+    p.classList.remove('active', 'prev');
+    if (i === currentPage) p.classList.add('active');
+    else if (i < currentPage) p.classList.add('prev');
+  });
+  document.querySelectorAll('.nav-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === currentPage);
+  });
+  progressBar.style.width = ((currentPage + 1) / totalPages * 100) + '%';
+  prevBtn.disabled = currentPage === 0;
+  nextBtn.disabled = currentPage === totalPages - 1;
+}
+
+function goToPage(idx) {
+  currentPage = Math.max(0, Math.min(totalPages - 1, idx));
+  updateUI();
+}
+
+function changePage(dir) { goToPage(currentPage + dir); }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changePage(-1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') changePage(1);
+});
+
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', (e) => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) changePage(diff > 0 ? 1 : -1);
+});
+
+// ===== Animated Background: Floating Balloons + Confetti =====
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Balloons
+const balloonColors = ['#e85d75', '#ffc857', '#7fb069', '#6ec5e9', '#ff9a76', '#c8a2c8'];
+const balloons = [];
+for (let i = 0; i < 8; i++) {
+  balloons.push({
+    x: Math.random() * W,
+    y: H + Math.random() * 300,
+    r: Math.random() * 12 + 8,
+    speed: Math.random() * 0.4 + 0.2,
+    sway: Math.random() * Math.PI * 2,
+    swaySpeed: Math.random() * 0.015 + 0.008,
+    color: balloonColors[Math.floor(Math.random() * balloonColors.length)],
+    alpha: Math.random() * 0.12 + 0.05
+  });
+}
+
+// Confetti particles
+const confetti = [];
+const confettiColors = ['#e85d75', '#ffc857', '#7fb069', '#6ec5e9', '#ff9a76', '#ffffff'];
+for (let i = 0; i < 40; i++) {
+  confetti.push({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    size: Math.random() * 3 + 1.5,
+    speed: Math.random() * 0.3 + 0.1,
+    drift: (Math.random() - 0.5) * 0.3,
+    rotation: Math.random() * Math.PI * 2,
+    rotSpeed: (Math.random() - 0.5) * 0.02,
+    color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+    alpha: Math.random() * 0.25 + 0.1,
+    shape: Math.random() > 0.5 ? 'rect' : 'circle'
+  });
+}
+
+function drawBalloon(b) {
+  ctx.save();
+  ctx.globalAlpha = b.alpha;
+  // Balloon body
+  ctx.fillStyle = b.color;
+  ctx.beginPath();
+  ctx.ellipse(b.x, b.y, b.r * 0.85, b.r, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // String
+  ctx.strokeStyle = b.color;
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(b.x, b.y + b.r);
+  ctx.quadraticCurveTo(b.x + b.sway * 10, b.y + b.r + 20, b.x + b.sway * 5, b.y + b.r + 40);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawConfetti(c) {
+  ctx.save();
+  ctx.globalAlpha = c.alpha;
+  ctx.translate(c.x, c.y);
+  ctx.rotate(c.rotation);
+  ctx.fillStyle = c.color;
+  if (c.shape === 'rect') {
+    ctx.fillRect(-c.size, -c.size * 0.4, c.size * 2, c.size * 0.8);
+  } else {
+    ctx.beginPath();
+    ctx.arc(0, 0, c.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Confetti
+  confetti.forEach(c => {
+    drawConfetti(c);
+    c.y += c.speed;
+    c.x += c.drift;
+    c.rotation += c.rotSpeed;
+    if (c.y > H) { c.y = -10; c.x = Math.random() * W; }
+  });
+
+  // Balloons
+  balloons.forEach(b => {
+    drawBalloon(b);
+    b.y -= b.speed;
+    b.sway += b.swaySpeed;
+    b.x += Math.sin(b.sway) * 0.3;
+    if (b.y + b.r + 50 < 0) {
+      b.y = H + 50;
+      b.x = Math.random() * W;
+    }
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+updateUI();
+</script>
+</body>
+</html>
