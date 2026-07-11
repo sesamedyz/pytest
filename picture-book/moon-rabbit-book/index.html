@@ -166,6 +166,30 @@ body {
   letter-spacing: 8px;
 }
 
+.back-to-list {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.8rem;
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: 1.25rem;
+  color: var(--moon-silver);
+  text-decoration: none;
+  border: 2px solid rgba(196, 216, 240, 0.3);
+  border-radius: 30px;
+  background: rgba(13, 27, 62, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  letter-spacing: 0.1em;
+}
+.back-to-list:hover {
+  background: rgba(196, 216, 240, 0.15);
+  border-color: var(--moon-silver);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(196, 216, 240, 0.3);
+}
+.back-to-list ruby rt { font-size: 0.45em; }
+
 /* Navigation */
 .nav {
   position: fixed;
@@ -274,6 +298,106 @@ ruby rt {
     .page-text p { line-height: 2.4; }
     ruby rt { font-size: 0.5em; }
 }
+
+/* ===== TTS 朗读按钮 ===== */
+.tts-btn {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  font-size: 1.15rem;
+}
+.tts-btn:hover {
+  transform: scale(1.1);
+}
+.tts-btn.tts-active {
+  animation: ttsPulse 1.5s ease-in-out infinite;
+}
+.tts-btn.tts-paused {
+  opacity: 0.55;
+}
+@keyframes ttsPulse {
+  0%, 100% { box-shadow: 0 0 5px rgba(255, 217, 125, 0.3); }
+  50% { box-shadow: 0 0 18px rgba(255, 217, 125, 0.6); }
+}
+
+/* TTS 进度条 */
+.tts-progress-wrap {
+  position: fixed;
+  bottom: 5rem;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 99;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.tts-progress-wrap.tts-visible {
+  opacity: 1;
+}
+.tts-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--moon-gold, var(--gold, var(--honey, var(--firefly-glow, #ffd97d))));
+  transition: width 0.3s ease;
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 8px rgba(255, 217, 125, 0.5);
+}
+
+
+/* TTS 停止按钮 */
+.tts-stop-btn {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  font-size: 0.95rem;
+  opacity: 0.65;
+}
+.tts-stop-btn:hover {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+/* TTS 进度文字 */
+.tts-progress-text {
+  position: fixed;
+  bottom: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.78rem;
+  color: var(--moon-gold, var(--gold, var(--honey, var(--firefly-glow, #ffd97d))));
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: 0 0 6px rgba(0,0,0,0.6);
+  z-index: 99;
+  letter-spacing: 0.05em;
+}
+.tts-progress-text.tts-visible {
+  opacity: 0.85;
+}
+
+@media (max-width: 600px) {
+  .tts-stop-btn { font-size: 0.85rem; }
+  .tts-progress-text { bottom: 64px; font-size: 0.7rem; }
+}
+
+
+/* 手机端 */
+@media (max-width: 600px) {
+  .tts-btn { font-size: 1rem; }
+  .tts-progress-wrap { bottom: 4.5rem; }
+}
 </style>
 </head>
 <body>
@@ -381,6 +505,7 @@ ruby rt {
 <ruby>有<rt>yǒu</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby>，<ruby>我<rt>wǒ</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>光<rt>guāng</rt></ruby>，<ruby>不<rt>bù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>因<rt>yīn</rt></ruby><ruby>为<rt>wèi</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>消<rt>xiāo</rt></ruby><ruby>失<rt>shī</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>而<rt>ér</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>因<rt>yīn</rt></ruby><ruby>为<rt>wèi</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>乌<rt>wū</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>挡<rt>dǎng</rt></ruby><ruby>住<rt>zhù</rt></ruby><ruby>了<rt>le</rt></ruby>。<ruby>只<rt>zhǐ</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>勇<rt>yǒng</rt></ruby><ruby>敢<rt>gǎn</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>往<rt>wǎng</rt></ruby><ruby>前<rt>qián</rt></ruby><ruby>走<rt>zǒu</rt></ruby>，<ruby>坚<rt>jiān</rt></ruby><ruby>持<rt>chí</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>放<rt>fàng</rt></ruby><ruby>弃<rt>qì</rt></ruby>，<ruby>总<rt>zǒng</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>天<rt>tiān</rt></ruby>，<ruby>风<rt>fēng</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>吹<rt>chuī</rt></ruby><ruby>散<rt>sàn</rt></ruby><ruby>乌<rt>wū</rt></ruby><ruby>云<rt>yún</rt></ruby>，<ruby>月<rt>yuè</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>重<rt>zhòng</rt></ruby><ruby>新<rt>xīn</rt></ruby><ruby>照<rt>zhào</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>路<rt>lù</rt></ruby>。<ruby>勇<rt>yǒng</rt></ruby><ruby>敢<rt>gǎn</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>坚<rt>jiān</rt></ruby><ruby>持<rt>chí</rt></ruby>，<ruby>就<rt>jiù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>心<rt>xīn</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby>。
         </div>
 <div class="moral-emojis">🐰 🌙 ✨ 🏔️ 🌟</div>
+<a class="back-to-list" href="../index.html"><ruby>返<rt>fǎn</rt></ruby><ruby>回<rt>huí</rt></ruby><ruby>绘<rt>huì</rt></ruby><ruby>本<rt>běn</rt></ruby><ruby>列<rt>liè</rt></ruby><ruby>表<rt>biǎo</rt></ruby> 📚</a>
 </div>
 </div>
 </div>
@@ -388,6 +513,8 @@ ruby rt {
 <div class="nav">
 <button id="prevBtn" onclick="changePage(-1)">‹</button>
 <div class="nav-dots" id="navDots"></div>
+<button class="tts-btn" id="ttsBtn" title="朗读全书">🔊</button>
+<button class="tts-stop-btn" id="ttsStopBtn" title="停止朗读" style="display:none;">⏹</button>
 <button id="nextBtn" onclick="changePage(1)">›</button>
 </div>
 <script>
@@ -611,6 +738,489 @@ function animate() {
 
 animate();
 updateUI();
+
+// ===== TTS 朗读功能（全文朗读 + 翻页同步 + 温柔女声）=====
+(function() {
+  if (!('speechSynthesis' in window)) {
+    console.warn('[TTS] Browser does not support speech synthesis');
+    var btn = document.getElementById('ttsBtn');
+    if (btn) {
+      btn.style.opacity = '0.4';
+      btn.title = '浏览器不支持语音朗读';
+      btn.addEventListener('click', function() {
+        alert('您的浏览器不支持语音朗读功能，请使用 Chrome 或 Edge 浏览器打开。');
+      });
+    }
+    return;
+  }
+
+  var ttsFlat = [];
+  var ttsCurrentIdx = 0;
+  var ttsSpeaking = false;
+  var ttsPaused = false;
+  var ttsKeepAlive = null;
+  var ttsCurrentUtterance = null;
+  var ttsAutoNav = false;
+  var ttsVoice = null;
+  var ttsRetryCount = 0;
+
+  var ttsBtn = document.getElementById('ttsBtn');
+  var ttsStopBtn = document.getElementById('ttsStopBtn');
+  var ttsProgressWrap = document.getElementById('ttsProgressWrap');
+  var ttsProgressBar = document.getElementById('ttsProgressBar');
+  var ttsProgressText = document.getElementById('ttsProgressText');
+
+  function showToast(msg, duration) {
+    duration = duration || 3000;
+    var old = document.getElementById('ttsToast');
+    if (old) old.remove();
+    var toast = document.createElement('div');
+    toast.id = 'ttsToast';
+    toast.textContent = msg;
+    toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(20,20,40,0.92);color:#fff;padding:18px 32px;border-radius:14px;font-size:1.1rem;z-index:99999;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.4);max-width:80vw;text-align:center;line-height:1.6;';
+    document.body.appendChild(toast);
+    setTimeout(function() {
+      toast.style.transition = 'opacity 0.4s';
+      toast.style.opacity = '0';
+      setTimeout(function() { toast.remove(); }, 400);
+    }, duration);
+  }
+
+  function extractPageText(pageEl) {
+    if (!pageEl) return '';
+
+    // Clone to avoid modifying original DOM
+    var clone = pageEl.cloneNode(true);
+
+    // CRITICAL FIX: Remove ALL <rt> elements (pinyin annotations)
+    // Without this, textContent includes pinyin like "月yuè亮liàng"
+    // which confuses the TTS engine and produces no recognizable speech
+    var rtEls = clone.querySelectorAll('rt');
+    for (var i = 0; i < rtEls.length; i++) {
+      var rt = rtEls[i];
+      if (rt.parentNode) rt.parentNode.removeChild(rt);
+    }
+
+    // Remove ruby tags but keep their remaining text (the Chinese characters)
+    var rubyEls = clone.querySelectorAll('ruby');
+    for (var i = 0; i < rubyEls.length; i++) {
+      var ruby = rubyEls[i];
+      while (ruby.firstChild) {
+        ruby.parentNode.insertBefore(ruby.firstChild, ruby);
+      }
+      ruby.parentNode.removeChild(ruby);
+    }
+
+    // Remove back-to-list links
+    var backLinks = clone.querySelectorAll('.back-to-list');
+    for (var i = 0; i < backLinks.length; i++) {
+      backLinks[i].parentNode.removeChild(backLinks[i]);
+    }
+
+    // Remove page numbers
+    var pageNums = clone.querySelectorAll('.page-number');
+    for (var i = 0; i < pageNums.length; i++) {
+      pageNums[i].parentNode.removeChild(pageNums[i]);
+    }
+
+    // Group 1 cover: .cover-title + .cover-subtitle
+    var coverTitle = clone.querySelector('.cover-title');
+    if (coverTitle) {
+      var text = coverTitle.textContent;
+      var subtitle = clone.querySelector('.cover-subtitle');
+      if (subtitle) text += '\u3002' + subtitle.textContent;
+      return text.trim();
+    }
+    // Group 1 story pages: .story-text
+    var storyText = clone.querySelector('.story-text');
+    if (storyText) return storyText.textContent.trim();
+    // Moral pages: .moral-text + .moral-goodnight
+    var moralText = clone.querySelector('.moral-text');
+    if (moralText) {
+      var t = moralText.textContent.trim();
+      var goodnight = clone.querySelector('.moral-goodnight');
+      if (goodnight) t += ' ' + goodnight.textContent.trim();
+      return t;
+    }
+    // Group 2: .page-text (cover, story, moral)
+    var pageText = clone.querySelector('.page-text');
+    if (pageText) {
+      var moralTitle = pageText.querySelector('.moral-title');
+      if (moralTitle) pageText.removeChild(moralTitle);
+      var moralEmojis = pageText.querySelector('.moral-emojis');
+      if (moralEmojis) pageText.removeChild(moralEmojis);
+      return pageText.textContent.trim();
+    }
+    return '';
+  }
+
+  function splitIntoSentences(text) {
+    return text.split(/[\u3002\uFF01\uFF1F\uFF1B\n]+/).map(function(s) {
+      return s.trim();
+    }).filter(function(s) { return s.length > 0; });
+  }
+
+  function buildBookContent() {
+    ttsFlat = [];
+    var allPages = document.querySelectorAll('.page');
+    allPages.forEach(function(pageEl, idx) {
+      var text = extractPageText(pageEl);
+      if (text) {
+        var sentences = splitIntoSentences(text);
+        sentences.forEach(function(s) {
+          ttsFlat.push({ pageIdx: idx, text: s });
+        });
+      }
+    });
+    console.log('[TTS] Built content:', ttsFlat.length, 'sentences');
+    if (ttsFlat.length > 0) {
+      console.log('[TTS] First sentence:', ttsFlat[0].text);
+    }
+  }
+
+  function selectVoice() {
+    var voices = window.speechSynthesis.getVoices();
+    console.log('[TTS] Total voices available:', voices.length);
+
+    var zhVoices = voices.filter(function(v) {
+      return v.lang && v.lang.toLowerCase().startsWith('zh');
+    });
+    console.log('[TTS] Chinese voices:', zhVoices.length,
+      zhVoices.map(function(v) { return v.name + '(' + v.lang + ')'; }).join(', ') || 'none');
+
+    if (zhVoices.length === 0) {
+      if (voices.length > 0) {
+        console.log('[TTS] No Chinese voice, using first available:', voices[0].name, voices[0].lang);
+        return voices[0];
+      }
+      console.warn('[TTS] No voices available at all');
+      return null;
+    }
+
+    // Preference: known female voice names
+    var femaleNames = [
+      'xiaoxiao', 'yaoyao', 'huihui', 'xiaoyi',
+      'tingting', 'ting-ting', 'mei-jia', 'meijia',
+      'sin-ji', 'female', '\u5973', 'huihui'
+    ];
+    for (var i = 0; i < femaleNames.length; i++) {
+      var match = zhVoices.find(function(v) {
+        return v.name.toLowerCase().indexOf(femaleNames[i].toLowerCase()) >= 0;
+      });
+      if (match) {
+        console.log('[TTS] Selected female voice:', match.name);
+        return match;
+      }
+    }
+
+    // Avoid known male voices
+    var nonMale = zhVoices.find(function(v) {
+      var n = v.name.toLowerCase();
+      return n.indexOf('male') < 0 && n.indexOf('\u7537') < 0 &&
+             n.indexOf('kangkang') < 0 && n.indexOf('yunxi') < 0;
+    });
+    if (nonMale) {
+      console.log('[TTS] Selected non-male voice:', nonMale.name);
+      return nonMale;
+    }
+
+    console.log('[TTS] Using first Chinese voice:', zhVoices[0].name);
+    return zhVoices[0];
+  }
+
+  function updateButton() {
+    if (!ttsBtn) return;
+    if (ttsSpeaking && !ttsPaused) {
+      ttsBtn.textContent = '\u23F8';
+      ttsBtn.classList.add('tts-active');
+      ttsBtn.classList.remove('tts-paused');
+      ttsBtn.title = '\u6682\u505C\u6717\u8BFB';
+      if (ttsStopBtn) ttsStopBtn.style.display = '';
+    } else if (ttsSpeaking && ttsPaused) {
+      ttsBtn.textContent = '\u25B6';
+      ttsBtn.classList.add('tts-paused');
+      ttsBtn.classList.remove('tts-active');
+      ttsBtn.title = '\u7EE7\u7EED\u6717\u8BFB';
+      if (ttsStopBtn) ttsStopBtn.style.display = '';
+    } else {
+      ttsBtn.textContent = '\uD83D\uDD0A';
+      ttsBtn.classList.remove('tts-active', 'tts-paused');
+      ttsBtn.title = '\u6717\u8BFB\u5168\u4E66';
+      if (ttsStopBtn) ttsStopBtn.style.display = 'none';
+    }
+  }
+
+  function updateProgress() {
+    if (!ttsProgressWrap || !ttsProgressBar) return;
+    if (!ttsSpeaking) {
+      ttsProgressWrap.classList.remove('tts-visible');
+      ttsProgressBar.style.width = '0%';
+      if (ttsProgressText) {
+        ttsProgressText.classList.remove('tts-visible');
+        ttsProgressText.textContent = '';
+      }
+      return;
+    }
+    ttsProgressWrap.classList.add('tts-visible');
+    var pct = ttsFlat.length > 0 ? (ttsCurrentIdx / ttsFlat.length) * 100 : 0;
+    ttsProgressBar.style.width = pct + '%';
+    if (ttsProgressText) {
+      var entry = ttsFlat[Math.min(ttsCurrentIdx, ttsFlat.length - 1)];
+      if (entry) {
+        var allPages = document.querySelectorAll('.page');
+        ttsProgressText.textContent = '\u7B2C ' + (entry.pageIdx + 1) + ' / ' + allPages.length + ' \u9875';
+        ttsProgressText.classList.add('tts-visible');
+      }
+    }
+  }
+
+  function navigateToPage(pageIdx) {
+    if (typeof goToPage === 'function') {
+      ttsAutoNav = true;
+      goToPage(pageIdx);
+      setTimeout(function() { ttsAutoNav = false; }, 500);
+    }
+  }
+
+  function stopTTS() {
+    window.speechSynthesis.cancel();
+    ttsSpeaking = false;
+    ttsPaused = false;
+    ttsCurrentIdx = 0;
+    if (ttsCurrentUtterance) {
+      ttsCurrentUtterance.onend = null;
+      ttsCurrentUtterance.onerror = null;
+      ttsCurrentUtterance = null;
+    }
+    if (ttsKeepAlive) { clearInterval(ttsKeepAlive); ttsKeepAlive = null; }
+    updateButton();
+    updateProgress();
+  }
+
+  function speakNext() {
+    if (!ttsSpeaking || ttsPaused) return;
+    if (ttsCurrentIdx >= ttsFlat.length) {
+      ttsSpeaking = false;
+      if (ttsKeepAlive) { clearInterval(ttsKeepAlive); ttsKeepAlive = null; }
+      updateButton();
+      updateProgress();
+      showToast('\u6545\u4E8B\u8BB2\u5B8C\u4E86\uFF01', 2500);
+      return;
+    }
+
+    var entry = ttsFlat[ttsCurrentIdx];
+    console.log('[TTS] Speaking', (ttsCurrentIdx + 1) + '/' + ttsFlat.length, ':', entry.text.substring(0, 40));
+
+    // Auto-navigate if the sentence belongs to a different page
+    if (typeof currentPage !== 'undefined' && entry.pageIdx !== currentPage) {
+      navigateToPage(entry.pageIdx);
+    }
+
+    var utterance = new SpeechSynthesisUtterance(entry.text);
+    utterance.lang = 'zh-CN';
+    utterance.rate = 0.85;
+    utterance.pitch = 1.15;
+    utterance.volume = 1.0;
+    if (ttsVoice) {
+      utterance.voice = ttsVoice;
+    }
+
+    utterance.onstart = function() {
+      console.log('[TTS] Utterance started successfully');
+      ttsRetryCount = 0;
+      updateProgress();
+    };
+    utterance.onend = function() {
+      console.log('[TTS] Utterance ended');
+      if (!ttsSpeaking) return;
+      ttsCurrentIdx++;
+      updateProgress();
+      var next = ttsFlat[Math.min(ttsCurrentIdx, ttsFlat.length - 1)];
+      var cur = ttsFlat[ttsCurrentIdx - 1];
+      var delay = (next && cur && next.pageIdx !== cur.pageIdx) ? 900 : 350;
+      setTimeout(speakNext, delay);
+    };
+    utterance.onerror = function(e) {
+      console.error('[TTS] Error:', e.error || e);
+      if (!ttsSpeaking) return;
+
+      // If it's an "interrupted" or "canceled" error, just stop
+      if (e.error === 'interrupted' || e.error === 'canceled') {
+        return;
+      }
+
+      // For other errors, try to skip to next sentence
+      ttsRetryCount++;
+      if (ttsRetryCount > 3) {
+        console.error('[TTS] Too many errors, stopping');
+        showToast('\u6717\u8BFB\u51FA\u9519\uFF0C\u8BF7\u5237\u65B0\u91CD\u8BD5', 3000);
+        stopTTS();
+        return;
+      }
+      console.warn('[TTS] Retrying, count:', ttsRetryCount);
+      ttsCurrentIdx++;
+      setTimeout(speakNext, 300);
+    };
+    ttsCurrentUtterance = utterance;
+
+    try {
+      // Cancel any pending speech first (important for Chrome)
+      window.speechSynthesis.cancel();
+      // Small delay before speaking to let cancel take effect
+      setTimeout(function() {
+        if (ttsSpeaking && !ttsPaused) {
+          window.speechSynthesis.speak(utterance);
+          console.log('[TTS] speak() called');
+        }
+      }, 50);
+    } catch (err) {
+      console.error('[TTS] speak() threw:', err);
+      showToast('\u6717\u8BFB\u5F02\u5E38\uFF0C\u8BF7\u5237\u65B0\u9875\u9762', 3000);
+      stopTTS();
+    }
+  }
+
+  function toggleTTS() {
+    if (ttsSpeaking && !ttsPaused) {
+      window.speechSynthesis.pause();
+      ttsPaused = true;
+      updateButton();
+      return;
+    }
+    if (ttsSpeaking && ttsPaused) {
+      window.speechSynthesis.resume();
+      ttsPaused = false;
+      updateButton();
+      return;
+    }
+
+    // === START ===
+    console.log('[TTS] Starting narration...');
+
+    // Build full-book content
+    buildBookContent();
+    if (ttsFlat.length === 0) {
+      showToast('\u6CA1\u6709\u627E\u5230\u53EF\u6717\u8BFB\u7684\u6587\u5B57', 2500);
+      return;
+    }
+
+    // Ensure voices are loaded
+    if (!ttsVoice) {
+      ttsVoice = selectVoice();
+    }
+
+    // If still no voice, try loading
+    if (!ttsVoice) {
+      console.warn('[TTS] No voice yet, attempting to load...');
+      var voices = window.speechSynthesis.getVoices();
+      if (voices.length === 0) {
+        // Trigger voice loading with a dummy utterance
+        var dummy = new SpeechSynthesisUtterance(' ');
+        dummy.volume = 0;
+        window.speechSynthesis.speak(dummy);
+        window.speechSynthesis.cancel();
+        // Wait and retry
+        setTimeout(function() {
+          ttsVoice = selectVoice();
+          if (!ttsVoice) {
+            showToast('\u672A\u627E\u5230\u8BED\u97F3\u5F15\u64CE\uFF0C\u8BF7\u786E\u4FDD\u6D4F\u89C8\u5668\u652F\u6301\u8BED\u97F3\u64AD\u62AB', 4000);
+            return;
+          }
+          actuallyStart();
+        }, 500);
+        return;
+      }
+    }
+
+    actuallyStart();
+  }
+
+  function actuallyStart() {
+    var startPage = (typeof currentPage !== 'undefined') ? currentPage : 0;
+    var startIdx = 0;
+    for (var i = 0; i < ttsFlat.length; i++) {
+      if (ttsFlat[i].pageIdx >= startPage) {
+        startIdx = i;
+        break;
+      }
+    }
+    ttsCurrentIdx = startIdx;
+    ttsSpeaking = true;
+    ttsPaused = false;
+    ttsRetryCount = 0;
+
+    // Chrome keep-alive: prevents 15-second timeout bug
+    // Only pause/resume if actually speaking (not paused)
+    ttsKeepAlive = setInterval(function() {
+      if (ttsSpeaking && !ttsPaused && window.speechSynthesis.speaking) {
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+      }
+    }, 10000);
+
+    speakNext();
+    updateButton();
+    updateProgress();
+  }
+
+  if (ttsBtn) ttsBtn.addEventListener('click', toggleTTS);
+  if (ttsStopBtn) ttsStopBtn.addEventListener('click', stopTTS);
+
+  // Auto-stop when user manually navigates (not TTS auto-nav)
+  var pageObserver = new MutationObserver(function(mutations) {
+    if (ttsAutoNav) return;
+    for (var i = 0; i < mutations.length; i++) {
+      if (mutations[i].attributeName === 'class' &&
+          mutations[i].target.classList.contains('active')) {
+        if (ttsSpeaking) {
+          console.log('[TTS] Manual page change, stopping');
+          stopTTS();
+        }
+        break;
+      }
+    }
+  });
+  document.querySelectorAll('.page').forEach(function(page) {
+    pageObserver.observe(page, { attributes: true, attributeFilter: ['class'] });
+  });
+
+  window.addEventListener('beforeunload', function() {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+  });
+
+  // === Voice Loading ===
+  // Some browsers load voices asynchronously
+  function initVoices() {
+    var voices = window.speechSynthesis.getVoices();
+    console.log('[TTS] initVoices: found', voices.length, 'voices');
+    if (voices.length > 0) {
+      if (!ttsVoice) ttsVoice = selectVoice();
+    }
+    return voices.length;
+  }
+
+  // Try immediately
+  initVoices();
+
+  // Listen for voiceschanged event (Chrome/Firefox)
+  if ('onvoiceschanged' in window.speechSynthesis) {
+    window.speechSynthesis.onvoiceschanged = function() {
+      console.log('[TTS] voiceschanged event fired');
+      initVoices();
+    };
+  }
+
+  // Retry loading voices after delays (some browsers are slow)
+  setTimeout(function() { if (!ttsVoice) initVoices(); }, 300);
+  setTimeout(function() { if (!ttsVoice) initVoices(); }, 800);
+  setTimeout(function() { if (!ttsVoice) initVoices(); }, 2000);
+
+  console.log('[TTS] Module initialized');
+})();
+
+
 </script>
+<div class="tts-progress-wrap" id="ttsProgressWrap"><div class="tts-progress-bar" id="ttsProgressBar"></div></div>
+<div class="tts-progress-text" id="ttsProgressText"></div>
 </body>
 </html>
