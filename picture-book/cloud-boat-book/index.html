@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>云朵小船</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -102,7 +103,7 @@ body {
 }
 
 .page-text p {
-  font-size: 1.05rem;
+  font-size: 1.31rem;
   line-height: 2;
   letter-spacing: 0.5px;
   color: var(--text-soft);
@@ -110,7 +111,7 @@ body {
 }
 
 .page-num {
-  font-size: 0.75rem;
+  font-size: 1.38rem;
   color: var(--text-dim);
   margin-top: 0.8rem;
   letter-spacing: 2px;
@@ -123,7 +124,7 @@ body {
 }
 
 .page-cover .page-text h1 {
-  font-size: 2.2rem;
+  font-size: 2.75rem;
   font-weight: 700;
   background: linear-gradient(135deg, var(--gold), var(--gold-warm), var(--pink-dawn));
   -webkit-background-clip: text;
@@ -134,7 +135,7 @@ body {
 }
 
 .page-cover .page-text .subtitle {
-  font-size: 0.9rem;
+  font-size: 1.38rem;
   color: var(--text-dim);
   letter-spacing: 6px;
 }
@@ -157,20 +158,20 @@ body {
 }
 
 .moral-box .moral-title {
-  font-size: 1.1rem;
+  font-size: 1.38rem;
   color: var(--gold);
   margin-bottom: 1rem;
   letter-spacing: 2px;
 }
 
 .moral-box .moral-text {
-  font-size: 1rem;
+  font-size: 1.25rem;
   line-height: 2.2;
   color: var(--text-soft);
 }
 
 .moral-emojis {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-top: 1.5rem;
   letter-spacing: 8px;
 }
@@ -199,7 +200,7 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  font-size: 1.1rem;
+  font-size: 1.38rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -256,138 +257,159 @@ body {
   .page-text p { font-size: 0.95rem; line-height: 1.8; }
   .page-cover .page-text h1 { font-size: 1.8rem; }
   .moral-box { padding: 1.5rem; }
-  .moral-box .moral-text { font-size: 0.9rem; }
+  .moral-box .moral-text { font-size: 1.1rem; }
   .nav { bottom: 1rem; gap: 1rem; padding: 0.5rem 1rem; }
+}
+
+/* Pinyin ruby annotations */
+ruby {
+    ruby-align: center;
+}
+ruby rt {
+    font-size: 0.58em;
+    font-weight: 400;
+    color: inherit;
+    opacity: 0.7;
+    letter-spacing: 0;
+    line-height: 1;
+}
+.page-text p {
+    line-height: 2.6;
+}
+.page-text p ruby rt {
+    display: ruby-text;
+}
+.page-cover .page-text h1 {
+    line-height: 1.6;
+}
+.page-cover .page-text h1 ruby rt {
+    font-size: 0.48em;
+}
+.moral-text {
+    line-height: 2.8;
+}
+.moral-text ruby rt {
+    font-size: 0.55em;
+}
+@media (max-width: 600px) {
+    .page-text p { line-height: 2.4; }
+    ruby rt { font-size: 0.5em; }
 }
 </style>
 </head>
 <body>
-
 <canvas id="bg-canvas"></canvas>
 <div class="progress-bar" id="progressBar" style="width: 0%"></div>
-
 <div id="book">
-
-  <!-- Cover -->
-  <div class="page page-cover active" data-page="0">
-    <div class="page-img-wrap">
-      <img src="images/01_cover.webp" alt="封面" loading="eager" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <h1>云朵小船</h1>
-      <p class="subtitle">一 场 关 于 勇 气 与 星 星 的 旅 行</p>
-    </div>
-  </div>
-
-  <!-- Page 1: 小朵看云 -->
-  <div class="page" data-page="1">
-    <div class="page-img-wrap">
-      <img src="images/02_cloud_comes.webp" alt="小朵看云" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>在一个被群山环抱的小村庄里，住着一个叫小朵的小女孩。小朵最喜欢的事情，就是躺在草地上看天上的云。</p>
-      <p>有一天傍晚，天边飘来一朵特别特别白的云。它比棉花糖还软，比雪还亮，慢慢地、慢慢地，落在了小朵家的屋顶上。</p>
-      <div class="page-num">01</div>
-    </div>
-  </div>
-
-  <!-- Page 2: 云朵变船 -->
-  <div class="page" data-page="2">
-    <div class="page-img-wrap">
-      <img src="images/03_climb_aboard.webp" alt="云朵小船" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>小朵好奇地爬上屋顶，发现这朵云竟然变成了一艘小船的形状！船头翘翘的，船身软绵绵的，还有两片小云朵当船桨。</p>
-      <p>"你……你是云朵小船吗？"小朵轻轻摸了摸船身，软软的，暖暖的。云朵小船微微晃了晃，好像在说："上来吧。"</p>
-      <div class="page-num">02</div>
-    </div>
-  </div>
-
-  <!-- Page 3: 云海 -->
-  <div class="page" data-page="3">
-    <div class="page-img-wrap">
-      <img src="images/04_cloud_sea.webp" alt="云海" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>小朵鼓起勇气，跳了上去。哇！云朵小船轻轻地飘了起来，越飞越高。村庄变小了，群山变小了，整个大地变成了一块五彩的拼图。</p>
-      <p>好大好大的云海呀！白色的云朵像翻滚的波浪，一层叠着一层，一直铺到天边。金色的夕阳给云海镶上了一道亮亮的金边，美得像一幅画。</p>
-      <div class="page-num">03</div>
-    </div>
-  </div>
-
-  <!-- Page 4: 云朵鲸鱼 -->
-  <div class="page" data-page="4">
-    <div class="page-img-wrap">
-      <img src="images/05_cloud_whale.webp" alt="云朵鲸鱼" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>忽然，前方的云朵拱起一个大大的弧形——一条巨大的云朵鲸鱼从云海里跃了出来！它的身体是银灰色的，尾巴甩出一道漂亮的弧线。</p>
-      <p>"我要去云海尽头，那里有通往星星的路。"鲸鱼说完，摆摆尾巴，潜入了云海，只留下一串圆圆的云泡泡。</p>
-      <p>小朵的眼睛亮了。通往星星的路！她也想去！</p>
-      <div class="page-num">04</div>
-    </div>
-  </div>
-
-  <!-- Page 5: 暴风雨 -->
-  <div class="page" data-page="5">
-    <div class="page-img-wrap">
-      <img src="images/06_storm_song.webp" alt="暴风雨中唱歌" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>可是，云海并不是一直那么温柔。天渐渐暗了下来，前方出现了一大片黑压压的暴风云。乌云翻滚着，闪电在云层里穿来穿去。</p>
-      <p>"我……我该怎么办？"小朵的声音在发抖。就在她快要哭出来的时候，她想起了妈妈常说的那句话："害怕的时候，就唱一首歌吧。"</p>
-      <p>小朵深吸一口气，开始小声唱歌："小云朵，轻轻飘，带着我去找星星……"</p>
-      <div class="page-num">05</div>
-    </div>
-  </div>
-
-  <!-- Page 6: 星空 -->
-  <div class="page" data-page="6">
-    <div class="page-img-wrap">
-      <img src="images/07_starry_sky.webp" alt="满天繁星" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>奇妙的事情发生了！云朵小船开始发光了，柔和的白光从船身散发出来。暴风云好像被这温柔的光安抚了，慢慢散开了一条通道。</p>
-      <p>当最后一片乌云散去，小朵眼前豁然开朗——满天繁星！数不清的星星密密麻麻地铺满了天空，有的金色，有的蓝色，有的粉色，像一颗颗彩色的糖果洒在黑丝绒上。</p>
-      <p>她伸出小手，轻轻碰了碰最近的一颗星星。那颗星星是暖的，像捧着一小团阳光。</p>
-      <div class="page-num">06</div>
-    </div>
-  </div>
-
-  <!-- Page 7: 入睡 -->
-  <div class="page" data-page="7">
-    <div class="page-img-wrap">
-      <img src="images/08_dreaming.webp" alt="甜甜入睡" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>不知过了多久，星星们渐渐飞回了天上。云朵小船载着小朵，慢慢地、轻轻地往回飞。当小朵回到屋顶的时候，手心里还留着一点星星的余温。</p>
-      <p>那一晚，小朵睡得特别香。她梦见自己又乘着云朵小船，在星星中间飞呀飞。因为她知道，勇敢的心，能带你去任何地方。</p>
-      <div class="page-num">07</div>
-    </div>
-  </div>
-
-  <!-- Moral -->
-  <div class="page page-moral" data-page="8">
-    <div class="page-text">
-      <div class="moral-box">
-        <div class="moral-title">🌟 小寓意</div>
-        <div class="moral-text">
-          每一次冒险都需要勇气。当你害怕的时候，不要退缩，唱一首歌，给自己一点光。你会发现，黑暗的尽头，总有一片星星在等你。
-        </div>
-        <div class="moral-emojis">☁️ ⛵ ✨ ⭐ 🌙</div>
-      </div>
-    </div>
-  </div>
-
+<!-- Cover -->
+<div class="page page-cover active" data-page="0">
+<div class="page-img-wrap">
+<img alt="封面" height="800" loading="eager" src="images/01_cover.webp" width="800"/>
 </div>
-
+<div class="page-text">
+<h1><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>船<rt>chuán</rt></ruby></h1>
+<p class="subtitle"><ruby>一<rt>yī</rt></ruby> <ruby>场<rt>chǎng</rt></ruby> <ruby>关<rt>guān</rt></ruby> <ruby>于<rt>yú</rt></ruby> <ruby>勇<rt>yǒng</rt></ruby> <ruby>气<rt>qì</rt></ruby> <ruby>与<rt>yǔ</rt></ruby> <ruby>星<rt>xīng</rt></ruby> <ruby>星<rt>xīng</rt></ruby> <ruby>的<rt>de</rt></ruby> <ruby>旅<rt>lǚ</rt></ruby> <ruby>行<rt>xíng</rt></ruby></p>
+</div>
+</div>
+ Page 1: <ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>云<rt>yún</rt></ruby> 
+<div class="page" data-page="1">
+<div class="page-img-wrap">
+<img alt="小朵看云" height="800" loading="lazy" src="images/02_cloud_comes.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>在<rt>zài</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>被<rt>bèi</rt></ruby><ruby>群<rt>qún</rt></ruby><ruby>山<rt>shān</rt></ruby><ruby>环<rt>huán</rt></ruby><ruby>抱<rt>bào</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>村<rt>cūn</rt></ruby><ruby>庄<rt>zhuāng</rt></ruby><ruby>里<rt>lǐ</rt></ruby>，<ruby>住<rt>zhù</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>叫<rt>jiào</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>女<rt>nǚ</rt></ruby><ruby>孩<rt>hái</rt></ruby>。<ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>喜<rt>xǐ</rt></ruby><ruby>欢<rt>huān</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>事<rt>shì</rt></ruby><ruby>情<rt>qíng</rt></ruby>，<ruby>就<rt>jiù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>躺<rt>tǎng</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>草<rt>cǎo</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>云<rt>yún</rt></ruby>。</p>
+<p><ruby>有<rt>yǒu</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>傍<rt>bàng</rt></ruby><ruby>晚<rt>wǎn</rt></ruby>，<ruby>天<rt>tiān</rt></ruby><ruby>边<rt>biān</rt></ruby><ruby>飘<rt>piāo</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>特<rt>tè</rt></ruby><ruby>别<rt>bié</rt></ruby><ruby>特<rt>tè</rt></ruby><ruby>别<rt>bié</rt></ruby><ruby>白<rt>bái</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>云<rt>yún</rt></ruby>。<ruby>它<rt>tā</rt></ruby><ruby>比<rt>bǐ</rt></ruby><ruby>棉<rt>mián</rt></ruby><ruby>花<rt>huā</rt></ruby><ruby>糖<rt>táng</rt></ruby><ruby>还<rt>hái</rt></ruby><ruby>软<rt>ruǎn</rt></ruby>，<ruby>比<rt>bǐ</rt></ruby><ruby>雪<rt>xuě</rt></ruby><ruby>还<rt>hái</rt></ruby><ruby>亮<rt>liàng</rt></ruby>，<ruby>慢<rt>màn</rt></ruby><ruby>慢<rt>màn</rt></ruby><ruby>地<rt>dì</rt></ruby>、<ruby>慢<rt>màn</rt></ruby><ruby>慢<rt>màn</rt></ruby><ruby>地<rt>dì</rt></ruby>，<ruby>落<rt>luò</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>家<rt>jiā</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>屋<rt>wū</rt></ruby><ruby>顶<rt>dǐng</rt></ruby><ruby>上<rt>shàng</rt></ruby>。</p>
+<div class="page-num">01</div>
+</div>
+</div>
+ Page 2: <ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>变<rt>biàn</rt></ruby><ruby>船<rt>chuán</rt></ruby> 
+<div class="page" data-page="2">
+<div class="page-img-wrap">
+<img alt="云朵小船" height="800" loading="lazy" src="images/03_climb_aboard.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>奇<rt>qí</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>爬<rt>pá</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>屋<rt>wū</rt></ruby><ruby>顶<rt>dǐng</rt></ruby>，<ruby>发<rt>fā</rt></ruby><ruby>现<rt>xiàn</rt></ruby><ruby>这<rt>zhè</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>竟<rt>jìng</rt></ruby><ruby>然<rt>rán</rt></ruby><ruby>变<rt>biàn</rt></ruby><ruby>成<rt>chéng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>艘<rt>sōu</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>形<rt>xíng</rt></ruby><ruby>状<rt>zhuàng</rt></ruby>！<ruby>船<rt>chuán</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>翘<rt>qiào</rt></ruby><ruby>翘<rt>qiào</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>船<rt>chuán</rt></ruby><ruby>身<rt>shēn</rt></ruby><ruby>软<rt>ruǎn</rt></ruby><ruby>绵<rt>mián</rt></ruby><ruby>绵<rt>mián</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>还<rt>hái</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>两<rt>liǎng</rt></ruby><ruby>片<rt>piàn</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>当<rt>dāng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>桨<rt>jiǎng</rt></ruby>。</p>
+<p>"<ruby>你<rt>nǐ</rt></ruby>……<ruby>你<rt>nǐ</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>吗<rt>ma</rt></ruby>？"<ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>摸<rt>mō</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>摸<rt>mō</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>身<rt>shēn</rt></ruby>，<ruby>软<rt>ruǎn</rt></ruby><ruby>软<rt>ruǎn</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>暖<rt>nuǎn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby>。<ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>微<rt>wēi</rt></ruby><ruby>微<rt>wēi</rt></ruby><ruby>晃<rt>huǎng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>晃<rt>huǎng</rt></ruby>，<ruby>好<rt>hǎo</rt></ruby><ruby>像<rt>xiàng</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>说<rt>shuō</rt></ruby>："<ruby>上<rt>shàng</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>吧<rt>ba</rt></ruby>。"</p>
+<div class="page-num">02</div>
+</div>
+</div>
+ Page 3: <ruby>云<rt>yún</rt></ruby><ruby>海<rt>hǎi</rt></ruby> 
+<div class="page" data-page="3">
+<div class="page-img-wrap">
+<img alt="云海" height="800" loading="lazy" src="images/04_cloud_sea.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>鼓<rt>gǔ</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>勇<rt>yǒng</rt></ruby><ruby>气<rt>qì</rt></ruby>，<ruby>跳<rt>tiào</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>去<rt>qù</rt></ruby>。<ruby>哇<rt>wa</rt></ruby>！<ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>飘<rt>piāo</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>来<rt>lái</rt></ruby>，<ruby>越<rt>yuè</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>越<rt>yuè</rt></ruby><ruby>高<rt>gāo</rt></ruby>。<ruby>村<rt>cūn</rt></ruby><ruby>庄<rt>zhuāng</rt></ruby><ruby>变<rt>biàn</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>群<rt>qún</rt></ruby><ruby>山<rt>shān</rt></ruby><ruby>变<rt>biàn</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>整<rt>zhěng</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>变<rt>biàn</rt></ruby><ruby>成<rt>chéng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>块<rt>kuài</rt></ruby><ruby>五<rt>wǔ</rt></ruby><ruby>彩<rt>cǎi</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>拼<rt>pīn</rt></ruby><ruby>图<rt>tú</rt></ruby>。</p>
+<p><ruby>好<rt>hǎo</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>海<rt>hǎi</rt></ruby><ruby>呀<rt>ya</rt></ruby>！<ruby>白<rt>bái</rt></ruby><ruby>色<rt>sè</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>像<rt>xiàng</rt></ruby><ruby>翻<rt>fān</rt></ruby><ruby>滚<rt>gǔn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>波<rt>bō</rt></ruby><ruby>浪<rt>làng</rt></ruby>，<ruby>一<rt>yī</rt></ruby><ruby>层<rt>céng</rt></ruby><ruby>叠<rt>dié</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>层<rt>céng</rt></ruby>，<ruby>一<rt>yī</rt></ruby><ruby>直<rt>zhí</rt></ruby><ruby>铺<rt>pù</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>边<rt>biān</rt></ruby>。<ruby>金<rt>jīn</rt></ruby><ruby>色<rt>sè</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>夕<rt>xī</rt></ruby><ruby>阳<rt>yáng</rt></ruby><ruby>给<rt>gěi</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>海<rt>hǎi</rt></ruby><ruby>镶<rt>xiāng</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>金<rt>jīn</rt></ruby><ruby>边<rt>biān</rt></ruby>，<ruby>美<rt>měi</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>像<rt>xiàng</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>幅<rt>fú</rt></ruby><ruby>画<rt>huà</rt></ruby>。</p>
+<div class="page-num">03</div>
+</div>
+</div>
+ Page 4: <ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>鲸<rt>jīng</rt></ruby><ruby>鱼<rt>yú</rt></ruby> 
+<div class="page" data-page="4">
+<div class="page-img-wrap">
+<img alt="云朵鲸鱼" height="800" loading="lazy" src="images/05_cloud_whale.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>忽<rt>hū</rt></ruby><ruby>然<rt>rán</rt></ruby>，<ruby>前<rt>qián</rt></ruby><ruby>方<rt>fāng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>拱<rt>gǒng</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>弧<rt>hú</rt></ruby><ruby>形<rt>xíng</rt></ruby>——<ruby>一<rt>yī</rt></ruby><ruby>条<rt>tiáo</rt></ruby><ruby>巨<rt>jù</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>鲸<rt>jīng</rt></ruby><ruby>鱼<rt>yú</rt></ruby><ruby>从<rt>cóng</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>海<rt>hǎi</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>跃<rt>yuè</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>来<rt>lái</rt></ruby>！<ruby>它<rt>tā</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>身<rt>shēn</rt></ruby><ruby>体<rt>tǐ</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>银<rt>yín</rt></ruby><ruby>灰<rt>huī</rt></ruby><ruby>色<rt>sè</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>尾<rt>wěi</rt></ruby><ruby>巴<rt>bā</rt></ruby><ruby>甩<rt>shuǎi</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>漂<rt>piāo</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>弧<rt>hú</rt></ruby><ruby>线<rt>xiàn</rt></ruby>。</p>
+<p>"<ruby>我<rt>wǒ</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>去<rt>qù</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>海<rt>hǎi</rt></ruby><ruby>尽<rt>jǐn</rt></ruby><ruby>头<rt>tóu</rt></ruby>，<ruby>那<rt>nà</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>通<rt>tōng</rt></ruby><ruby>往<rt>wǎng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>路<rt>lù</rt></ruby>。"<ruby>鲸<rt>jīng</rt></ruby><ruby>鱼<rt>yú</rt></ruby><ruby>说<rt>shuō</rt></ruby><ruby>完<rt>wán</rt></ruby>，<ruby>摆<rt>bǎi</rt></ruby><ruby>摆<rt>bǎi</rt></ruby><ruby>尾<rt>wěi</rt></ruby><ruby>巴<rt>bā</rt></ruby>，<ruby>潜<rt>qián</rt></ruby><ruby>入<rt>rù</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>海<rt>hǎi</rt></ruby>，<ruby>只<rt>zhǐ</rt></ruby><ruby>留<rt>liú</rt></ruby><ruby>下<rt>xià</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>串<rt>chuàn</rt></ruby><ruby>圆<rt>yuán</rt></ruby><ruby>圆<rt>yuán</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>泡<rt>pào</rt></ruby><ruby>泡<rt>pào</rt></ruby>。</p>
+<p><ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>眼<rt>yǎn</rt></ruby><ruby>睛<rt>jīng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>了<rt>le</rt></ruby>。<ruby>通<rt>tōng</rt></ruby><ruby>往<rt>wǎng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>路<rt>lù</rt></ruby>！<ruby>她<rt>tā</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>想<rt>xiǎng</rt></ruby><ruby>去<rt>qù</rt></ruby>！</p>
+<div class="page-num">04</div>
+</div>
+</div>
+ Page 5: <ruby>暴<rt>bào</rt></ruby><ruby>风<rt>fēng</rt></ruby><ruby>雨<rt>yǔ</rt></ruby> 
+<div class="page" data-page="5">
+<div class="page-img-wrap">
+<img alt="暴风雨中唱歌" height="800" loading="lazy" src="images/06_storm_song.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>可<rt>kě</rt></ruby><ruby>是<rt>shì</rt></ruby>，<ruby>云<rt>yún</rt></ruby><ruby>海<rt>hǎi</rt></ruby><ruby>并<rt>bìng</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>直<rt>zhí</rt></ruby><ruby>那<rt>nà</rt></ruby><ruby>么<rt>me</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>柔<rt>róu</rt></ruby>。<ruby>天<rt>tiān</rt></ruby><ruby>渐<rt>jiàn</rt></ruby><ruby>渐<rt>jiàn</rt></ruby><ruby>暗<rt>àn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>下<rt>xià</rt></ruby><ruby>来<rt>lái</rt></ruby>，<ruby>前<rt>qián</rt></ruby><ruby>方<rt>fāng</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>现<rt>xiàn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>片<rt>piàn</rt></ruby><ruby>黑<rt>hēi</rt></ruby><ruby>压<rt>yā</rt></ruby><ruby>压<rt>yā</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>暴<rt>bào</rt></ruby><ruby>风<rt>fēng</rt></ruby><ruby>云<rt>yún</rt></ruby>。<ruby>乌<rt>wū</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>翻<rt>fān</rt></ruby><ruby>滚<rt>gǔn</rt></ruby><ruby>着<rt>zhe</rt></ruby>，<ruby>闪<rt>shǎn</rt></ruby><ruby>电<rt>diàn</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>层<rt>céng</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>穿<rt>chuān</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>穿<rt>chuān</rt></ruby><ruby>去<rt>qù</rt></ruby>。</p>
+<p>"<ruby>我<rt>wǒ</rt></ruby>……<ruby>我<rt>wǒ</rt></ruby><ruby>该<rt>gāi</rt></ruby><ruby>怎<rt>zěn</rt></ruby><ruby>么<rt>me</rt></ruby><ruby>办<rt>bàn</rt></ruby>？"<ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>声<rt>shēng</rt></ruby><ruby>音<rt>yīn</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>抖<rt>dǒu</rt></ruby>。<ruby>就<rt>jiù</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>她<rt>tā</rt></ruby><ruby>快<rt>kuài</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>哭<rt>kū</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby>，<ruby>她<rt>tā</rt></ruby><ruby>想<rt>xiǎng</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>常<rt>cháng</rt></ruby><ruby>说<rt>shuō</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>那<rt>nà</rt></ruby><ruby>句<rt>jù</rt></ruby><ruby>话<rt>huà</rt></ruby>："<ruby>害<rt>hài</rt></ruby><ruby>怕<rt>pà</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby>，<ruby>就<rt>jiù</rt></ruby><ruby>唱<rt>chàng</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>首<rt>shǒu</rt></ruby><ruby>歌<rt>gē</rt></ruby><ruby>吧<rt>ba</rt></ruby>。"</p>
+<p><ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>深<rt>shēn</rt></ruby><ruby>吸<rt>xī</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>口<rt>kǒu</rt></ruby><ruby>气<rt>qì</rt></ruby>，<ruby>开<rt>kāi</rt></ruby><ruby>始<rt>shǐ</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>声<rt>shēng</rt></ruby><ruby>唱<rt>chàng</rt></ruby><ruby>歌<rt>gē</rt></ruby>："<ruby>小<rt>xiǎo</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby>，<ruby>轻<rt>qīng</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>飘<rt>piāo</rt></ruby>，<ruby>带<rt>dài</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>去<rt>qù</rt></ruby><ruby>找<rt>zhǎo</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby>……"</p>
+<div class="page-num">05</div>
+</div>
+</div>
+ Page 6: <ruby>星<rt>xīng</rt></ruby><ruby>空<rt>kōng</rt></ruby> 
+<div class="page" data-page="6">
+<div class="page-img-wrap">
+<img alt="满天繁星" height="800" loading="lazy" src="images/07_starry_sky.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>奇<rt>qí</rt></ruby><ruby>妙<rt>miào</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>事<rt>shì</rt></ruby><ruby>情<rt>qíng</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>生<rt>shēng</rt></ruby><ruby>了<rt>le</rt></ruby>！<ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>开<rt>kāi</rt></ruby><ruby>始<rt>shǐ</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>柔<rt>róu</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>白<rt>bái</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>从<rt>cóng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>身<rt>shēn</rt></ruby><ruby>散<rt>sàn</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>来<rt>lái</rt></ruby>。<ruby>暴<rt>bào</rt></ruby><ruby>风<rt>fēng</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>像<rt>xiàng</rt></ruby><ruby>被<rt>bèi</rt></ruby><ruby>这<rt>zhè</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>柔<rt>róu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>安<rt>ān</rt></ruby><ruby>抚<rt>fǔ</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>慢<rt>màn</rt></ruby><ruby>慢<rt>màn</rt></ruby><ruby>散<rt>sàn</rt></ruby><ruby>开<rt>kāi</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>条<rt>tiáo</rt></ruby><ruby>通<rt>tōng</rt></ruby><ruby>道<rt>dào</rt></ruby>。</p>
+<p><ruby>当<rt>dāng</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>后<rt>hòu</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>片<rt>piàn</rt></ruby><ruby>乌<rt>wū</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>散<rt>sàn</rt></ruby><ruby>去<rt>qù</rt></ruby>，<ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>眼<rt>yǎn</rt></ruby><ruby>前<rt>qián</rt></ruby><ruby>豁<rt>huō</rt></ruby><ruby>然<rt>rán</rt></ruby><ruby>开<rt>kāi</rt></ruby><ruby>朗<rt>lǎng</rt></ruby>——<ruby>满<rt>mǎn</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>繁<rt>fán</rt></ruby><ruby>星<rt>xīng</rt></ruby>！<ruby>数<rt>shù</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>清<rt>qīng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>密<rt>mì</rt></ruby><ruby>密<rt>mì</rt></ruby><ruby>麻<rt>má</rt></ruby><ruby>麻<rt>má</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>铺<rt>pù</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>空<rt>kōng</rt></ruby>，<ruby>有<rt>yǒu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>金<rt>jīn</rt></ruby><ruby>色<rt>sè</rt></ruby>，<ruby>有<rt>yǒu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>蓝<rt>lán</rt></ruby><ruby>色<rt>sè</rt></ruby>，<ruby>有<rt>yǒu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>粉<rt>fěn</rt></ruby><ruby>色<rt>sè</rt></ruby>，<ruby>像<rt>xiàng</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>彩<rt>cǎi</rt></ruby><ruby>色<rt>sè</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>糖<rt>táng</rt></ruby><ruby>果<rt>guǒ</rt></ruby><ruby>洒<rt>sǎ</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>黑<rt>hēi</rt></ruby><ruby>丝<rt>sī</rt></ruby><ruby>绒<rt>róng</rt></ruby><ruby>上<rt>shàng</rt></ruby>。</p>
+<p><ruby>她<rt>tā</rt></ruby><ruby>伸<rt>shēn</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>手<rt>shǒu</rt></ruby>，<ruby>轻<rt>qīng</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>碰<rt>pèng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>碰<rt>pèng</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>近<rt>jìn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby>。<ruby>那<rt>nà</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>像<rt>xiàng</rt></ruby><ruby>捧<rt>pěng</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>团<rt>tuán</rt></ruby><ruby>阳<rt>yáng</rt></ruby><ruby>光<rt>guāng</rt></ruby>。</p>
+<div class="page-num">06</div>
+</div>
+</div>
+ Page 7: <ruby>入<rt>rù</rt></ruby><ruby>睡<rt>shuì</rt></ruby> 
+<div class="page" data-page="7">
+<div class="page-img-wrap">
+<img alt="甜甜入睡" height="800" loading="lazy" src="images/08_dreaming.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>不<rt>bù</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>过<rt>guò</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>久<rt>jiǔ</rt></ruby>，<ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>渐<rt>jiàn</rt></ruby><ruby>渐<rt>jiàn</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>回<rt>huí</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>上<rt>shàng</rt></ruby>。<ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>载<rt>zài</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby>，<ruby>慢<rt>màn</rt></ruby><ruby>慢<rt>màn</rt></ruby><ruby>地<rt>dì</rt></ruby>、<ruby>轻<rt>qīng</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>往<rt>wǎng</rt></ruby><ruby>回<rt>huí</rt></ruby><ruby>飞<rt>fēi</rt></ruby>。<ruby>当<rt>dāng</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>回<rt>huí</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>屋<rt>wū</rt></ruby><ruby>顶<rt>dǐng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby>，<ruby>手<rt>shǒu</rt></ruby><ruby>心<rt>xīn</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>还<rt>hái</rt></ruby><ruby>留<rt>liú</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>余<rt>yú</rt></ruby><ruby>温<rt>wēn</rt></ruby>。</p>
+<p><ruby>那<rt>nà</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>晚<rt>wǎn</rt></ruby>，<ruby>小<rt>xiǎo</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>睡<rt>shuì</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>特<rt>tè</rt></ruby><ruby>别<rt>bié</rt></ruby><ruby>香<rt>xiāng</rt></ruby>。<ruby>她<rt>tā</rt></ruby><ruby>梦<rt>mèng</rt></ruby><ruby>见<rt>jiàn</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>乘<rt>chéng</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>船<rt>chuán</rt></ruby>，<ruby>在<rt>zài</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>中<rt>zhōng</rt></ruby><ruby>间<rt>jiān</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>呀<rt>ya</rt></ruby><ruby>飞<rt>fēi</rt></ruby>。<ruby>因<rt>yīn</rt></ruby><ruby>为<rt>wèi</rt></ruby><ruby>她<rt>tā</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>道<rt>dào</rt></ruby>，<ruby>勇<rt>yǒng</rt></ruby><ruby>敢<rt>gǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>心<rt>xīn</rt></ruby>，<ruby>能<rt>néng</rt></ruby><ruby>带<rt>dài</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>去<rt>qù</rt></ruby><ruby>任<rt>rèn</rt></ruby><ruby>何<rt>hé</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>方<rt>fāng</rt></ruby>。</p>
+<div class="page-num">07</div>
+</div>
+</div>
+<!-- Moral -->
+<div class="page page-moral" data-page="8">
+<div class="page-text">
+<div class="moral-box">
+<div class="moral-title">🌟 <ruby>小<rt>xiǎo</rt></ruby><ruby>寓<rt>yù</rt></ruby><ruby>意<rt>yì</rt></ruby></div>
+<div class="moral-text">
+<ruby>每<rt>měi</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>次<rt>cì</rt></ruby><ruby>冒<rt>mào</rt></ruby><ruby>险<rt>xiǎn</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>需<rt>xū</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>勇<rt>yǒng</rt></ruby><ruby>气<rt>qì</rt></ruby>。<ruby>当<rt>dāng</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>害<rt>hài</rt></ruby><ruby>怕<rt>pà</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby>，<ruby>不<rt>bù</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>退<rt>tuì</rt></ruby><ruby>缩<rt>suō</rt></ruby>，<ruby>唱<rt>chàng</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>首<rt>shǒu</rt></ruby><ruby>歌<rt>gē</rt></ruby>，<ruby>给<rt>gěi</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>光<rt>guāng</rt></ruby>。<ruby>你<rt>nǐ</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>现<rt>xiàn</rt></ruby>，<ruby>黑<rt>hēi</rt></ruby><ruby>暗<rt>àn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>尽<rt>jǐn</rt></ruby><ruby>头<rt>tóu</rt></ruby>，<ruby>总<rt>zǒng</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>片<rt>piàn</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>等<rt>děng</rt></ruby><ruby>你<rt>nǐ</rt></ruby>。
+        </div>
+<div class="moral-emojis">☁️ ⛵ ✨ ⭐ 🌙</div>
+</div>
+</div>
+</div>
+</div>
 <!-- Navigation -->
 <div class="nav">
-  <button id="prevBtn" onclick="changePage(-1)">‹</button>
-  <div class="nav-dots" id="navDots"></div>
-  <button id="nextBtn" onclick="changePage(1)">›</button>
+<button id="prevBtn" onclick="changePage(-1)">‹</button>
+<div class="nav-dots" id="navDots"></div>
+<button id="nextBtn" onclick="changePage(1)">›</button>
 </div>
-
 <script>
 // ===== Page Navigation =====
 let currentPage = 0;

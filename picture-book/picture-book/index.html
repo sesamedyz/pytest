@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>月亮船和小星星 🌙✨</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Long+Cang&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --night-deep: #0a0e27;
+    --night-mid: #1a1f4e;
+    --night-soft: #2d2f6e;
+    --moon-gold: #f9e79f;
+    --moon-warm: #fef3d0;
+    --star-yellow: #fff4b3;
+    --star-glow: #ffe082;
+    --cloud-white: #e8eaf6;
+    --text-light: #f5f5f5;
+    --text-warm: #fff8e1;
+    --text-soft: #e0e0e0;
+    --accent-purple: #b39ddb;
+    --accent-pink: #f8bbd0;
+    --dawn-orange: #ffab91;
+    --dawn-pink: #ffccbc;
+  }
+
+  body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--night-deep);
+    font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* ===== Starfield Background ===== */
+  #starfield {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ===== Book Container ===== */
+  #book {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .page {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+    padding: 20px;
+  }
+
+  .page.active {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+
+  /* ===== Cover Page ===== */
+  .cover-page {
+    background: radial-gradient(ellipse at center, var(--night-mid) 0%, var(--night-deep) 100%);
+  }
+
+  .cover-content {
+    text-align: center;
+    z-index: 2;
+    animation: floatIn 1.5s ease;
+  }
+
+  .cover-title {
+    font-family: 'Ma Shan Zheng', serif;
+    font-size: clamp(3.12rem, 7.2vw, 5.62rem);
+    color: var(--moon-warm);
+    text-shadow: 0 0 20px rgba(249, 231, 159, 0.5), 0 0 40px rgba(249, 231, 159, 0.3);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.15em;
+  }
+
+  .cover-subtitle {
+    font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+    color: var(--star-glow);
+    opacity: 0.85;
+    margin-bottom: 2rem;
+    letter-spacing: 0.3em;
+  }
+
+  .cover-emojis {
+    font-size: clamp(2.50rem, 6.0vw, 4.38rem);
+    margin-bottom: 2rem;
+    animation: twinkle 2s ease-in-out infinite;
+  }
+
+  .cover-image-wrapper {
+    width: clamp(250px, 40vw, 420px);
+    height: clamp(250px, 40vw, 420px);
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 2rem;
+    border: 3px solid rgba(249, 231, 159, 0.3);
+    box-shadow: 0 0 40px rgba(249, 231, 159, 0.2), inset 0 0 30px rgba(0,0,0,0.3);
+    animation: gentlePulse 4s ease-in-out infinite;
+  }
+
+  .cover-image-wrapper img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+
+  .cover-start-btn {
+    font-family: 'ZCOOL KuaiLe', sans-serif;
+    font-size: clamp(1.25rem, 2.4vw, 1.62rem);
+    padding: 12px 40px;
+    background: linear-gradient(135deg, var(--moon-gold), var(--star-glow));
+    color: var(--night-deep);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(249, 231, 159, 0.4);
+    transition: all 0.3s ease;
+    letter-spacing: 0.1em;
+  }
+
+  .cover-start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(249, 231, 159, 0.6);
+  }
+
+  /* ===== Story Pages ===== */
+  .story-page {
+    background: linear-gradient(180deg, var(--night-deep) 0%, var(--night-mid) 50%, var(--night-soft) 100%);
+  }
+
+  .story-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 700px;
+    width: 100%;
+    z-index: 2;
+  }
+
+  .story-image-wrapper {
+    width: clamp(220px, 42vw, 380px);
+    height: clamp(220px, 42vw, 380px);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(179, 157, 219, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+  }
+
+  .story-image-wrapper img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 8s ease;
+  }
+
+  .page.active .story-image-wrapper img {
+    transform: scale(1.08);
+  }
+
+  .story-text {
+    font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+    font-size: clamp(1.25rem, 2.2vw, 1.62rem);
+    line-height: 2.2;
+    color: var(--text-warm);
+    text-align: center;
+    max-width: 580px;
+    padding: 1.2rem 2rem;
+    background: rgba(26, 31, 78, 0.4);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    letter-spacing: 0.05em;
+  }
+
+  .story-text .dialogue {
+    color: var(--star-glow);
+    font-style: italic;
+  }
+
+  .story-text .emphasis {
+    color: var(--accent-pink);
+  }
+
+  .page-number {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Ma Shan Zheng', serif;
+  }
+
+  /* ===== Moral Page ===== */
+  .moral-page {
+    background: radial-gradient(ellipse at center, var(--night-mid) 0%, var(--night-deep) 70%);
+  }
+
+  .moral-content {
+    text-align: center;
+    max-width: 600px;
+    z-index: 2;
+    animation: floatIn 1.5s ease;
+  }
+
+  .moral-emojis {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    animation: twinkle 2s ease-in-out infinite;
+  }
+
+  .moral-title {
+    font-family: 'Ma Shan Zheng', serif;
+    font-size: clamp(2.25rem, 4.2vw, 3.12rem);
+    color: var(--moon-warm);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .moral-text {
+    font-family: 'ZCOOL KuaiLe', sans-serif;
+    font-size: clamp(1.25rem, 1.9vw, 1.50rem);
+    line-height: 2.4;
+    color: var(--text-warm);
+    padding: 2rem;
+    background: rgba(26, 31, 78, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(249, 231, 159, 0.2);
+    margin-bottom: 2rem;
+  }
+
+  .moral-goodnight {
+    font-family: 'Long Cang', 'Ma Shan Zheng', cursive;
+    font-size: clamp(1.88rem, 3.6vw, 2.50rem);
+    color: var(--star-glow);
+    opacity: 0.9;
+  }
+
+  /* ===== Navigation ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 100;
+    background: linear-gradient(180deg, transparent, rgba(10, 14, 39, 0.8));
+    pointer-events: none;
+  }
+
+  .nav-btn {
+    pointer-events: auto;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid rgba(249, 231, 159, 0.3);
+    background: rgba(26, 31, 78, 0.7);
+    color: var(--moon-warm);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: rgba(249, 231, 159, 0.2);
+    border-color: var(--moon-gold);
+    transform: scale(1.1);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .page-indicator {
+    pointer-events: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .dot.active {
+    background: var(--moon-gold);
+    width: 24px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(249, 231, 159, 0.5);
+  }
+
+  /* ===== Floating Decorations ===== */
+  .floating-moon {
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    font-size: 2rem;
+    z-index: 50;
+    opacity: 0.5;
+    animation: gentleFloat 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  /* ===== Animations ===== */
+  @keyframes twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+  }
+
+  @keyframes gentlePulse {
+    0%, 100% { box-shadow: 0 0 40px rgba(249, 231, 159, 0.2), inset 0 0 30px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 60px rgba(249, 231, 159, 0.4), inset 0 0 30px rgba(0,0,0,0.3); }
+  }
+
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes gentleFloat {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+  }
+
+  @keyframes starTwinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 600px) {
+    .story-text { font-size: 1.2rem; line-height: 2; padding: 1rem 1.2rem; }
+    .story-image-wrapper { width: 200px; height: 200px; }
+    .cover-image-wrapper { width: 220px; height: 220px; }
+    .nav-btn { width: 40px; height: 40px; font-size: 1.1rem; }
+  }
+
+  @media (orientation: landscape) and (max-height: 500px) {
+    .story-content { flex-direction: row; gap: 2rem; }
+    .story-image-wrapper { width: 180px; height: 180px; margin-bottom: 0; flex-shrink: 0; }
+    .story-text { font-size: 1.15rem; line-height: 1.8; text-align: left; }
+  }
+
+/* Pinyin ruby annotations */
+ruby {
+    ruby-align: center;
+}
+ruby rt {
+    font-size: 0.58em;
+    font-weight: 400;
+    color: inherit;
+    opacity: 0.7;
+    letter-spacing: 0;
+    line-height: 1;
+}
+.page-text p {
+    line-height: 2.6;
+}
+.page-text p ruby rt {
+    display: ruby-text;
+}
+.page-cover .page-text h1 {
+    line-height: 1.6;
+}
+.page-cover .page-text h1 ruby rt {
+    font-size: 0.48em;
+}
+.moral-text {
+    line-height: 2.8;
+}
+.moral-text ruby rt {
+    font-size: 0.55em;
+}
+@media (max-width: 600px) {
+    .page-text p { line-height: 2.4; }
+    ruby rt { font-size: 0.5em; }
+}
+</style>
+</head>
+<body>
+<!-- Starfield Canvas -->
+<canvas id="starfield"></canvas>
+<!-- Floating Moon Decoration -->
+<div class="floating-moon">🌙</div>
+<!-- Book -->
+<div id="book">
+<!-- ===== Cover Page ===== -->
+<div class="page cover-page active" data-page="0">
+<div class="cover-content">
+<div class="cover-emojis">🌙 ✨ 🌟</div>
+<h1 class="cover-title"><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby></h1>
+<p class="cover-subtitle"><ruby>一<rt>yī</rt></ruby> <ruby>个<rt>gè</rt></ruby> <ruby>关<rt>guān</rt></ruby> <ruby>于<rt>yú</rt></ruby> <ruby>陪<rt>péi</rt></ruby> <ruby>伴<rt>bàn</rt></ruby> <ruby>的<rt>de</rt></ruby> <ruby>故<rt>gù</rt></ruby> <ruby>事<rt>shì</rt></ruby></p>
+<div class="cover-image-wrapper">
+<img alt="月亮船在星空中" loading="lazy" src="images/01_cover.webp"/>
+</div>
+<button class="cover-start-btn" onclick="nextPage()"><ruby>开<rt>kāi</rt></ruby><ruby>始<rt>shǐ</rt></ruby><ruby>阅<rt>yuè</rt></ruby><ruby>读<rt>dú</rt></ruby> ✨</button>
+</div>
+</div>
+ ===== Page 1: <ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>工<rt>gōng</rt></ruby><ruby>作<rt>zuò</rt></ruby> ===== 
+<div class="page story-page" data-page="1">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="月亮船划过天空" loading="lazy" src="images/01_cover.webp"/>
+</div>
+<div class="story-text">
+<ruby>从<rt>cóng</rt></ruby><ruby>前<rt>qián</rt></ruby>，<ruby>在<rt>zài</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>片<rt>piàn</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>高<rt>gāo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>上<rt>shàng</rt></ruby>，<ruby>有<rt>yǒu</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>只<rt>zhǐ</rt></ruby><ruby>弯<rt>wān</rt></ruby><ruby>弯<rt>wān</rt></ruby><ruby>的<rt>de</rt></ruby><span class="emphasis"><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby></span>。<br/>
+<ruby>每<rt>měi</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>上<rt>shàng</rt></ruby>，<ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>慢<rt>màn</rt></ruby><ruby>慢<rt>màn</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>从<rt>cóng</rt></ruby><ruby>东<rt>dōng</rt></ruby><ruby>边<rt>biān</rt></ruby><ruby>划<rt>huà</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>西<rt>xī</rt></ruby><ruby>边<rt>biān</rt></ruby>，<ruby>给<rt>gěi</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>洒<rt>sǎ</rt></ruby><ruby>下<rt>xià</rt></ruby><ruby>柔<rt>róu</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>银<rt>yín</rt></ruby><ruby>光<rt>guāng</rt></ruby>。
+      </div>
+</div>
+<span class="page-number">— 1 —</span>
+</div>
+ ===== Page 2: <ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>烦<rt>fán</rt></ruby><ruby>恼<rt>nǎo</rt></ruby> ===== 
+<div class="page story-page" data-page="2">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="孤独的月亮船" loading="lazy" src="images/02_lonely_moon.webp"/>
+</div>
+<div class="story-text">
+<ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>喜<rt>xǐ</rt></ruby><ruby>欢<rt>huān</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>工<rt>gōng</rt></ruby><ruby>作<rt>zuò</rt></ruby>，<ruby>但<rt>dàn</rt></ruby><ruby>他<rt>tā</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>烦<rt>fán</rt></ruby><ruby>恼<rt>nǎo</rt></ruby>——<ruby>他<rt>tā</rt></ruby><ruby>太<rt>tài</rt></ruby><ruby>安<rt>ān</rt></ruby><ruby>静<rt>jìng</rt></ruby><ruby>了<rt>le</rt></ruby>。<br/>
+<ruby>漫<rt>màn</rt></ruby><ruby>漫<rt>màn</rt></ruby><ruby>长<rt>zhǎng</rt></ruby><ruby>夜<rt>yè</rt></ruby>，<ruby>只<rt>zhǐ</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>风<rt>fēng</rt></ruby><ruby>儿<rt>ér</rt></ruby><ruby>偶<rt>ǒu</rt></ruby><ruby>尔<rt>ěr</rt></ruby><ruby>路<rt>lù</rt></ruby><ruby>过<rt>guò</rt></ruby>，<ruby>跟<rt>gēn</rt></ruby><ruby>他<rt>tā</rt></ruby><ruby>说<rt>shuō</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>两<rt>liǎng</rt></ruby><ruby>句<rt>jù</rt></ruby><ruby>话<rt>huà</rt></ruby>，<ruby>然<rt>rán</rt></ruby><ruby>后<rt>hòu</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>匆<rt>cōng</rt></ruby><ruby>匆<rt>cōng</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>走<rt>zǒu</rt></ruby><ruby>了<rt>le</rt></ruby>。<br/><br/>
+<span class="dialogue">"<ruby>要<rt>yào</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>能<rt>néng</rt></ruby><ruby>陪<rt>péi</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>划<rt>huà</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>就<rt>jiù</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>了<rt>le</rt></ruby>。"</span><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>叹<rt>tàn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>口<rt>kǒu</rt></ruby><ruby>气<rt>qì</rt></ruby>。
+      </div>
+</div>
+<span class="page-number">— 2 —</span>
+</div>
+ ===== Page 3: <ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>场<rt>chǎng</rt></ruby> ===== 
+<div class="page story-page" data-page="3">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="小星星躲在云后" loading="lazy" src="images/03_shy_star.webp"/>
+</div>
+<div class="story-text">
+<ruby>就<rt>jiù</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>这<rt>zhè</rt></ruby><ruby>时<rt>shí</rt></ruby>，<ruby>一<rt>yī</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>从<rt>cóng</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>后<rt>hòu</rt></ruby><ruby>面<rt>miàn</rt></ruby><ruby>探<rt>tàn</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>头<rt>tóu</rt></ruby>。<ruby>她<rt>tā</rt></ruby><ruby>叫<rt>jiào</rt></ruby><span class="emphasis"><ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby></span>，<ruby>是<rt>shì</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>胆<rt>dǎn</rt></ruby><ruby>怯<rt>qiè</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby>。<br/>
+<ruby>别<rt>bié</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>方<rt>fāng</rt></ruby><ruby>方<rt>fāng</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>挂<rt>guà</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>空<rt>kōng</rt></ruby><ruby>中<rt>zhōng</rt></ruby><ruby>间<rt>jiān</rt></ruby>，<ruby>闪<rt>shǎn</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>亮<rt>liàng</rt></ruby>，<ruby>可<rt>kě</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>总<rt>zǒng</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>躲<rt>duǒ</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>后<rt>hòu</rt></ruby><ruby>面<rt>miàn</rt></ruby>，<ruby>觉<rt>jué</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>太<rt>tài</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>没<rt>méi</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>注<rt>zhù</rt></ruby><ruby>意<rt>yì</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>她<rt>tā</rt></ruby>。<br/><br/>
+<span class="dialogue">"<ruby>你<rt>nǐ</rt></ruby>……<ruby>你<rt>nǐ</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>叹<rt>tàn</rt></ruby><ruby>气<rt>qì</rt></ruby><ruby>吗<rt>ma</rt></ruby>？"</span><ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>声<rt>shēng</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>问<rt>wèn</rt></ruby>。
+      </div>
+</div>
+<span class="page-number">— 3 —</span>
+</div>
+ ===== Page 4: <ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>邀<rt>yāo</rt></ruby><ruby>请<rt>qǐng</rt></ruby> ===== 
+<div class="page story-page" data-page="4">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="月亮船邀请小星星" loading="lazy" src="images/04_invitation.webp"/>
+</div>
+<div class="story-text">
+<ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>吓<rt>xià</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>跳<rt>tiào</rt></ruby>，<ruby>然<rt>rán</rt></ruby><ruby>后<rt>hòu</rt></ruby><ruby>笑<rt>xiào</rt></ruby><ruby>了<rt>le</rt></ruby>：<br/>
+<span class="dialogue">"<ruby>是<rt>shì</rt></ruby><ruby>呀<rt>ya</rt></ruby>，<ruby>长<rt>zhǎng</rt></ruby><ruby>夜<rt>yè</rt></ruby><ruby>漫<rt>màn</rt></ruby><ruby>漫<rt>màn</rt></ruby>，<ruby>有<rt>yǒu</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>孤<rt>gū</rt></ruby><ruby>单<rt>dān</rt></ruby>。<ruby>你<rt>nǐ</rt></ruby><ruby>愿<rt>yuàn</rt></ruby><ruby>意<rt>yì</rt></ruby><ruby>坐<rt>zuò</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>吗<rt>ma</rt></ruby>？"</span><br/><br/>
+<ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>犹<rt>yóu</rt></ruby><ruby>豫<rt>yù</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>下<rt>xià</rt></ruby>：<span class="dialogue">"<ruby>可<rt>kě</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>太<rt>tài</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>我<rt>wǒ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>微<rt>wēi</rt></ruby><ruby>弱<rt>ruò</rt></ruby>……"</span><br/><br/>
+<span class="dialogue">"<ruby>没<rt>méi</rt></ruby><ruby>关<rt>guān</rt></ruby><ruby>系<rt>xì</rt></ruby><ruby>呀<rt>ya</rt></ruby>！<ruby>船<rt>chuán</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>能<rt>néng</rt></ruby><ruby>划<rt>huà</rt></ruby>，<ruby>光<rt>guāng</rt></ruby><ruby>强<rt>qiáng</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>弱<rt>ruò</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>能<rt>néng</rt></ruby><ruby>亮<rt>liàng</rt></ruby>。<ruby>来<rt>lái</rt></ruby><ruby>吧<rt>ba</rt></ruby>！"</span><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>柔<rt>róu</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>说<rt>shuō</rt></ruby>。
+      </div>
+</div>
+<span class="page-number">— 4 —</span>
+</div>
+ ===== Page 5: <ruby>船<rt>chuán</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>美<rt>měi</rt></ruby><ruby>景<rt>jǐng</rt></ruby> ===== 
+<div class="page story-page" data-page="5">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="从船上看美景" loading="lazy" src="images/05_beautiful_view.webp"/>
+</div>
+<div class="story-text">
+<ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>鼓<rt>gǔ</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>勇<rt>yǒng</rt></ruby><ruby>气<rt>qì</rt></ruby>，<ruby>轻<rt>qīng</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>弯<rt>wān</rt></ruby><ruby>弯<rt>wān</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>身<rt>shēn</rt></ruby>。<ruby>哇<rt>wa</rt></ruby>——<ruby>从<rt>cóng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>下<rt>xià</rt></ruby><ruby>去<rt>qù</rt></ruby>，<ruby>整<rt>zhěng</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>世<rt>shì</rt></ruby><ruby>界<rt>jiè</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>美<rt>měi</rt></ruby><ruby>呀<rt>ya</rt></ruby>！<br/>
+<ruby>山<rt>shān</rt></ruby><ruby>峦<rt>luán</rt></ruby><ruby>像<rt>xiàng</rt></ruby><ruby>睡<rt>shuì</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>巨<rt>jù</rt></ruby><ruby>兽<rt>shòu</rt></ruby>，<ruby>河<rt>hé</rt></ruby><ruby>流<rt>liú</rt></ruby><ruby>像<rt>xiàng</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>丝<rt>sī</rt></ruby><ruby>带<rt>dài</rt></ruby>，<ruby>小<rt>xiǎo</rt></ruby><ruby>镇<rt>zhèn</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>灯<rt>dēng</rt></ruby><ruby>火<rt>huǒ</rt></ruby><ruby>像<rt>xiàng</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>橘<rt>jú</rt></ruby><ruby>黄<rt>huáng</rt></ruby><ruby>色<rt>sè</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>糖<rt>táng</rt></ruby><ruby>豆<rt>dòu</rt></ruby>。<br/><br/>
+<span class="dialogue">"<ruby>好<rt>hǎo</rt></ruby><ruby>漂<rt>piāo</rt></ruby><ruby>亮<rt>liàng</rt></ruby>！"</span><ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>忍<rt>rěn</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>住<rt>zhù</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>叫<rt>jiào</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>来<rt>lái</rt></ruby>，<ruby>她<rt>tā</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>点<rt>diǎn</rt></ruby>。<br/><br/>
+<ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>笑<rt>xiào</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>说<rt>shuō</rt></ruby>：<span class="dialogue">"<ruby>你<rt>nǐ</rt></ruby><ruby>看<rt>kàn</rt></ruby>，<ruby>你<rt>nǐ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>并<rt>bìng</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>弱<rt>ruò</rt></ruby><ruby>嘛<rt>ma</rt></ruby>。"</span>
+</div>
+</div>
+<span class="page-number">— 5 —</span>
+</div>
+ ===== Page 6: <ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>讲<rt>jiǎng</rt></ruby><ruby>故<rt>gù</rt></ruby><ruby>事<rt>shì</rt></ruby> ===== 
+<div class="page story-page" data-page="6">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="一起讲故事" loading="lazy" src="images/06_stories.webp"/>
+</div>
+<div class="story-text">
+<ruby>那<rt>nà</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>夜<rt>yè</rt></ruby>，<ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>慢<rt>màn</rt></ruby><ruby>慢<rt>màn</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>划<rt>huà</rt></ruby><ruby>过<rt>guò</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>空<rt>kōng</rt></ruby>。<br/>
+<ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>给<rt>gěi</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>讲<rt>jiǎng</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>故<rt>gù</rt></ruby><ruby>事<rt>shì</rt></ruby>——<ruby>谁<rt>shuí</rt></ruby><ruby>爱<rt>ài</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>舞<rt>wǔ</rt></ruby>，<ruby>谁<rt>shuí</rt></ruby><ruby>爱<rt>ài</rt></ruby><ruby>捉<rt>zhuō</rt></ruby><ruby>迷<rt>mí</rt></ruby><ruby>藏<rt>cáng</rt></ruby>，<ruby>谁<rt>shuí</rt></ruby><ruby>总<rt>zǒng</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>打<rt>dǎ</rt></ruby><ruby>瞌<rt>kē</rt></ruby><ruby>睡<rt>shuì</rt></ruby>。<br/>
+<ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>给<rt>gěi</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>讲<rt>jiǎng</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>故<rt>gù</rt></ruby><ruby>事<rt>shì</rt></ruby>——<ruby>哪<rt>nǎ</rt></ruby><ruby>条<rt>tiáo</rt></ruby><ruby>河<rt>hé</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>柔<rt>róu</rt></ruby>，<ruby>哪<rt>nǎ</rt></ruby><ruby>座<rt>zuò</rt></ruby><ruby>山<rt>shān</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>沉<rt>chén</rt></ruby><ruby>稳<rt>wěn</rt></ruby>，<ruby>哪<rt>nǎ</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>镇<rt>zhèn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>孩<rt>hái</rt></ruby><ruby>子<rt>zi</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>爱<rt>ài</rt></ruby><ruby>笑<rt>xiào</rt></ruby>。<br/><br/>
+<ruby>风<rt>fēng</rt></ruby><ruby>儿<rt>ér</rt></ruby><ruby>路<rt>lù</rt></ruby><ruby>过<rt>guò</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby>，<ruby>听<rt>tīng</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>他<rt>tā</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>笑<rt>xiào</rt></ruby><ruby>声<rt>shēng</rt></ruby>，<ruby>忍<rt>rěn</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>住<rt>zhù</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>留<rt>liú</rt></ruby><ruby>下<rt>xià</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>听<rt>tīng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>儿<rt>ér</rt></ruby>。
+      </div>
+</div>
+<span class="page-number">— 6 —</span>
+</div>
+ ===== Page 7: <ruby>天<rt>tiān</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>别<rt>bié</rt></ruby> ===== 
+<div class="page story-page" data-page="7">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="天亮道别" loading="lazy" src="images/07_farewell.webp"/>
+</div>
+<div class="story-text">
+<ruby>不<rt>bù</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>觉<rt>jué</rt></ruby>，<ruby>天<rt>tiān</rt></ruby><ruby>边<rt>biān</rt></ruby><ruby>泛<rt>fàn</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>淡<rt>dàn</rt></ruby><ruby>淡<rt>dàn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>橘<rt>jú</rt></ruby><ruby>红<rt>hóng</rt></ruby><ruby>色<rt>sè</rt></ruby>。<ruby>新<rt>xīn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>了<rt>le</rt></ruby>。<br/><br/>
+<span class="dialogue">"<ruby>我<rt>wǒ</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>回<rt>huí</rt></ruby><ruby>去<rt>qù</rt></ruby><ruby>啦<rt>la</rt></ruby>。"</span><ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>舍<rt>shě</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>说<rt>shuō</rt></ruby>。<br/><br/>
+<span class="dialogue">"<ruby>明<rt>míng</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>再<rt>zài</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>吧<rt>ba</rt></ruby>！"</span><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>说<rt>shuō</rt></ruby>，<span class="dialogue">"<ruby>我<rt>wǒ</rt></ruby><ruby>每<rt>měi</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>这<rt>zhè</rt></ruby><ruby>里<rt>lǐ</rt></ruby>。"</span><br/><br/>
+<ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>用<rt>yòng</rt></ruby><ruby>力<rt>lì</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>头<rt>tóu</rt></ruby>，<ruby>然<rt>rán</rt></ruby><ruby>后<rt>hòu</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>从<rt>cóng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>边<rt>biān</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>回<rt>huí</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>里<rt>lǐ</rt></ruby>。<ruby>但<rt>dàn</rt></ruby><ruby>她<rt>tā</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>再<rt>zài</rt></ruby><ruby>躲<rt>duǒ</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>深<rt>shēn</rt></ruby><ruby>处<rt>chù</rt></ruby><ruby>了<rt>le</rt></ruby>——<ruby>她<rt>tā</rt></ruby><ruby>选<rt>xuǎn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>片<rt>piàn</rt></ruby><ruby>薄<rt>báo</rt></ruby><ruby>薄<rt>báo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>云<rt>yún</rt></ruby>，<ruby>刚<rt>gāng</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>能<rt>néng</rt></ruby><ruby>让<rt>ràng</rt></ruby><ruby>她<rt>tā</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>透<rt>tòu</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>来<rt>lái</rt></ruby>。
+      </div>
+</div>
+<span class="page-number">— 7 —</span>
+</div>
+ ===== Page 8: <ruby>不<rt>bù</rt></ruby><ruby>再<rt>zài</rt></ruby><ruby>孤<rt>gū</rt></ruby><ruby>单<rt>dān</rt></ruby> ===== 
+<div class="page story-page" data-page="8">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="朋友们一起来" loading="lazy" src="images/08_friends.webp"/>
+</div>
+<div class="story-text">
+<ruby>从<rt>cóng</rt></ruby><ruby>那<rt>nà</rt></ruby><ruby>以<rt>yǐ</rt></ruby><ruby>后<rt>hòu</rt></ruby>，<ruby>每<rt>měi</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>上<rt>shàng</rt></ruby>，<ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>准<rt>zhǔn</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby>。<ruby>有<rt>yǒu</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby><ruby>还<rt>hái</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>带<rt>dài</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>两<rt>liǎng</rt></ruby><ruby>三<rt>sān</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>别<rt>bié</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>来<rt>lái</rt></ruby>。<br/><br/>
+<ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>再<rt>zài</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>孤<rt>gū</rt></ruby><ruby>单<rt>dān</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>而<rt>ér</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>呢<rt>ne</rt></ruby>，<ruby>也<rt>yě</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>再<rt>zài</rt></ruby><ruby>觉<rt>jué</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>太<rt>tài</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>了<rt>le</rt></ruby>——<br/>
+<ruby>因<rt>yīn</rt></ruby><ruby>为<rt>wèi</rt></ruby><ruby>她<rt>tā</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>现<rt>xiàn</rt></ruby>，<span class="emphasis"><ruby>陪<rt>péi</rt></ruby><ruby>伴<rt>bàn</rt></ruby><ruby>本<rt>běn</rt></ruby><ruby>身<rt>shēn</rt></ruby><ruby>就<rt>jiù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>种<rt>zhǒng</rt></ruby><ruby>光<rt>guāng</rt></ruby></span>。
+      </div>
+</div>
+<span class="page-number">— 8 —</span>
+</div>
+<!-- ===== Moral Page ===== -->
+<div class="page moral-page" data-page="9">
+<div class="moral-content">
+<div class="moral-emojis">🌟🌙</div>
+<h2 class="moral-title"><ruby>小<rt>xiǎo</rt></ruby> <ruby>寓<rt>yù</rt></ruby> <ruby>意<rt>yì</rt></ruby></h2>
+<div class="moral-text">
+<ruby>每<rt>měi</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>独<rt>dú</rt></ruby><ruby>特<rt>tè</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby>，<ruby>哪<rt>nǎ</rt></ruby><ruby>怕<rt>pà</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>微<rt>wēi</rt></ruby><ruby>弱<rt>ruò</rt></ruby>。<br/>
+<ruby>当<rt>dāng</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>愿<rt>yuàn</rt></ruby><ruby>意<rt>yì</rt></ruby><ruby>走<rt>zǒu</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>来<rt>lái</rt></ruby>，<ruby>陪<rt>péi</rt></ruby><ruby>伴<rt>bàn</rt></ruby><ruby>别<rt>bié</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby>，<br/>
+<ruby>你<rt>nǐ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>就<rt>jiù</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>变<rt>biàn</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>更<rt>gèng</rt></ruby><ruby>亮<rt>liàng</rt></ruby>。<br/><br/>
+<ruby>而<rt>ér</rt></ruby><ruby>那<rt>nà</rt></ruby><ruby>些<rt>xiē</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>强<rt>qiáng</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>人<rt>rén</rt></ruby>，<br/>
+<ruby>有<rt>yǒu</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>需<rt>xū</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby>，<br/>
+<ruby>让<rt>ràng</rt></ruby><ruby>夜<rt>yè</rt></ruby><ruby>空<rt>kōng</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>再<rt>zài</rt></ruby><ruby>孤<rt>gū</rt></ruby><ruby>单<rt>dān</rt></ruby>。
+      </div>
+<p class="moral-goodnight"><ruby>晚<rt>wǎn</rt></ruby><ruby>安<rt>ān</rt></ruby>，<ruby>小<rt>xiǎo</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>们<rt>men</rt></ruby> 🌙</p>
+</div>
+</div>
+</div>
+<!-- Navigation Bar -->
+<div class="nav-bar">
+<button class="nav-btn" disabled="" id="prevBtn" onclick="prevPage()">‹</button>
+<div class="page-indicator" id="pageIndicator"></div>
+<button class="nav-btn" id="nextBtn" onclick="nextPage()">›</button>
+</div>
+<script>
+  // ===== Page Navigation =====
+  const pages = document.querySelectorAll('.page');
+  const totalPages = pages.length;
+  let currentPage = 0;
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const pageIndicator = document.getElementById('pageIndicator');
+
+  // Create dots
+  for (let i = 0; i < totalPages; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToPage(i);
+    pageIndicator.appendChild(dot);
+  }
+
+  function updateNav() {
+    prevBtn.disabled = currentPage === 0;
+    nextBtn.disabled = currentPage === totalPages - 1;
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === currentPage);
+    });
+  }
+
+  function goToPage(index) {
+    if (index < 0 || index >= totalPages) return;
+    pages[currentPage].classList.remove('active');
+    currentPage = index;
+    pages[currentPage].classList.add('active');
+    updateNav();
+  }
+
+  function nextPage() {
+    goToPage(currentPage + 1);
+  }
+
+  function prevPage() {
+    goToPage(currentPage - 1);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') nextPage();
+    if (e.key === 'ArrowLeft') prevPage();
+  });
+
+  // Touch / Swipe navigation
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+
+  document.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextPage();
+      else prevPage();
+    }
+  });
+
+  // ===== Starfield Animation =====
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  // Create stars
+  const stars = [];
+  const starCount = 80;
+
+  for (let i = 0; i < starCount; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.5 + 0.3,
+      opacity: Math.random() * 0.8 + 0.2,
+      twinkleSpeed: Math.random() * 0.02 + 0.005,
+      twinklePhase: Math.random() * Math.PI * 2,
+      driftX: (Math.random() - 0.5) * 0.15,
+      driftY: (Math.random() - 0.5) * 0.1,
+      color: Math.random() > 0.7 ? 'rgba(255, 240, 180,' : 'rgba(220, 220, 255,'
+    });
+  }
+
+  // Create shooting stars occasionally
+  let shootingStar = null;
+
+  function maybeCreateShootingStar() {
+    if (!shootingStar && Math.random() < 0.003) {
+      shootingStar = {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height * 0.5,
+        length: 80 + Math.random() * 60,
+        speed: 8 + Math.random() * 6,
+        angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
+        opacity: 1
+      };
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw stars
+    stars.forEach(star => {
+      star.twinklePhase += star.twinkleSpeed;
+      const currentOpacity = star.opacity * (0.5 + 0.5 * Math.sin(star.twinklePhase));
+
+      star.x += star.driftX;
+      star.y += star.driftY;
+
+      // Wrap around
+      if (star.x < 0) star.x = canvas.width;
+      if (star.x > canvas.width) star.x = 0;
+      if (star.y < 0) star.y = canvas.height;
+      if (star.y > canvas.height) star.y = 0;
+
+      // Glow
+      const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.radius * 4);
+      gradient.addColorStop(0, star.color + currentOpacity + ')');
+      gradient.addColorStop(0.5, star.color + (currentOpacity * 0.3) + ')');
+      gradient.addColorStop(1, star.color + '0)');
+
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius * 4, 0, Math.PI * 2);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // Core
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fillStyle = star.color + currentOpacity + ')';
+      ctx.fill();
+    });
+
+    // Shooting star
+    maybeCreateShootingStar();
+    if (shootingStar) {
+      const tailX = shootingStar.x - Math.cos(shootingStar.angle) * shootingStar.length;
+      const tailY = shootingStar.y - Math.sin(shootingStar.angle) * shootingStar.length;
+
+      const grad = ctx.createLinearGradient(shootingStar.x, shootingStar.y, tailX, tailY);
+      grad.addColorStop(0, 'rgba(255, 255, 220, ' + shootingStar.opacity + ')');
+      grad.addColorStop(1, 'rgba(255, 255, 220, 0)');
+
+      ctx.beginPath();
+      ctx.moveTo(shootingStar.x, shootingStar.y);
+      ctx.lineTo(tailX, tailY);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      shootingStar.x += Math.cos(shootingStar.angle) * shootingStar.speed;
+      shootingStar.y += Math.sin(shootingStar.angle) * shootingStar.speed;
+      shootingStar.opacity -= 0.015;
+
+      if (shootingStar.opacity <= 0 || shootingStar.x > canvas.width || shootingStar.y > canvas.height) {
+        shootingStar = null;
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+</body>
+</html>

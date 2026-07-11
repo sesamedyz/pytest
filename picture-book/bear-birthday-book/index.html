@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>小熊的生日派对</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -99,7 +100,7 @@ body {
 }
 
 .page-text p {
-  font-size: 1rem;
+  font-size: 1.25rem;
   line-height: 1.9;
   letter-spacing: 0.5px;
   color: var(--text-soft);
@@ -108,7 +109,7 @@ body {
 }
 
 .page-num {
-  font-size: 0.75rem;
+  font-size: 1.38rem;
   color: var(--text-dim);
   margin-top: 0.6rem;
   letter-spacing: 2px;
@@ -118,7 +119,7 @@ body {
 .page-cover .page-img-wrap { max-height: 48vh; border-radius: 24px; }
 
 .page-cover .page-text h1 {
-  font-size: 2.2rem;
+  font-size: 2.75rem;
   font-weight: 700;
   background: linear-gradient(135deg, var(--honey), var(--berry), #ff9a76);
   -webkit-background-clip: text;
@@ -129,7 +130,7 @@ body {
 }
 
 .page-cover .page-text .subtitle {
-  font-size: 0.85rem;
+  font-size: 1.19rem;
   color: var(--text-dim);
   letter-spacing: 6px;
 }
@@ -147,20 +148,20 @@ body {
 }
 
 .moral-title {
-  font-size: 1.1rem;
+  font-size: 1.38rem;
   color: var(--honey);
   margin-bottom: 1rem;
   letter-spacing: 2px;
 }
 
 .moral-text {
-  font-size: 1rem;
+  font-size: 1.25rem;
   line-height: 2.2;
   color: var(--text-soft);
 }
 
 .moral-emojis {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-top: 1.5rem;
   letter-spacing: 8px;
 }
@@ -188,7 +189,7 @@ body {
   color: var(--honey);
   width: 40px; height: 40px;
   border-radius: 50%;
-  font-size: 1.1rem;
+  font-size: 1.38rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -232,143 +233,164 @@ body {
 @media (max-width: 600px) {
   .page { width: 94%; height: 90vh; }
   .page-img-wrap { max-height: 42vh; border-radius: 14px; }
-  .page-text p { font-size: 0.9rem; line-height: 1.7; }
+  .page-text p { font-size: 1.1rem; line-height: 1.7; }
   .page-cover .page-text h1 { font-size: 1.7rem; }
   .moral-box { padding: 1.5rem; }
-  .moral-text { font-size: 0.9rem; }
+  .moral-text { font-size: 1.1rem; }
   .nav { bottom: 1rem; gap: 1rem; padding: 0.5rem 1rem; }
+}
+
+/* Pinyin ruby annotations */
+ruby {
+    ruby-align: center;
+}
+ruby rt {
+    font-size: 0.58em;
+    font-weight: 400;
+    color: inherit;
+    opacity: 0.7;
+    letter-spacing: 0;
+    line-height: 1;
+}
+.page-text p {
+    line-height: 2.6;
+}
+.page-text p ruby rt {
+    display: ruby-text;
+}
+.page-cover .page-text h1 {
+    line-height: 1.6;
+}
+.page-cover .page-text h1 ruby rt {
+    font-size: 0.48em;
+}
+.moral-text {
+    line-height: 2.8;
+}
+.moral-text ruby rt {
+    font-size: 0.55em;
+}
+@media (max-width: 600px) {
+    .page-text p { line-height: 2.4; }
+    ruby rt { font-size: 0.5em; }
 }
 </style>
 </head>
 <body>
-
 <canvas id="bg-canvas"></canvas>
 <div class="progress-bar" id="progressBar" style="width: 0%"></div>
-
 <div id="book">
-
-  <!-- Cover -->
-  <div class="page page-cover active" data-page="0">
-    <div class="page-img-wrap">
-      <img src="images/01_cover.webp" alt="封面" loading="eager" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <h1>小熊的生日派对</h1>
-      <p class="subtitle">一 场 关 于 友 谊 与 分 享 的 盛 会</p>
-    </div>
-  </div>
-
-  <!-- Page 1 -->
-  <div class="page" data-page="1">
-    <div class="page-img-wrap">
-      <img src="images/02_decorating.webp" alt="布置派对" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>春天的一个早晨，阳光透过树叶洒进小熊的树洞小屋。今天是一个特别的日子——小熊满满五岁啦！</p>
-      <p>"今天是我的生日！"小熊满满从床上跳起来，开心地转了三个圈。</p>
-      <p>满满和妈妈一起忙碌起来，在墙上挂满了彩色气球和亮闪闪的彩带。满满还亲手画了一张大大的横幅："欢迎来满满的生日派对！"</p>
-      <div class="page-num">01</div>
-    </div>
-  </div>
-
-  <!-- Page 2 -->
-  <div class="page" data-page="2">
-    <div class="page-img-wrap">
-      <img src="images/03_waiting.webp" alt="等朋友" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>最让人期待的是那个生日蛋糕。熊妈妈烤了一个圆圆的蜂蜜蛋糕，上面铺满了红红的草莓和金黄的奶油，还插了五根彩色的蜡烛。甜甜的香味飘满了整个房间。</p>
-      <p>满满坐在门口的小凳子上，两只小脚晃啊晃。"朋友们什么时候来呢？"满满有点着急。</p>
-      <p>"叮咚——"门铃响了！</p>
-      <div class="page-num">02</div>
-    </div>
-  </div>
-
-  <!-- Page 3 -->
-  <div class="page" data-page="3">
-    <div class="page-img-wrap">
-      <img src="images/04_bunny_arrives.webp" alt="小兔到来" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>满满飞快地跑去开门。门口站着小兔子棉棉，她穿着粉色的小围裙，手里捧着一个小小的篮子。</p>
-      <p>"满满，生日快乐！"棉棉把篮子递过来，"这是我亲手种的胡萝卜，又甜又脆，送给你！"</p>
-      <p>"谢谢你，棉棉！"满满接过篮子，胡萝卜上还带着泥土的清香，真新鲜呀。</p>
-      <div class="page-num">03</div>
-    </div>
-  </div>
-
-  <!-- Page 4 -->
-  <div class="page" data-page="4">
-    <div class="page-img-wrap">
-      <img src="images/05_friends_arrive.webp" alt="朋友们到来" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>"叮咚——"小松鼠果果蹦蹦跳跳地跑进来，脖子上挂着一串亮晶晶的松果项链："满满，生日快乐！"</p>
-      <p>小狐狸暖暖抱着一束野花："这束花是我在山坡上采的，每一朵都是我精心挑的！"</p>
-      <p>小鹿丫丫举着一幅画："这是我画的我们一起玩的画，送给你当生日礼物！"画上大家手拉手，笑得可开心了。</p>
-      <div class="page-num">04</div>
-    </div>
-  </div>
-
-  <!-- Page 5 -->
-  <div class="page" data-page="5">
-    <div class="page-img-wrap">
-      <img src="images/06_games.webp" alt="玩游戏" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>朋友们都到齐了，派对正式开始！满满和朋友们先玩了"抢椅子"的游戏。音乐一停，所有人都去抢椅子——哈哈，果果没抢到，一屁股坐在了地上，逗得大家哈哈大笑。</p>
-      <p>然后是"猜谜语"游戏。暖暖出了一个谜语，大家想了半天，满满最聪明，第一个答对了！"答对啦！"大家鼓起掌来。</p>
-      <div class="page-num">05</div>
-    </div>
-  </div>
-
-  <!-- Page 6 -->
-  <div class="page" data-page="6">
-    <div class="page-img-wrap">
-      <img src="images/07_wish.webp" alt="许愿吹蜡烛" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>熊妈妈端出了那个漂亮的蜂蜜蛋糕。五根蜡烛被点燃，火苗一跳一跳的，把每个人的脸都映得暖暖的。</p>
-      <p>"满满，许个愿吧！"满满闭上眼睛，双手合十，许了一个很小很小、却很温暖很温暖的愿望。</p>
-      <p>"呼——"满满一口气吹灭了所有蜡烛。熊妈妈把蛋糕分给每一个人，蜂蜜蛋糕甜甜的，草莓酸酸的——"这是我吃过的最好吃的蛋糕！"</p>
-      <div class="page-num">06</div>
-    </div>
-  </div>
-
-  <!-- Page 7 -->
-  <div class="page" data-page="7">
-    <div class="page-img-wrap">
-      <img src="images/08_dreaming.webp" alt="甜甜入睡" loading="lazy" width="800" height="800">
-    </div>
-    <div class="page-text">
-      <p>吃完蛋糕，满满小心翼翼地拆开每一份礼物，每一样他都看了又看，摸了又摸。</p>
-      <p>"谢谢你们，"满满声音有点哽咽，"这是我过得最开心的一个生日。不是因为蛋糕，也不是因为礼物，而是因为你们都来了。"</p>
-      <p>棉棉搂住满满："因为我们是好朋友呀！好朋友就是要一起分享快乐的！"那天晚上，满满做了一个甜甜的梦——梦里，好朋友们永远在一起。</p>
-      <div class="page-num">07</div>
-    </div>
-  </div>
-
-  <!-- Moral -->
-  <div class="page page-moral" data-page="8">
-    <div class="page-text">
-      <div class="moral-box">
-        <div class="moral-title">🌟 小寓意</div>
-        <div class="moral-text">
-          真正的快乐，不在于收到多少礼物，而在于和好朋友一起分享。当你把快乐分给别人，快乐就会像气球一样，越变越大，飞得越来越高。陪伴，就是最好的生日礼物。
+<!-- Cover -->
+<div class="page page-cover active" data-page="0">
+<div class="page-img-wrap">
+<img alt="封面" height="800" loading="eager" src="images/01_cover.webp" width="800"/>
+</div>
+<div class="page-text">
+<h1><ruby>小<rt>xiǎo</rt></ruby><ruby>熊<rt>xióng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>生<rt>shēng</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>派<rt>pài</rt></ruby><ruby>对<rt>duì</rt></ruby></h1>
+<p class="subtitle"><ruby>一<rt>yī</rt></ruby> <ruby>场<rt>chǎng</rt></ruby> <ruby>关<rt>guān</rt></ruby> <ruby>于<rt>yú</rt></ruby> <ruby>友<rt>yǒu</rt></ruby> <ruby>谊<rt>yì</rt></ruby> <ruby>与<rt>yǔ</rt></ruby> <ruby>分<rt>fēn</rt></ruby> <ruby>享<rt>xiǎng</rt></ruby> <ruby>的<rt>de</rt></ruby> <ruby>盛<rt>shèng</rt></ruby> <ruby>会<rt>huì</rt></ruby></p>
+</div>
+</div>
+<!-- Page 1 -->
+<div class="page" data-page="1">
+<div class="page-img-wrap">
+<img alt="布置派对" height="800" loading="lazy" src="images/02_decorating.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>春<rt>chūn</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>早<rt>zǎo</rt></ruby><ruby>晨<rt>chén</rt></ruby>，<ruby>阳<rt>yáng</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>透<rt>tòu</rt></ruby><ruby>过<rt>guò</rt></ruby><ruby>树<rt>shù</rt></ruby><ruby>叶<rt>yè</rt></ruby><ruby>洒<rt>sǎ</rt></ruby><ruby>进<rt>jìn</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>熊<rt>xióng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>树<rt>shù</rt></ruby><ruby>洞<rt>dòng</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>屋<rt>wū</rt></ruby>。<ruby>今<rt>jīn</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>特<rt>tè</rt></ruby><ruby>别<rt>bié</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>子<rt>zi</rt></ruby>——<ruby>小<rt>xiǎo</rt></ruby><ruby>熊<rt>xióng</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>五<rt>wǔ</rt></ruby><ruby>岁<rt>suì</rt></ruby><ruby>啦<rt>la</rt></ruby>！</p>
+<p>"<ruby>今<rt>jīn</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>生<rt>shēng</rt></ruby><ruby>日<rt>rì</rt></ruby>！"<ruby>小<rt>xiǎo</rt></ruby><ruby>熊<rt>xióng</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>从<rt>cóng</rt></ruby><ruby>床<rt>chuáng</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>来<rt>lái</rt></ruby>，<ruby>开<rt>kāi</rt></ruby><ruby>心<rt>xīn</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>转<rt>zhuǎn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>三<rt>sān</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>圈<rt>quān</rt></ruby>。</p>
+<p><ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>忙<rt>máng</rt></ruby><ruby>碌<rt>lù</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>来<rt>lái</rt></ruby>，<ruby>在<rt>zài</rt></ruby><ruby>墙<rt>qiáng</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>挂<rt>guà</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>彩<rt>cǎi</rt></ruby><ruby>色<rt>sè</rt></ruby><ruby>气<rt>qì</rt></ruby><ruby>球<rt>qiú</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>彩<rt>cǎi</rt></ruby><ruby>带<rt>dài</rt></ruby>。<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>还<rt>hái</rt></ruby><ruby>亲<rt>qīn</rt></ruby><ruby>手<rt>shǒu</rt></ruby><ruby>画<rt>huà</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>张<rt>zhāng</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>横<rt>héng</rt></ruby><ruby>幅<rt>fú</rt></ruby>："<ruby>欢<rt>huān</rt></ruby><ruby>迎<rt>yíng</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>生<rt>shēng</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>派<rt>pài</rt></ruby><ruby>对<rt>duì</rt></ruby>！"</p>
+<div class="page-num">01</div>
+</div>
+</div>
+<!-- Page 2 -->
+<div class="page" data-page="2">
+<div class="page-img-wrap">
+<img alt="等朋友" height="800" loading="lazy" src="images/03_waiting.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>最<rt>zuì</rt></ruby><ruby>让<rt>ràng</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>期<rt>qī</rt></ruby><ruby>待<rt>dài</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>那<rt>nà</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>生<rt>shēng</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>蛋<rt>dàn</rt></ruby><ruby>糕<rt>gāo</rt></ruby>。<ruby>熊<rt>xióng</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>烤<rt>kǎo</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>圆<rt>yuán</rt></ruby><ruby>圆<rt>yuán</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>蜂<rt>fēng</rt></ruby><ruby>蜜<rt>mì</rt></ruby><ruby>蛋<rt>dàn</rt></ruby><ruby>糕<rt>gāo</rt></ruby>，<ruby>上<rt>shàng</rt></ruby><ruby>面<rt>miàn</rt></ruby><ruby>铺<rt>pù</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>红<rt>hóng</rt></ruby><ruby>红<rt>hóng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>草<rt>cǎo</rt></ruby><ruby>莓<rt>méi</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>金<rt>jīn</rt></ruby><ruby>黄<rt>huáng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>奶<rt>nǎi</rt></ruby><ruby>油<rt>yóu</rt></ruby>，<ruby>还<rt>hái</rt></ruby><ruby>插<rt>chā</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>五<rt>wǔ</rt></ruby><ruby>根<rt>gēn</rt></ruby><ruby>彩<rt>cǎi</rt></ruby><ruby>色<rt>sè</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>蜡<rt>là</rt></ruby><ruby>烛<rt>zhú</rt></ruby>。<ruby>甜<rt>tián</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>香<rt>xiāng</rt></ruby><ruby>味<rt>wèi</rt></ruby><ruby>飘<rt>piāo</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>整<rt>zhěng</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>房<rt>fáng</rt></ruby><ruby>间<rt>jiān</rt></ruby>。</p>
+<p><ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>坐<rt>zuò</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>门<rt>mén</rt></ruby><ruby>口<rt>kǒu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>凳<rt>dèng</rt></ruby><ruby>子<rt>zi</rt></ruby><ruby>上<rt>shàng</rt></ruby>，<ruby>两<rt>liǎng</rt></ruby><ruby>只<rt>zhǐ</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>脚<rt>jiǎo</rt></ruby><ruby>晃<rt>huǎng</rt></ruby><ruby>啊<rt>a</rt></ruby><ruby>晃<rt>huǎng</rt></ruby>。"<ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>什<rt>shén</rt></ruby><ruby>么<rt>me</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>呢<rt>ne</rt></ruby>？"<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>急<rt>jí</rt></ruby>。</p>
+<p>"<ruby>叮<rt>dīng</rt></ruby><ruby>咚<rt>dōng</rt></ruby>——"<ruby>门<rt>mén</rt></ruby><ruby>铃<rt>líng</rt></ruby><ruby>响<rt>xiǎng</rt></ruby><ruby>了<rt>le</rt></ruby>！</p>
+<div class="page-num">02</div>
+</div>
+</div>
+<!-- Page 3 -->
+<div class="page" data-page="3">
+<div class="page-img-wrap">
+<img alt="小兔到来" height="800" loading="lazy" src="images/04_bunny_arrives.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>快<rt>kuài</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>跑<rt>pǎo</rt></ruby><ruby>去<rt>qù</rt></ruby><ruby>开<rt>kāi</rt></ruby><ruby>门<rt>mén</rt></ruby>。<ruby>门<rt>mén</rt></ruby><ruby>口<rt>kǒu</rt></ruby><ruby>站<rt>zhàn</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>兔<rt>tù</rt></ruby><ruby>子<rt>zi</rt></ruby><ruby>棉<rt>mián</rt></ruby><ruby>棉<rt>mián</rt></ruby>，<ruby>她<rt>tā</rt></ruby><ruby>穿<rt>chuān</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>粉<rt>fěn</rt></ruby><ruby>色<rt>sè</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>围<rt>wéi</rt></ruby><ruby>裙<rt>qún</rt></ruby>，<ruby>手<rt>shǒu</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>捧<rt>pěng</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>篮<rt>lán</rt></ruby><ruby>子<rt>zi</rt></ruby>。</p>
+<p>"<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby>，<ruby>生<rt>shēng</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>快<rt>kuài</rt></ruby><ruby>乐<rt>lè</rt></ruby>！"<ruby>棉<rt>mián</rt></ruby><ruby>棉<rt>mián</rt></ruby><ruby>把<rt>bǎ</rt></ruby><ruby>篮<rt>lán</rt></ruby><ruby>子<rt>zi</rt></ruby><ruby>递<rt>dì</rt></ruby><ruby>过<rt>guò</rt></ruby><ruby>来<rt>lái</rt></ruby>，"<ruby>这<rt>zhè</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>亲<rt>qīn</rt></ruby><ruby>手<rt>shǒu</rt></ruby><ruby>种<rt>zhǒng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>胡<rt>hú</rt></ruby><ruby>萝<rt>luó</rt></ruby><ruby>卜<rt>bo</rt></ruby>，<ruby>又<rt>yòu</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>脆<rt>cuì</rt></ruby>，<ruby>送<rt>sòng</rt></ruby><ruby>给<rt>gěi</rt></ruby><ruby>你<rt>nǐ</rt></ruby>！"</p>
+<p>"<ruby>谢<rt>xiè</rt></ruby><ruby>谢<rt>xiè</rt></ruby><ruby>你<rt>nǐ</rt></ruby>，<ruby>棉<rt>mián</rt></ruby><ruby>棉<rt>mián</rt></ruby>！"<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>接<rt>jiē</rt></ruby><ruby>过<rt>guò</rt></ruby><ruby>篮<rt>lán</rt></ruby><ruby>子<rt>zi</rt></ruby>，<ruby>胡<rt>hú</rt></ruby><ruby>萝<rt>luó</rt></ruby><ruby>卜<rt>bo</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>还<rt>hái</rt></ruby><ruby>带<rt>dài</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>泥<rt>ní</rt></ruby><ruby>土<rt>tǔ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>清<rt>qīng</rt></ruby><ruby>香<rt>xiāng</rt></ruby>，<ruby>真<rt>zhēn</rt></ruby><ruby>新<rt>xīn</rt></ruby><ruby>鲜<rt>xiān</rt></ruby><ruby>呀<rt>ya</rt></ruby>。</p>
+<div class="page-num">03</div>
+</div>
+</div>
+<!-- Page 4 -->
+<div class="page" data-page="4">
+<div class="page-img-wrap">
+<img alt="朋友们到来" height="800" loading="lazy" src="images/05_friends_arrive.webp" width="800"/>
+</div>
+<div class="page-text">
+<p>"<ruby>叮<rt>dīng</rt></ruby><ruby>咚<rt>dōng</rt></ruby>——"<ruby>小<rt>xiǎo</rt></ruby><ruby>松<rt>sōng</rt></ruby><ruby>鼠<rt>shǔ</rt></ruby><ruby>果<rt>guǒ</rt></ruby><ruby>果<rt>guǒ</rt></ruby><ruby>蹦<rt>bèng</rt></ruby><ruby>蹦<rt>bèng</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>跑<rt>pǎo</rt></ruby><ruby>进<rt>jìn</rt></ruby><ruby>来<rt>lái</rt></ruby>，<ruby>脖<rt>bó</rt></ruby><ruby>子<rt>zi</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>挂<rt>guà</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>串<rt>chuàn</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>晶<rt>jīng</rt></ruby><ruby>晶<rt>jīng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>松<rt>sōng</rt></ruby><ruby>果<rt>guǒ</rt></ruby><ruby>项<rt>xiàng</rt></ruby><ruby>链<rt>liàn</rt></ruby>："<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby>，<ruby>生<rt>shēng</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>快<rt>kuài</rt></ruby><ruby>乐<rt>lè</rt></ruby>！"</p>
+<p><ruby>小<rt>xiǎo</rt></ruby><ruby>狐<rt>hú</rt></ruby><ruby>狸<rt>lí</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>抱<rt>bào</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>束<rt>shù</rt></ruby><ruby>野<rt>yě</rt></ruby><ruby>花<rt>huā</rt></ruby>："<ruby>这<rt>zhè</rt></ruby><ruby>束<rt>shù</rt></ruby><ruby>花<rt>huā</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>山<rt>shān</rt></ruby><ruby>坡<rt>pō</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>采<rt>cǎi</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>每<rt>měi</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>精<rt>jīng</rt></ruby><ruby>心<rt>xīn</rt></ruby><ruby>挑<rt>tiāo</rt></ruby><ruby>的<rt>de</rt></ruby>！"</p>
+<p><ruby>小<rt>xiǎo</rt></ruby><ruby>鹿<rt>lù</rt></ruby><ruby>丫<rt>yā</rt></ruby><ruby>丫<rt>yā</rt></ruby><ruby>举<rt>jǔ</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>幅<rt>fú</rt></ruby><ruby>画<rt>huà</rt></ruby>："<ruby>这<rt>zhè</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>画<rt>huà</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>玩<rt>wán</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>画<rt>huà</rt></ruby>，<ruby>送<rt>sòng</rt></ruby><ruby>给<rt>gěi</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>当<rt>dāng</rt></ruby><ruby>生<rt>shēng</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>礼<rt>lǐ</rt></ruby><ruby>物<rt>wù</rt></ruby>！"<ruby>画<rt>huà</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>家<rt>jiā</rt></ruby><ruby>手<rt>shǒu</rt></ruby><ruby>拉<rt>lā</rt></ruby><ruby>手<rt>shǒu</rt></ruby>，<ruby>笑<rt>xiào</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>可<rt>kě</rt></ruby><ruby>开<rt>kāi</rt></ruby><ruby>心<rt>xīn</rt></ruby><ruby>了<rt>le</rt></ruby>。</p>
+<div class="page-num">04</div>
+</div>
+</div>
+<!-- Page 5 -->
+<div class="page" data-page="5">
+<div class="page-img-wrap">
+<img alt="玩游戏" height="800" loading="lazy" src="images/06_games.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>齐<rt>qí</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>派<rt>pài</rt></ruby><ruby>对<rt>duì</rt></ruby><ruby>正<rt>zhèng</rt></ruby><ruby>式<rt>shì</rt></ruby><ruby>开<rt>kāi</rt></ruby><ruby>始<rt>shǐ</rt></ruby>！<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>先<rt>xiān</rt></ruby><ruby>玩<rt>wán</rt></ruby><ruby>了<rt>le</rt></ruby>"<ruby>抢<rt>qiǎng</rt></ruby><ruby>椅<rt>yǐ</rt></ruby><ruby>子<rt>zi</rt></ruby>"<ruby>的<rt>de</rt></ruby><ruby>游<rt>yóu</rt></ruby><ruby>戏<rt>xì</rt></ruby>。<ruby>音<rt>yīn</rt></ruby><ruby>乐<rt>lè</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>停<rt>tíng</rt></ruby>，<ruby>所<rt>suǒ</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>去<rt>qù</rt></ruby><ruby>抢<rt>qiǎng</rt></ruby><ruby>椅<rt>yǐ</rt></ruby><ruby>子<rt>zi</rt></ruby>——<ruby>哈<rt>hā</rt></ruby><ruby>哈<rt>hā</rt></ruby>，<ruby>果<rt>guǒ</rt></ruby><ruby>果<rt>guǒ</rt></ruby><ruby>没<rt>méi</rt></ruby><ruby>抢<rt>qiǎng</rt></ruby><ruby>到<rt>dào</rt></ruby>，<ruby>一<rt>yī</rt></ruby><ruby>屁<rt>pì</rt></ruby><ruby>股<rt>gǔ</rt></ruby><ruby>坐<rt>zuò</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby>，<ruby>逗<rt>dòu</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>家<rt>jiā</rt></ruby><ruby>哈<rt>hā</rt></ruby><ruby>哈<rt>hā</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>笑<rt>xiào</rt></ruby>。</p>
+<p><ruby>然<rt>rán</rt></ruby><ruby>后<rt>hòu</rt></ruby><ruby>是<rt>shì</rt></ruby>"<ruby>猜<rt>cāi</rt></ruby><ruby>谜<rt>mí</rt></ruby><ruby>语<rt>yǔ</rt></ruby>"<ruby>游<rt>yóu</rt></ruby><ruby>戏<rt>xì</rt></ruby>。<ruby>暖<rt>nuǎn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>谜<rt>mí</rt></ruby><ruby>语<rt>yǔ</rt></ruby>，<ruby>大<rt>dà</rt></ruby><ruby>家<rt>jiā</rt></ruby><ruby>想<rt>xiǎng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>半<rt>bàn</rt></ruby><ruby>天<rt>tiān</rt></ruby>，<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>聪<rt>cōng</rt></ruby><ruby>明<rt>míng</rt></ruby>，<ruby>第<rt>dì</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>答<rt>dá</rt></ruby><ruby>对<rt>duì</rt></ruby><ruby>了<rt>le</rt></ruby>！"<ruby>答<rt>dá</rt></ruby><ruby>对<rt>duì</rt></ruby><ruby>啦<rt>la</rt></ruby>！"<ruby>大<rt>dà</rt></ruby><ruby>家<rt>jiā</rt></ruby><ruby>鼓<rt>gǔ</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>掌<rt>zhǎng</rt></ruby><ruby>来<rt>lái</rt></ruby>。</p>
+<div class="page-num">05</div>
+</div>
+</div>
+<!-- Page 6 -->
+<div class="page" data-page="6">
+<div class="page-img-wrap">
+<img alt="许愿吹蜡烛" height="800" loading="lazy" src="images/07_wish.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>熊<rt>xióng</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>端<rt>duān</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>那<rt>nà</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>漂<rt>piāo</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>蜂<rt>fēng</rt></ruby><ruby>蜜<rt>mì</rt></ruby><ruby>蛋<rt>dàn</rt></ruby><ruby>糕<rt>gāo</rt></ruby>。<ruby>五<rt>wǔ</rt></ruby><ruby>根<rt>gēn</rt></ruby><ruby>蜡<rt>là</rt></ruby><ruby>烛<rt>zhú</rt></ruby><ruby>被<rt>bèi</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>燃<rt>rán</rt></ruby>，<ruby>火<rt>huǒ</rt></ruby><ruby>苗<rt>miáo</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>把<rt>bǎ</rt></ruby><ruby>每<rt>měi</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>脸<rt>liǎn</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>映<rt>yìng</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby>。</p>
+<p>"<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby>，<ruby>许<rt>xǔ</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>愿<rt>yuàn</rt></ruby><ruby>吧<rt>ba</rt></ruby>！"<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>闭<rt>bì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>眼<rt>yǎn</rt></ruby><ruby>睛<rt>jīng</rt></ruby>，<ruby>双<rt>shuāng</rt></ruby><ruby>手<rt>shǒu</rt></ruby><ruby>合<rt>hé</rt></ruby><ruby>十<rt>shí</rt></ruby>，<ruby>许<rt>xǔ</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>小<rt>xiǎo</rt></ruby>、<ruby>却<rt>què</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>愿<rt>yuàn</rt></ruby><ruby>望<rt>wàng</rt></ruby>。</p>
+<p>"<ruby>呼<rt>hū</rt></ruby>——"<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>口<rt>kǒu</rt></ruby><ruby>气<rt>qì</rt></ruby><ruby>吹<rt>chuī</rt></ruby><ruby>灭<rt>miè</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>所<rt>suǒ</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>蜡<rt>là</rt></ruby><ruby>烛<rt>zhú</rt></ruby>。<ruby>熊<rt>xióng</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>把<rt>bǎ</rt></ruby><ruby>蛋<rt>dàn</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>分<rt>fēn</rt></ruby><ruby>给<rt>gěi</rt></ruby><ruby>每<rt>měi</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>人<rt>rén</rt></ruby>，<ruby>蜂<rt>fēng</rt></ruby><ruby>蜜<rt>mì</rt></ruby><ruby>蛋<rt>dàn</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>草<rt>cǎo</rt></ruby><ruby>莓<rt>méi</rt></ruby><ruby>酸<rt>suān</rt></ruby><ruby>酸<rt>suān</rt></ruby><ruby>的<rt>de</rt></ruby>——"<ruby>这<rt>zhè</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>过<rt>guò</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>蛋<rt>dàn</rt></ruby><ruby>糕<rt>gāo</rt></ruby>！"</p>
+<div class="page-num">06</div>
+</div>
+</div>
+<!-- Page 7 -->
+<div class="page" data-page="7">
+<div class="page-img-wrap">
+<img alt="甜甜入睡" height="800" loading="lazy" src="images/08_dreaming.webp" width="800"/>
+</div>
+<div class="page-text">
+<p><ruby>吃<rt>chī</rt></ruby><ruby>完<rt>wán</rt></ruby><ruby>蛋<rt>dàn</rt></ruby><ruby>糕<rt>gāo</rt></ruby>，<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>心<rt>xīn</rt></ruby><ruby>翼<rt>yì</rt></ruby><ruby>翼<rt>yì</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>拆<rt>chāi</rt></ruby><ruby>开<rt>kāi</rt></ruby><ruby>每<rt>měi</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>份<rt>fèn</rt></ruby><ruby>礼<rt>lǐ</rt></ruby><ruby>物<rt>wù</rt></ruby>，<ruby>每<rt>měi</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>样<rt>yàng</rt></ruby><ruby>他<rt>tā</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>看<rt>kàn</rt></ruby>，<ruby>摸<rt>mō</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>摸<rt>mō</rt></ruby>。</p>
+<p>"<ruby>谢<rt>xiè</rt></ruby><ruby>谢<rt>xiè</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>们<rt>men</rt></ruby>，"<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>声<rt>shēng</rt></ruby><ruby>音<rt>yīn</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>哽<rt>gěng</rt></ruby><ruby>咽<rt>yàn</rt></ruby>，"<ruby>这<rt>zhè</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>过<rt>guò</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>开<rt>kāi</rt></ruby><ruby>心<rt>xīn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>生<rt>shēng</rt></ruby><ruby>日<rt>rì</rt></ruby>。<ruby>不<rt>bù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>因<rt>yīn</rt></ruby><ruby>为<rt>wèi</rt></ruby><ruby>蛋<rt>dàn</rt></ruby><ruby>糕<rt>gāo</rt></ruby>，<ruby>也<rt>yě</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>因<rt>yīn</rt></ruby><ruby>为<rt>wèi</rt></ruby><ruby>礼<rt>lǐ</rt></ruby><ruby>物<rt>wù</rt></ruby>，<ruby>而<rt>ér</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>因<rt>yīn</rt></ruby><ruby>为<rt>wèi</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>了<rt>le</rt></ruby>。"</p>
+<p><ruby>棉<rt>mián</rt></ruby><ruby>棉<rt>mián</rt></ruby><ruby>搂<rt>lǒu</rt></ruby><ruby>住<rt>zhù</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby>："<ruby>因<rt>yīn</rt></ruby><ruby>为<rt>wèi</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>呀<rt>ya</rt></ruby>！<ruby>好<rt>hǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>就<rt>jiù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>分<rt>fēn</rt></ruby><ruby>享<rt>xiǎng</rt></ruby><ruby>快<rt>kuài</rt></ruby><ruby>乐<rt>lè</rt></ruby><ruby>的<rt>de</rt></ruby>！"<ruby>那<rt>nà</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>上<rt>shàng</rt></ruby>，<ruby>满<rt>mǎn</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>做<rt>zuò</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>梦<rt>mèng</rt></ruby>——<ruby>梦<rt>mèng</rt></ruby><ruby>里<rt>lǐ</rt></ruby>，<ruby>好<rt>hǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>永<rt>yǒng</rt></ruby><ruby>远<rt>yuǎn</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby>。</p>
+<div class="page-num">07</div>
+</div>
+</div>
+<!-- Moral -->
+<div class="page page-moral" data-page="8">
+<div class="page-text">
+<div class="moral-box">
+<div class="moral-title">🌟 <ruby>小<rt>xiǎo</rt></ruby><ruby>寓<rt>yù</rt></ruby><ruby>意<rt>yì</rt></ruby></div>
+<div class="moral-text">
+<ruby>真<rt>zhēn</rt></ruby><ruby>正<rt>zhèng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>快<rt>kuài</rt></ruby><ruby>乐<rt>lè</rt></ruby>，<ruby>不<rt>bù</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>于<rt>yú</rt></ruby><ruby>收<rt>shōu</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>少<rt>shǎo</rt></ruby><ruby>礼<rt>lǐ</rt></ruby><ruby>物<rt>wù</rt></ruby>，<ruby>而<rt>ér</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>于<rt>yú</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>分<rt>fēn</rt></ruby><ruby>享<rt>xiǎng</rt></ruby>。<ruby>当<rt>dāng</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>把<rt>bǎ</rt></ruby><ruby>快<rt>kuài</rt></ruby><ruby>乐<rt>lè</rt></ruby><ruby>分<rt>fēn</rt></ruby><ruby>给<rt>gěi</rt></ruby><ruby>别<rt>bié</rt></ruby><ruby>人<rt>rén</rt></ruby>，<ruby>快<rt>kuài</rt></ruby><ruby>乐<rt>lè</rt></ruby><ruby>就<rt>jiù</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>像<rt>xiàng</rt></ruby><ruby>气<rt>qì</rt></ruby><ruby>球<rt>qiú</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>样<rt>yàng</rt></ruby>，<ruby>越<rt>yuè</rt></ruby><ruby>变<rt>biàn</rt></ruby><ruby>越<rt>yuè</rt></ruby><ruby>大<rt>dà</rt></ruby>，<ruby>飞<rt>fēi</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>越<rt>yuè</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>越<rt>yuè</rt></ruby><ruby>高<rt>gāo</rt></ruby>。<ruby>陪<rt>péi</rt></ruby><ruby>伴<rt>bàn</rt></ruby>，<ruby>就<rt>jiù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>生<rt>shēng</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>礼<rt>lǐ</rt></ruby><ruby>物<rt>wù</rt></ruby>。
         </div>
-        <div class="moral-emojis">🐻 🎂 🎈 🎁 🌸</div>
-      </div>
-    </div>
-  </div>
-
+<div class="moral-emojis">🐻 🎂 🎈 🎁 🌸</div>
 </div>
-
+</div>
+</div>
+</div>
 <div class="nav">
-  <button id="prevBtn" onclick="changePage(-1)">&#8249;</button>
-  <div class="nav-dots" id="navDots"></div>
-  <button id="nextBtn" onclick="changePage(1)">&#8250;</button>
+<button id="prevBtn" onclick="changePage(-1)">‹</button>
+<div class="nav-dots" id="navDots"></div>
+<button id="nextBtn" onclick="changePage(1)">›</button>
 </div>
-
 <script>
 let currentPage = 0;
 const pages = document.querySelectorAll('.page');

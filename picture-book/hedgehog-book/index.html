@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>小刺猬的晚安毯 🦔🌙</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Long+Cang&display=swap');
@@ -84,7 +85,7 @@
 
   .cover-title {
     font-family: 'Ma Shan Zheng', serif;
-    font-size: clamp(2.2rem, 5.5vw, 4rem);
+    font-size: clamp(2.75rem, 6.6vw, 5.00rem);
     color: var(--moon-warm);
     text-shadow: 0 0 20px rgba(255, 204, 128, 0.5), 0 0 40px rgba(255, 204, 128, 0.3);
     margin-bottom: 0.4rem;
@@ -92,7 +93,7 @@
   }
 
   .cover-subtitle {
-    font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+    font-size: clamp(1.12rem, 2.2vw, 1.50rem);
     color: var(--blanket-warm);
     opacity: 0.85;
     margin-bottom: 1.8rem;
@@ -100,7 +101,7 @@
   }
 
   .cover-emojis {
-    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-size: clamp(2.50rem, 5.4vw, 3.75rem);
     margin-bottom: 1.5rem;
     animation: coverEmojiFloat 3s ease-in-out infinite;
   }
@@ -123,7 +124,7 @@
 
   .cover-start-btn {
     font-family: 'ZCOOL KuaiLe', sans-serif;
-    font-size: clamp(1rem, 1.8vw, 1.25rem);
+    font-size: clamp(1.25rem, 2.2vw, 1.56rem);
     padding: 12px 44px;
     background: linear-gradient(135deg, var(--blanket-warm), var(--accent-coral));
     color: #4e342e;
@@ -177,7 +178,7 @@
 
   .story-text {
     font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
-    font-size: clamp(0.95rem, 1.7vw, 1.2rem);
+    font-size: clamp(1.19rem, 2.0vw, 1.50rem);
     line-height: 2.3;
     color: var(--text-warm);
     text-align: center;
@@ -204,7 +205,7 @@
     position: absolute;
     bottom: 18px;
     right: 28px;
-    font-size: 0.82rem;
+    font-size: 0.95rem;
     color: rgba(255,255,255,0.25);
     font-family: 'Ma Shan Zheng', serif;
   }
@@ -229,7 +230,7 @@
 
   .moral-title {
     font-family: 'Ma Shan Zheng', serif;
-    font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+    font-size: clamp(2.00rem, 3.8vw, 2.88rem);
     color: var(--moon-warm);
     margin-bottom: 1.2rem;
     letter-spacing: 0.1em;
@@ -237,7 +238,7 @@
 
   .moral-text {
     font-family: 'ZCOOL KuaiLe', sans-serif;
-    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    font-size: clamp(1.19rem, 1.8vw, 1.44rem);
     line-height: 2.5;
     color: var(--text-warm);
     padding: 1.8rem;
@@ -251,7 +252,7 @@
 
   .moral-goodnight {
     font-family: 'Long Cang', 'Ma Shan Zheng', cursive;
-    font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+    font-size: clamp(1.75rem, 3.4vw, 2.38rem);
     color: var(--blanket-warm);
     opacity: 0.9;
   }
@@ -359,7 +360,7 @@
 
   /* ===== Responsive ===== */
   @media (max-width: 600px) {
-    .story-text { font-size: 0.9rem; line-height: 2.1; padding: 1rem 1.1rem; }
+    .story-text { font-size: 1.15rem; line-height: 2.1; padding: 1rem 1.1rem; }
     .story-image-wrapper { width: 190px; height: 190px; }
     .cover-image-wrapper { width: 200px; height: 200px; }
     .nav-btn { width: 40px; height: 40px; font-size: 1.1rem; }
@@ -368,190 +369,210 @@
   @media (orientation: landscape) and (max-height: 500px) {
     .story-content { flex-direction: row; gap: 1.5rem; }
     .story-image-wrapper { width: 160px; height: 160px; margin-bottom: 0; flex-shrink: 0; }
-    .story-text { font-size: 0.82rem; line-height: 1.8; text-align: left; }
+    .story-text { font-size: 1.05rem; line-height: 1.8; text-align: left; }
   }
+
+/* Pinyin ruby annotations */
+ruby {
+    ruby-align: center;
+}
+ruby rt {
+    font-size: 0.58em;
+    font-weight: 400;
+    color: inherit;
+    opacity: 0.7;
+    letter-spacing: 0;
+    line-height: 1;
+}
+.page-text p {
+    line-height: 2.6;
+}
+.page-text p ruby rt {
+    display: ruby-text;
+}
+.page-cover .page-text h1 {
+    line-height: 1.6;
+}
+.page-cover .page-text h1 ruby rt {
+    font-size: 0.48em;
+}
+.moral-text {
+    line-height: 2.8;
+}
+.moral-text ruby rt {
+    font-size: 0.55em;
+}
+@media (max-width: 600px) {
+    .page-text p { line-height: 2.4; }
+    ruby rt { font-size: 0.5em; }
+}
 </style>
 </head>
 <body>
-
 <canvas id="starfield"></canvas>
 <div class="floating-moon">🌙</div>
-
 <div id="book">
-
-  <!-- ===== 封面 ===== -->
-  <div class="page cover-page active" data-page="0">
-    <div class="cover-content">
-      <div class="cover-emojis">🦔 🌙 ✨</div>
-      <h1 class="cover-title">小刺猬的晚安毯</h1>
-      <p class="cover-subtitle">一 条 月 光 织 成 的 暖 暖 毯 子</p>
-      <div class="cover-image-wrapper">
-        <img src="images/01_cover.webp" alt="小刺猬在月光下安睡">
-      </div>
-      <button class="cover-start-btn" onclick="nextPage()">开始阅读 🌙</button>
-    </div>
-  </div>
-
-  <!-- ===== 第1页：白天玩耍 ===== -->
-  <div class="page story-page" data-page="1">
-    <div class="story-content">
-      <div class="story-image-wrapper">
-        <img src="images/02_playing.webp" alt="跳跳白天玩耍">
-      </div>
-      <div class="story-text">
-        小刺猬<span class="emphasis">跳跳</span>今天玩了一整天：<br>
-        早上帮妈妈给花盆浇水，<br>
-        中午和小兔子在草丛里捉迷藏，<br>
-        傍晚还捡了好多圆圆的红果子。<br>
-      </div>
-    </div>
-    <span class="page-number">— 1 —</span>
-  </div>
-
-  <!-- ===== 第2页：天黑睡觉 ===== -->
-  <div class="page story-page" data-page="2">
-    <div class="story-content">
-      <div class="story-image-wrapper">
-        <img src="images/03_nightfall.webp" alt="天黑月亮升起">
-      </div>
-      <div class="story-text">
-        天慢慢黑了，月亮姐姐升上了天空。<br>
-        妈妈温柔地喊：<br>
-        <span class="dialogue">"跳跳，该睡觉啦。"</span><br><br>
-        跳跳乖乖地洗了脸、刷了牙，<br>
-        钻进铺满干草的小床。
-      </div>
-    </div>
-    <span class="page-number">— 2 —</span>
-  </div>
-
-  <!-- ===== 第3页：睡不着 ===== -->
-  <div class="page story-page" data-page="3">
-    <div class="story-content">
-      <div class="story-image-wrapper">
-        <img src="images/04_cant_sleep.webp" alt="跳跳睡不着">
-      </div>
-      <div class="story-text">
-        她把眼睛闭了又睁，睁了又闭，<br>
-        可还是睡不着。<br><br>
-        <span class="dialogue">"妈妈，"</span>她小声说，<br>
-        <span class="dialogue">"房间里黑黑的，我有点害怕。"</span>
-      </div>
-    </div>
-    <span class="page-number">— 3 —</span>
-  </div>
-
-  <!-- ===== 第4页：妈妈安抚 ===== -->
-  <div class="page story-page" data-page="4">
-    <div class="story-content">
-      <div class="story-image-wrapper">
-        <img src="images/05_mama_comfort.webp" alt="妈妈安抚跳跳">
-      </div>
-      <div class="story-text">
-        妈妈坐到床边，轻轻摸摸她的背：<br>
-        <span class="dialogue">"别怕，宝贝。<br>黑夜里藏着很多温柔的声音呢。<br>你听——"</span>
-      </div>
-    </div>
-    <span class="page-number">— 4 —</span>
-  </div>
-
-  <!-- ===== 第5页：听夜声 ===== -->
-  <div class="page story-page" data-page="5">
-    <div class="story-content">
-      <div class="story-image-wrapper">
-        <img src="images/06_listening.webp" alt="跳跳听夜声">
-      </div>
-      <div class="story-text">
-        跳跳竖起小耳朵。<br>
-        窗外，蟋蟀正在拉它的小提琴；<br>
-        远处，小河叮叮咚咚地唱着摇篮曲；<br>
-        还有风吹过树叶，沙沙沙，<br>
-        像在讲一个古老的故事。<br><br>
-        <span class="dialogue">"好像……没那么可怕了。"</span><br>
-        跳跳眨眨眼睛。
-      </div>
-    </div>
-    <span class="page-number">— 5 —</span>
-  </div>
-
-  <!-- ===== 第6页：月光毯 ===== -->
-  <div class="page story-page" data-page="6">
-    <div class="story-content">
-      <div class="story-image-wrapper">
-        <img src="images/07_moonlight.webp" alt="月光洒进房间">
-      </div>
-      <div class="story-text">
-        可她又说：<span class="dialogue">"可是我有点冷。"</span><br><br>
-        妈妈笑着拉开窗帘。<br>
-        一束银白色的月光洒进来，<br>
-        正好落在跳跳的小床上，<br>
-        像一条闪闪发光的<span class="emphasis">金色毯子</span>。<br><br>
-        <span class="dialogue">"这是月亮姐姐送给你的晚安毯。"</span><br>
-        妈妈轻声说，<br>
-        <span class="dialogue">"她挂在窗外，就是为了守护你入睡呀。"</span>
-      </div>
-    </div>
-    <span class="page-number">— 6 —</span>
-  </div>
-
-  <!-- ===== 第7页：安睡 ===== -->
-  <div class="page story-page" data-page="7">
-    <div class="story-content">
-      <div class="story-image-wrapper">
-        <img src="images/08_sleeping.webp" alt="跳跳入睡">
-      </div>
-      <div class="story-text">
-        跳跳裹紧月光毯，软软的、暖暖的。<br>
-        她想起白天和朋友们一起玩耍的快乐，<br>
-        嘴角弯弯的。<br><br>
-        <span class="dialogue">"晚安，妈妈。"</span>她打了个小小的哈欠。<br><br>
-        <span class="dialogue">"晚安，跳跳。"</span><br>
-        妈妈在它额头亲了一下。
-      </div>
-    </div>
-    <span class="page-number">— 7 —</span>
-  </div>
-
-  <!-- ===== 第8页：甜甜梦乡 ===== -->
-  <div class="page story-page" data-page="8">
-    <div class="story-content">
-      <div class="story-image-wrapper">
-        <img src="images/01_cover.webp" alt="甜甜梦乡">
-      </div>
-      <div class="story-text">
-        不一会儿，小刺猬跳跳发出了轻轻的呼噜声，<br>
-        睡得又香又甜。<br><br>
-        月亮姐姐在窗外静静地笑着，<br>
-        把整个夜晚都照得<span class="emphasis">温柔极了</span>。
-      </div>
-    </div>
-    <span class="page-number">— 8 —</span>
-  </div>
-
-  <!-- ===== 寓意页 ===== -->
-  <div class="page moral-page" data-page="9">
-    <div class="moral-content">
-      <div class="moral-emojis">🦔 🌙 💤</div>
-      <h2 class="moral-title">小 寓 意</h2>
-      <div class="moral-text">
-        黑夜并不可怕，<br>
-        身边的爱与温柔，<br>
-        会像一条暖暖的毯子，<br>
-        守护我们进入甜甜的梦乡。
-      </div>
-      <p class="moral-goodnight">晚安，宝贝们 🌙</p>
-    </div>
-  </div>
-
+ ===== <ruby>封<rt>fēng</rt></ruby><ruby>面<rt>miàn</rt></ruby> ===== 
+<div class="page cover-page active" data-page="0">
+<div class="cover-content">
+<div class="cover-emojis">🦔 🌙 ✨</div>
+<h1 class="cover-title"><ruby>小<rt>xiǎo</rt></ruby><ruby>刺<rt>cì</rt></ruby><ruby>猬<rt>wèi</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>安<rt>ān</rt></ruby><ruby>毯<rt>tǎn</rt></ruby></h1>
+<p class="cover-subtitle"><ruby>一<rt>yī</rt></ruby> <ruby>条<rt>tiáo</rt></ruby> <ruby>月<rt>yuè</rt></ruby> <ruby>光<rt>guāng</rt></ruby> <ruby>织<rt>zhī</rt></ruby> <ruby>成<rt>chéng</rt></ruby> <ruby>的<rt>de</rt></ruby> <ruby>暖<rt>nuǎn</rt></ruby> <ruby>暖<rt>nuǎn</rt></ruby> <ruby>毯<rt>tǎn</rt></ruby> <ruby>子<rt>zi</rt></ruby></p>
+<div class="cover-image-wrapper">
+<img alt="小刺猬在月光下安睡" loading="lazy" src="images/01_cover.webp"/>
 </div>
-
+<button class="cover-start-btn" onclick="nextPage()"><ruby>开<rt>kāi</rt></ruby><ruby>始<rt>shǐ</rt></ruby><ruby>阅<rt>yuè</rt></ruby><ruby>读<rt>dú</rt></ruby> 🌙</button>
+</div>
+</div>
+ ===== <ruby>第<rt>dì</rt></ruby>1<ruby>页<rt>yè</rt></ruby>：<ruby>白<rt>bái</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>玩<rt>wán</rt></ruby><ruby>耍<rt>shuǎ</rt></ruby> ===== 
+<div class="page story-page" data-page="1">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="跳跳白天玩耍" loading="lazy" src="images/02_playing.webp"/>
+</div>
+<div class="story-text">
+<ruby>小<rt>xiǎo</rt></ruby><ruby>刺<rt>cì</rt></ruby><ruby>猬<rt>wèi</rt></ruby><span class="emphasis"><ruby>跳<rt>tiào</rt></ruby><ruby>跳<rt>tiào</rt></ruby></span><ruby>今<rt>jīn</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>玩<rt>wán</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>整<rt>zhěng</rt></ruby><ruby>天<rt>tiān</rt></ruby>：<br/>
+<ruby>早<rt>zǎo</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>帮<rt>bāng</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>给<rt>gěi</rt></ruby><ruby>花<rt>huā</rt></ruby><ruby>盆<rt>pén</rt></ruby><ruby>浇<rt>jiāo</rt></ruby><ruby>水<rt>shuǐ</rt></ruby>，<br/>
+<ruby>中<rt>zhōng</rt></ruby><ruby>午<rt>wǔ</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>兔<rt>tù</rt></ruby><ruby>子<rt>zi</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>草<rt>cǎo</rt></ruby><ruby>丛<rt>cóng</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>捉<rt>zhuō</rt></ruby><ruby>迷<rt>mí</rt></ruby><ruby>藏<rt>cáng</rt></ruby>，<br/>
+<ruby>傍<rt>bàng</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>还<rt>hái</rt></ruby><ruby>捡<rt>jiǎn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>圆<rt>yuán</rt></ruby><ruby>圆<rt>yuán</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>红<rt>hóng</rt></ruby><ruby>果<rt>guǒ</rt></ruby><ruby>子<rt>zi</rt></ruby>。<br/>
+</div>
+</div>
+<span class="page-number">— 1 —</span>
+</div>
+ ===== <ruby>第<rt>dì</rt></ruby>2<ruby>页<rt>yè</rt></ruby>：<ruby>天<rt>tiān</rt></ruby><ruby>黑<rt>hēi</rt></ruby><ruby>睡<rt>shuì</rt></ruby><ruby>觉<rt>jué</rt></ruby> ===== 
+<div class="page story-page" data-page="2">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="天黑月亮升起" loading="lazy" src="images/03_nightfall.webp"/>
+</div>
+<div class="story-text">
+<ruby>天<rt>tiān</rt></ruby><ruby>慢<rt>màn</rt></ruby><ruby>慢<rt>màn</rt></ruby><ruby>黑<rt>hēi</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>姐<rt>jiě</rt></ruby><ruby>姐<rt>jiě</rt></ruby><ruby>升<rt>shēng</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>空<rt>kōng</rt></ruby>。<br/>
+<ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>柔<rt>róu</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>喊<rt>hǎn</rt></ruby>：<br/>
+<span class="dialogue">"<ruby>跳<rt>tiào</rt></ruby><ruby>跳<rt>tiào</rt></ruby>，<ruby>该<rt>gāi</rt></ruby><ruby>睡<rt>shuì</rt></ruby><ruby>觉<rt>jué</rt></ruby><ruby>啦<rt>la</rt></ruby>。"</span><br/><br/>
+<ruby>跳<rt>tiào</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>乖<rt>guāi</rt></ruby><ruby>乖<rt>guāi</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>洗<rt>xǐ</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>脸<rt>liǎn</rt></ruby>、<ruby>刷<rt>shuā</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>牙<rt>yá</rt></ruby>，<br/>
+<ruby>钻<rt>zuān</rt></ruby><ruby>进<rt>jìn</rt></ruby><ruby>铺<rt>pù</rt></ruby><ruby>满<rt>mǎn</rt></ruby><ruby>干<rt>gàn</rt></ruby><ruby>草<rt>cǎo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>床<rt>chuáng</rt></ruby>。
+      </div>
+</div>
+<span class="page-number">— 2 —</span>
+</div>
+ ===== <ruby>第<rt>dì</rt></ruby>3<ruby>页<rt>yè</rt></ruby>：<ruby>睡<rt>shuì</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>着<rt>zhe</rt></ruby> ===== 
+<div class="page story-page" data-page="3">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="跳跳睡不着" loading="lazy" src="images/04_cant_sleep.webp"/>
+</div>
+<div class="story-text">
+<ruby>她<rt>tā</rt></ruby><ruby>把<rt>bǎ</rt></ruby><ruby>眼<rt>yǎn</rt></ruby><ruby>睛<rt>jīng</rt></ruby><ruby>闭<rt>bì</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>睁<rt>zhēng</rt></ruby>，<ruby>睁<rt>zhēng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>闭<rt>bì</rt></ruby>，<br/>
+<ruby>可<rt>kě</rt></ruby><ruby>还<rt>hái</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>睡<rt>shuì</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>着<rt>zhe</rt></ruby>。<br/><br/>
+<span class="dialogue">"<ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby>，"</span><ruby>她<rt>tā</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>声<rt>shēng</rt></ruby><ruby>说<rt>shuō</rt></ruby>，<br/>
+<span class="dialogue">"<ruby>房<rt>fáng</rt></ruby><ruby>间<rt>jiān</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>黑<rt>hēi</rt></ruby><ruby>黑<rt>hēi</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>我<rt>wǒ</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>害<rt>hài</rt></ruby><ruby>怕<rt>pà</rt></ruby>。"</span>
+</div>
+</div>
+<span class="page-number">— 3 —</span>
+</div>
+ ===== <ruby>第<rt>dì</rt></ruby>4<ruby>页<rt>yè</rt></ruby>：<ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>安<rt>ān</rt></ruby><ruby>抚<rt>fǔ</rt></ruby> ===== 
+<div class="page story-page" data-page="4">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="妈妈安抚跳跳" loading="lazy" src="images/05_mama_comfort.webp"/>
+</div>
+<div class="story-text">
+<ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>坐<rt>zuò</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>床<rt>chuáng</rt></ruby><ruby>边<rt>biān</rt></ruby>，<ruby>轻<rt>qīng</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>摸<rt>mō</rt></ruby><ruby>摸<rt>mō</rt></ruby><ruby>她<rt>tā</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>背<rt>bèi</rt></ruby>：<br/>
+<span class="dialogue">"<ruby>别<rt>bié</rt></ruby><ruby>怕<rt>pà</rt></ruby>，<ruby>宝<rt>bǎo</rt></ruby><ruby>贝<rt>bèi</rt></ruby>。<br/><ruby>黑<rt>hēi</rt></ruby><ruby>夜<rt>yè</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>藏<rt>cáng</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>柔<rt>róu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>声<rt>shēng</rt></ruby><ruby>音<rt>yīn</rt></ruby><ruby>呢<rt>ne</rt></ruby>。<br/><ruby>你<rt>nǐ</rt></ruby><ruby>听<rt>tīng</rt></ruby>——"</span>
+</div>
+</div>
+<span class="page-number">— 4 —</span>
+</div>
+ ===== <ruby>第<rt>dì</rt></ruby>5<ruby>页<rt>yè</rt></ruby>：<ruby>听<rt>tīng</rt></ruby><ruby>夜<rt>yè</rt></ruby><ruby>声<rt>shēng</rt></ruby> ===== 
+<div class="page story-page" data-page="5">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="跳跳听夜声" loading="lazy" src="images/06_listening.webp"/>
+</div>
+<div class="story-text">
+<ruby>跳<rt>tiào</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>竖<rt>shù</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>耳<rt>ěr</rt></ruby><ruby>朵<rt>duǒ</rt></ruby>。<br/>
+<ruby>窗<rt>chuāng</rt></ruby><ruby>外<rt>wài</rt></ruby>，<ruby>蟋<rt>xī</rt></ruby><ruby>蟀<rt>shuài</rt></ruby><ruby>正<rt>zhèng</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>拉<rt>lā</rt></ruby><ruby>它<rt>tā</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>提<rt>tí</rt></ruby><ruby>琴<rt>qín</rt></ruby>；<br/>
+<ruby>远<rt>yuǎn</rt></ruby><ruby>处<rt>chù</rt></ruby>，<ruby>小<rt>xiǎo</rt></ruby><ruby>河<rt>hé</rt></ruby><ruby>叮<rt>dīng</rt></ruby><ruby>叮<rt>dīng</rt></ruby><ruby>咚<rt>dōng</rt></ruby><ruby>咚<rt>dōng</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>唱<rt>chàng</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>摇<rt>yáo</rt></ruby><ruby>篮<rt>lán</rt></ruby><ruby>曲<rt>qū</rt></ruby>；<br/>
+<ruby>还<rt>hái</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>风<rt>fēng</rt></ruby><ruby>吹<rt>chuī</rt></ruby><ruby>过<rt>guò</rt></ruby><ruby>树<rt>shù</rt></ruby><ruby>叶<rt>yè</rt></ruby>，<ruby>沙<rt>shā</rt></ruby><ruby>沙<rt>shā</rt></ruby><ruby>沙<rt>shā</rt></ruby>，<br/>
+<ruby>像<rt>xiàng</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>讲<rt>jiǎng</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>古<rt>gǔ</rt></ruby><ruby>老<rt>lǎo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>故<rt>gù</rt></ruby><ruby>事<rt>shì</rt></ruby>。<br/><br/>
+<span class="dialogue">"<ruby>好<rt>hǎo</rt></ruby><ruby>像<rt>xiàng</rt></ruby>……<ruby>没<rt>méi</rt></ruby><ruby>那<rt>nà</rt></ruby><ruby>么<rt>me</rt></ruby><ruby>可<rt>kě</rt></ruby><ruby>怕<rt>pà</rt></ruby><ruby>了<rt>le</rt></ruby>。"</span><br/>
+<ruby>跳<rt>tiào</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>眨<rt>zhǎ</rt></ruby><ruby>眨<rt>zhǎ</rt></ruby><ruby>眼<rt>yǎn</rt></ruby><ruby>睛<rt>jīng</rt></ruby>。
+      </div>
+</div>
+<span class="page-number">— 5 —</span>
+</div>
+ ===== <ruby>第<rt>dì</rt></ruby>6<ruby>页<rt>yè</rt></ruby>：<ruby>月<rt>yuè</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>毯<rt>tǎn</rt></ruby> ===== 
+<div class="page story-page" data-page="6">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="月光洒进房间" loading="lazy" src="images/07_moonlight.webp"/>
+</div>
+<div class="story-text">
+<ruby>可<rt>kě</rt></ruby><ruby>她<rt>tā</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>说<rt>shuō</rt></ruby>：<span class="dialogue">"<ruby>可<rt>kě</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>冷<rt>lěng</rt></ruby>。"</span><br/><br/>
+<ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>笑<rt>xiào</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>拉<rt>lā</rt></ruby><ruby>开<rt>kāi</rt></ruby><ruby>窗<rt>chuāng</rt></ruby><ruby>帘<rt>lián</rt></ruby>。<br/>
+<ruby>一<rt>yī</rt></ruby><ruby>束<rt>shù</rt></ruby><ruby>银<rt>yín</rt></ruby><ruby>白<rt>bái</rt></ruby><ruby>色<rt>sè</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>洒<rt>sǎ</rt></ruby><ruby>进<rt>jìn</rt></ruby><ruby>来<rt>lái</rt></ruby>，<br/>
+<ruby>正<rt>zhèng</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>落<rt>luò</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>床<rt>chuáng</rt></ruby><ruby>上<rt>shàng</rt></ruby>，<br/>
+<ruby>像<rt>xiàng</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>条<rt>tiáo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>的<rt>de</rt></ruby><span class="emphasis"><ruby>金<rt>jīn</rt></ruby><ruby>色<rt>sè</rt></ruby><ruby>毯<rt>tǎn</rt></ruby><ruby>子<rt>zi</rt></ruby></span>。<br/><br/>
+<span class="dialogue">"<ruby>这<rt>zhè</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>姐<rt>jiě</rt></ruby><ruby>姐<rt>jiě</rt></ruby><ruby>送<rt>sòng</rt></ruby><ruby>给<rt>gěi</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>安<rt>ān</rt></ruby><ruby>毯<rt>tǎn</rt></ruby>。"</span><br/>
+<ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>声<rt>shēng</rt></ruby><ruby>说<rt>shuō</rt></ruby>，<br/>
+<span class="dialogue">"<ruby>她<rt>tā</rt></ruby><ruby>挂<rt>guà</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>窗<rt>chuāng</rt></ruby><ruby>外<rt>wài</rt></ruby>，<ruby>就<rt>jiù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>为<rt>wèi</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>守<rt>shǒu</rt></ruby><ruby>护<rt>hù</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>入<rt>rù</rt></ruby><ruby>睡<rt>shuì</rt></ruby><ruby>呀<rt>ya</rt></ruby>。"</span>
+</div>
+</div>
+<span class="page-number">— 6 —</span>
+</div>
+ ===== <ruby>第<rt>dì</rt></ruby>7<ruby>页<rt>yè</rt></ruby>：<ruby>安<rt>ān</rt></ruby><ruby>睡<rt>shuì</rt></ruby> ===== 
+<div class="page story-page" data-page="7">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="跳跳入睡" loading="lazy" src="images/08_sleeping.webp"/>
+</div>
+<div class="story-text">
+<ruby>跳<rt>tiào</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>裹<rt>guǒ</rt></ruby><ruby>紧<rt>jǐn</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>毯<rt>tǎn</rt></ruby>，<ruby>软<rt>ruǎn</rt></ruby><ruby>软<rt>ruǎn</rt></ruby><ruby>的<rt>de</rt></ruby>、<ruby>暖<rt>nuǎn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby>。<br/>
+<ruby>她<rt>tā</rt></ruby><ruby>想<rt>xiǎng</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>白<rt>bái</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>玩<rt>wán</rt></ruby><ruby>耍<rt>shuǎ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>快<rt>kuài</rt></ruby><ruby>乐<rt>lè</rt></ruby>，<br/>
+<ruby>嘴<rt>zuǐ</rt></ruby><ruby>角<rt>jiǎo</rt></ruby><ruby>弯<rt>wān</rt></ruby><ruby>弯<rt>wān</rt></ruby><ruby>的<rt>de</rt></ruby>。<br/><br/>
+<span class="dialogue">"<ruby>晚<rt>wǎn</rt></ruby><ruby>安<rt>ān</rt></ruby>，<ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby>。"</span><ruby>她<rt>tā</rt></ruby><ruby>打<rt>dǎ</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>哈<rt>hā</rt></ruby><ruby>欠<rt>qiàn</rt></ruby>。<br/><br/>
+<span class="dialogue">"<ruby>晚<rt>wǎn</rt></ruby><ruby>安<rt>ān</rt></ruby>，<ruby>跳<rt>tiào</rt></ruby><ruby>跳<rt>tiào</rt></ruby>。"</span><br/>
+<ruby>妈<rt>mā</rt></ruby><ruby>妈<rt>mā</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>它<rt>tā</rt></ruby><ruby>额<rt>é</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>亲<rt>qīn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>下<rt>xià</rt></ruby>。
+      </div>
+</div>
+<span class="page-number">— 7 —</span>
+</div>
+ ===== <ruby>第<rt>dì</rt></ruby>8<ruby>页<rt>yè</rt></ruby>：<ruby>甜<rt>tián</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>梦<rt>mèng</rt></ruby><ruby>乡<rt>xiāng</rt></ruby> ===== 
+<div class="page story-page" data-page="8">
+<div class="story-content">
+<div class="story-image-wrapper">
+<img alt="甜甜梦乡" loading="lazy" src="images/01_cover.webp"/>
+</div>
+<div class="story-text">
+<ruby>不<rt>bù</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>儿<rt>ér</rt></ruby>，<ruby>小<rt>xiǎo</rt></ruby><ruby>刺<rt>cì</rt></ruby><ruby>猬<rt>wèi</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>跳<rt>tiào</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>轻<rt>qīng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>呼<rt>hū</rt></ruby><ruby>噜<rt>lū</rt></ruby><ruby>声<rt>shēng</rt></ruby>，<br/>
+<ruby>睡<rt>shuì</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>香<rt>xiāng</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>甜<rt>tián</rt></ruby>。<br/><br/>
+<ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>姐<rt>jiě</rt></ruby><ruby>姐<rt>jiě</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>窗<rt>chuāng</rt></ruby><ruby>外<rt>wài</rt></ruby><ruby>静<rt>jìng</rt></ruby><ruby>静<rt>jìng</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>笑<rt>xiào</rt></ruby><ruby>着<rt>zhe</rt></ruby>，<br/>
+<ruby>把<rt>bǎ</rt></ruby><ruby>整<rt>zhěng</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>夜<rt>yè</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>照<rt>zhào</rt></ruby><ruby>得<rt>dé</rt></ruby><span class="emphasis"><ruby>温<rt>wēn</rt></ruby><ruby>柔<rt>róu</rt></ruby><ruby>极<rt>jí</rt></ruby><ruby>了<rt>le</rt></ruby></span>。
+      </div>
+</div>
+<span class="page-number">— 8 —</span>
+</div>
+ ===== <ruby>寓<rt>yù</rt></ruby><ruby>意<rt>yì</rt></ruby><ruby>页<rt>yè</rt></ruby> ===== 
+<div class="page moral-page" data-page="9">
+<div class="moral-content">
+<div class="moral-emojis">🦔 🌙 💤</div>
+<h2 class="moral-title"><ruby>小<rt>xiǎo</rt></ruby> <ruby>寓<rt>yù</rt></ruby> <ruby>意<rt>yì</rt></ruby></h2>
+<div class="moral-text">
+<ruby>黑<rt>hēi</rt></ruby><ruby>夜<rt>yè</rt></ruby><ruby>并<rt>bìng</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>可<rt>kě</rt></ruby><ruby>怕<rt>pà</rt></ruby>，<br/>
+<ruby>身<rt>shēn</rt></ruby><ruby>边<rt>biān</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>爱<rt>ài</rt></ruby><ruby>与<rt>yǔ</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>柔<rt>róu</rt></ruby>，<br/>
+<ruby>会<rt>huì</rt></ruby><ruby>像<rt>xiàng</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>条<rt>tiáo</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>毯<rt>tǎn</rt></ruby><ruby>子<rt>zi</rt></ruby>，<br/>
+<ruby>守<rt>shǒu</rt></ruby><ruby>护<rt>hù</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>进<rt>jìn</rt></ruby><ruby>入<rt>rù</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>梦<rt>mèng</rt></ruby><ruby>乡<rt>xiāng</rt></ruby>。
+      </div>
+<p class="moral-goodnight"><ruby>晚<rt>wǎn</rt></ruby><ruby>安<rt>ān</rt></ruby>，<ruby>宝<rt>bǎo</rt></ruby><ruby>贝<rt>bèi</rt></ruby><ruby>们<rt>men</rt></ruby> 🌙</p>
+</div>
+</div>
+</div>
 <!-- Navigation -->
 <div class="nav-bar">
-  <button class="nav-btn" id="prevBtn" onclick="prevPage()" disabled>‹</button>
-  <div class="page-indicator" id="pageIndicator"></div>
-  <button class="nav-btn" id="nextBtn" onclick="nextPage()">›</button>
+<button class="nav-btn" disabled="" id="prevBtn" onclick="prevPage()">‹</button>
+<div class="page-indicator" id="pageIndicator"></div>
+<button class="nav-btn" id="nextBtn" onclick="nextPage()">›</button>
 </div>
-
 <script>
   const pages = document.querySelectorAll('.page');
   const totalPages = pages.length;
