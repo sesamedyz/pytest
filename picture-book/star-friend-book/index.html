@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>小星星找朋友</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --sky-deep: #060a1f;
+  --sky-mid: #111c40;
+  --star-gold: #ffd97d;
+  --star-warm: #ffb74d;
+  --firefly-green: #c6ff7b;
+  --cloud-soft: #f0f0ff;
+  --text-soft: rgba(240, 244, 255, 0.92);
+  --text-dim: rgba(240, 244, 255, 0.6);
+}
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  background: linear-gradient(180deg, var(--sky-deep) 0%, var(--sky-mid) 40%, #1a1040 100%);
+  min-height: 100vh;
+  overflow: hidden;
+  color: var(--text-soft);
+}
+
+#bg-canvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+}
+
+#book {
+  position: relative; z-index: 1;
+  width: 100%; height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  perspective: 1500px;
+}
+
+.page {
+  position: absolute;
+  width: 90%; max-width: 700px;
+  height: 88vh; max-height: 800px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; transform: translateX(60px) scale(0.95);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  pointer-events: none;
+}
+.page.active { opacity: 1; transform: translateX(0) scale(1); pointer-events: auto; }
+.page.prev { transform: translateX(-60px) scale(0.95); opacity: 0; }
+
+.page-img-wrap {
+  width: 100%; max-height: 58vh;
+  border-radius: 20px; overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 60px rgba(255, 217, 125, 0.08);
+  position: relative; background: rgba(255,255,255,0.05);
+}
+.page-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.page-text { margin-top: 1.2rem; padding: 0 1rem; text-align: center; max-width: 600px; }
+.page-text p { font-size: 1.31rem; line-height: 2; letter-spacing: 0.5px; color: var(--text-soft); text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+.page-num { font-size: 1.38rem; color: var(--text-dim); margin-top: 0.8rem; letter-spacing: 2px; }
+
+.page-cover .page-img-wrap { max-height: 50vh; border-radius: 24px; }
+.page-cover .page-text h1 {
+  font-size: 2.75rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--star-gold), var(--star-warm), var(--firefly-green));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 0.5rem; letter-spacing: 4px;
+}
+.page-cover .page-text .subtitle { font-size: 1.38rem; color: var(--text-dim); letter-spacing: 6px; }
+
+.page-moral .page-img-wrap { display: none; }
+.page-moral .page-text { margin-top: 0; }
+
+.moral-box {
+  background: rgba(255, 217, 125, 0.08);
+  border: 1px solid rgba(255, 217, 125, 0.2);
+  border-radius: 16px; padding: 2rem 2.5rem; margin-top: 1rem;
+}
+.moral-box .moral-title { font-size: 1.38rem; color: var(--star-gold); margin-bottom: 1rem; letter-spacing: 2px; }
+.moral-box .moral-text { font-size: 1.25rem; line-height: 2.2; color: var(--text-soft); }
+.moral-emojis { font-size: 2.5rem; margin-top: 1.5rem; letter-spacing: 8px; }
+
+.back-to-list {
+  display: inline-block; margin-top: 1.5rem; padding: 0.6rem 1.8rem;
+  font-family: 'Ma Shan Zheng', serif; font-size: 1.25rem;
+  color: var(--star-gold); text-decoration: none;
+  border: 2px solid rgba(255, 217, 125, 0.3); border-radius: 30px;
+  background: rgba(10, 20, 40, 0.5);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s ease; letter-spacing: 0.1em;
+}
+.back-to-list:hover {
+  background: rgba(255, 217, 125, 0.15); border-color: var(--star-gold);
+  transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 217, 125, 0.3);
+}
+
+.nav {
+  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 1.5rem; z-index: 10;
+  background: rgba(10, 20, 40, 0.6); backdrop-filter: blur(12px);
+  padding: 0.6rem 1.5rem; border-radius: 40px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.nav button {
+  background: rgba(255, 217, 125, 0.15);
+  border: 1px solid rgba(255, 217, 125, 0.3);
+  color: var(--star-gold); width: 40px; height: 40px;
+  border-radius: 50%; font-size: 1.38rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
+}
+.nav button:hover { background: rgba(255, 217, 125, 0.3); transform: scale(1.1); }
+.nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+.nav-dots { display: flex; gap: 6px; }
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s; }
+.nav-dot.active { background: var(--star-gold); width: 24px; border-radius: 4px; }
+
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--star-gold), var(--star-warm));
+  z-index: 20; transition: width 0.5s ease; border-radius: 0 3px 3px 0;
+}
+
+/* Pinyin */
+ruby { ruby-align: center; }
+ruby rt { font-size: 0.58em; font-weight: 400; color: inherit; opacity: 0.7; letter-spacing: 0; line-height: 1; }
+.page-text p { line-height: 2.6; }
+.page-text p ruby rt { display: ruby-text; }
+.page-cover .page-text h1 { line-height: 1.6; }
+.page-cover .page-text h1 ruby rt { font-size: 0.48em; }
+.moral-text { line-height: 2.8; }
+.moral-text ruby rt { font-size: 0.55em; }
+.back-to-list ruby rt { font-size: 0.45em; }
+
+/* TTS */
+.tts-btn { pointer-events: auto; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; flex-shrink: 0; font-size: 1.15rem; }
+.tts-btn:hover { transform: scale(1.1); }
+.tts-btn.tts-active { animation: ttsPulse 1.5s ease-in-out infinite; }
+.tts-btn.tts-paused { opacity: 0.55; }
+@keyframes ttsPulse {
+  0%, 100% { box-shadow: 0 0 5px rgba(255, 217, 125, 0.3); }
+  50% { box-shadow: 0 0 18px rgba(255, 217, 125, 0.6); }
+}
+.tts-progress-wrap { position: fixed; bottom: 5rem; left: 0; width: 100%; height: 3px; background: rgba(255, 255, 255, 0.05); z-index: 99; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.tts-progress-wrap.tts-visible { opacity: 1; }
+.tts-progress-bar { height: 100%; width: 0%; background: var(--star-gold); transition: width 0.3s ease; border-radius: 0 2px 2px 0; box-shadow: 0 0 8px rgba(255, 217, 125, 0.5); }
+.tts-stop-btn { pointer-events: auto; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; flex-shrink: 0; font-size: 0.95rem; opacity: 0.65; }
+.tts-stop-btn:hover { transform: scale(1.1); opacity: 1; }
+.tts-progress-text { position: fixed; bottom: 72px; left: 50%; transform: translateX(-50%); font-size: 0.78rem; color: var(--star-gold); opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; text-shadow: 0 0 6px rgba(0,0,0,0.6); z-index: 99; letter-spacing: 0.05em; }
+.tts-progress-text.tts-visible { opacity: 0.85; }
+
+@media (max-width: 600px) {
+  .page { width: 94%; height: 90vh; }
+  .page-img-wrap { max-height: 45vh; border-radius: 14px; }
+  .page-text p { font-size: 0.95rem; line-height: 2.4; }
+  .page-cover .page-text h1 { font-size: 1.8rem; }
+  .moral-box { padding: 1.5rem; }
+  .moral-box .moral-text { font-size: 1.1rem; }
+  .nav { bottom: 1rem; gap: 1rem; padding: 0.5rem 1rem; }
+  ruby rt { font-size: 0.5em; }
+  .tts-btn { font-size: 1rem; }
+  .tts-stop-btn { font-size: 0.85rem; }
+  .tts-progress-wrap { bottom: 4.5rem; }
+  .tts-progress-text { bottom: 64px; font-size: 0.7rem; }
+}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+<div id="book">
+<!-- Cover -->
+<div class="page page-cover active" data-page="0">
+<div class="page-img-wrap"><img alt="封面" height="800" loading="eager" src="images/01_cover.webp" width="800"/></div>
+<div class="page-text">
+<h1><ruby>小<rt>xiǎo</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>找<rt>zhǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby></h1>
+<p class="subtitle"><ruby>一<rt>yī</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>关<rt>guān</rt></ruby><ruby>于<rt>yú</rt></ruby><ruby>陪<rt>péi</rt></ruby><ruby>伴<rt>bàn</rt></ruby><ruby>与<rt>yǔ</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>故<rt>gù</rt></ruby><ruby>事<rt>shì</rt></ruby></p>
+</div>
+</div>
+<!-- Page 1: 亮亮孤单 -->
+<div class="page" data-page="1">
+<div class="page-img-wrap"><img alt="亮亮孤单" height="800" loading="lazy" src="images/02_lonely.webp" width="800"/></div>
+<div class="page-text">
+<p><ruby>从<rt>cóng</rt></ruby><ruby>前<rt>qián</rt></ruby>，<ruby>在<rt>zài</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>高<rt>gāo</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>高<rt>gāo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>空<rt>kōng</rt></ruby><ruby>上<rt>shàng</rt></ruby>，<ruby>住<rt>zhù</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby>，<ruby>叫<rt>jiào</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby>。</p>
+<p><ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>每<rt>měi</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>准<rt>zhǔn</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>来<rt>lái</rt></ruby>，<ruby>可<rt>kě</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>他<rt>tā</rt></ruby><ruby>总<rt>zǒng</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>待<rt>dài</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>空<rt>kōng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>角<rt>jiǎo</rt></ruby><ruby>落<rt>luò</rt></ruby><ruby>里<rt>lǐ</rt></ruby>。<ruby>其<rt>qí</rt></ruby><ruby>他<rt>tā</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>三<rt>sān</rt></ruby><ruby>三<rt>sān</rt></ruby><ruby>两<rt>liǎng</rt></ruby><ruby>两<rt>liǎng</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>聚<rt>jù</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>说<rt>shuō</rt></ruby><ruby>悄<rt>qiāo</rt></ruby><ruby>悄<rt>qiāo</rt></ruby><ruby>话<rt>huà</rt></ruby>，<ruby>可<rt>kě</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>离<rt>lí</rt></ruby><ruby>它<rt>tā</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>太<rt>tài</rt></ruby><ruby>远<rt>yuǎn</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>总<rt>zǒng</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>听<rt>tīng</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>清<rt>qīng</rt></ruby><ruby>它<rt>tā</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>说<rt>shuō</rt></ruby><ruby>什<rt>shén</rt></ruby><ruby>么<rt>me</rt></ruby>。</p>
+<p>"<ruby>要<rt>yào</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>能<rt>néng</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>就<rt>jiù</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>了<rt>le</rt></ruby>。"<ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>每<rt>měi</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>心<rt>xīn</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>这<rt>zhè</rt></ruby><ruby>么<rt>me</rt></ruby><ruby>想<rt>xiǎng</rt></ruby>。</p>
+<div class="page-num">01</div>
+</div></div>
+<!-- Page 2: 遇见小闪 -->
+<div class="page" data-page="2">
+<div class="page-img-wrap"><img alt="遇见萤火虫" height="800" loading="lazy" src="images/03_firefly.webp" width="800"/></div>
+<div class="page-text">
+<p><ruby>有<rt>yǒu</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>上<rt>shàng</rt></ruby>，<ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>见<rt>jiàn</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>动<rt>dòng</rt></ruby>。<ruby>那<rt>nà</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>慢<rt>màn</rt></ruby><ruby>慢<rt>màn</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>空<rt>kōng</rt></ruby>。</p>
+<p>"<ruby>你<rt>nǐ</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>吗<rt>ma</rt></ruby>？"<ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>奇<rt>qí</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>问<rt>wèn</rt></ruby>。</p>
+<p>"<ruby>不<rt>bù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>呀<rt>ya</rt></ruby>，"<ruby>那<rt>nà</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>笑<rt>xiào</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>说<rt>shuō</rt></ruby>，"<ruby>我<rt>wǒ</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>萤<rt>yíng</rt></ruby><ruby>火<rt>huǒ</rt></ruby><ruby>虫<rt>chóng</rt></ruby>，<ruby>我<rt>wǒ</rt></ruby><ruby>叫<rt>jiào</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby>。<ruby>我<rt>wǒ</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>高<rt>gāo</rt></ruby><ruby>高<rt>gāo</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>想<rt>xiǎng</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>空<rt>kōng</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>什<rt>shén</rt></ruby><ruby>么<rt>me</rt></ruby><ruby>样<rt>yàng</rt></ruby><ruby>的<rt>de</rt></ruby>。"</p>
+<p><ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>可<rt>kě</rt></ruby><ruby>高<rt>gāo</rt></ruby><ruby>兴<rt>xīng</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>这<rt>zhè</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>第<rt>dì</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>次<rt>cì</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>这<rt>zhè</rt></ruby><ruby>么<rt>me</rt></ruby><ruby>高<rt>gāo</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>方<rt>fāng</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>找<rt>zhǎo</rt></ruby><ruby>他<rt>tā</rt></ruby><ruby>说<rt>shuō</rt></ruby><ruby>话<rt>huà</rt></ruby>。</p>
+<div class="page-num">02</div>
+</div></div>
+<!-- Page 3: 天空很大 -->
+<div class="page" data-page="3">
+<div class="page-img-wrap"><img alt="对话" height="800" loading="lazy" src="images/04_talking.webp" width="800"/></div>
+<div class="page-text">
+<p>"<ruby>天<rt>tiān</rt></ruby><ruby>空<rt>kōng</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>大<rt>dà</rt></ruby>，"<ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>说<rt>shuō</rt></ruby>，"<ruby>可<rt>kě</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>觉<rt>jué</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>孤<rt>gū</rt></ruby><ruby>单<rt>dān</rt></ruby>。"</p>
+<p><ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>停<rt>tíng</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>片<rt>piàn</rt></ruby><ruby>云<rt>yún</rt></ruby><ruby>上<rt>shàng</rt></ruby>，<ruby>抬<rt>tái</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>说<rt>shuō</rt></ruby>："<ruby>你<rt>nǐ</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>吗<rt>ma</rt></ruby>？<ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>每<rt>měi</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>睡<rt>shuì</rt></ruby><ruby>觉<rt>jué</rt></ruby><ruby>前<rt>qián</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>抬<rt>tái</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>找<rt>zhǎo</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>那<rt>nà</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby>。<ruby>他<rt>tā</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>指<rt>zhǐ</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>说<rt>shuō</rt></ruby>：'<ruby>看<rt>kàn</rt></ruby>，<ruby>那<rt>nà</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>呀<rt>ya</rt></ruby>！'"</p>
+<p>"<ruby>真<rt>zhēn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>吗<rt>ma</rt></ruby>？"<ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>惊<rt>jīng</rt></ruby><ruby>讶<rt>yà</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>睁<rt>zhēng</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>眼<rt>yǎn</rt></ruby><ruby>睛<rt>jīng</rt></ruby>，<ruby>他<rt>tā</rt></ruby><ruby>从<rt>cóng</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby>。</p>
+<div class="page-num">03</div>
+</div></div>
+<!-- Page 4: 温暖的真相 -->
+<div class="page" data-page="4">
+<div class="page-img-wrap"><img alt="温暖的真相" height="800" loading="lazy" src="images/05_truth.webp" width="800"/></div>
+<div class="page-text">
+<p>"<ruby>当<rt>dāng</rt></ruby><ruby>然<rt>rán</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>真<rt>zhēn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>啦<rt>la</rt></ruby>！"<ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>认<rt>rèn</rt></ruby><ruby>真<rt>zhēn</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>点<rt>diǎn</rt></ruby><ruby>头<rt>tóu</rt></ruby>，"<ruby>你<rt>nǐ</rt></ruby><ruby>每<rt>měi</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>准<rt>zhǔn</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>来<rt>lái</rt></ruby>，<ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>就<rt>jiù</rt></ruby><ruby>觉<rt>jué</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>安<rt>ān</rt></ruby><ruby>心<rt>xīn</rt></ruby>，<ruby>知<rt>zhī</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>该<rt>gāi</rt></ruby><ruby>睡<rt>shuì</rt></ruby><ruby>觉<rt>jué</rt></ruby><ruby>了<rt>le</rt></ruby>。<ruby>你<rt>nǐ</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>直<rt>zhí</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>陪<rt>péi</rt></ruby><ruby>伴<rt>bàn</rt></ruby><ruby>他<rt>tā</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>呢<rt>ne</rt></ruby>。"</p>
+<p><ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>听<rt>tīng</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>这<rt>zhè</rt></ruby><ruby>话<rt>huà</rt></ruby>，<ruby>心<rt>xīn</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby>。<ruby>原<rt>yuán</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>并<rt>bìng</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>人<rt>rén</rt></ruby>，<ruby>地<rt>dì</rt></ruby><ruby>面<rt>miàn</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>那<rt>nà</rt></ruby><ruby>么<rt>me</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby>。</p>
+<div class="page-num">04</div>
+</div></div>
+<!-- Page 5: 帮我说晚安 -->
+<div class="page" data-page="5">
+<div class="page-img-wrap"><img alt="帮我说晚安" height="800" loading="lazy" src="images/06_goodnight.webp" width="800"/></div>
+<div class="page-text">
+<p>"<ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby>，<ruby>你<rt>nǐ</rt></ruby><ruby>能<rt>néng</rt></ruby><ruby>帮<rt>bāng</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>做<rt>zuò</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>件<rt>jiàn</rt></ruby><ruby>事<rt>shì</rt></ruby><ruby>吗<rt>ma</rt></ruby>？"<ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>问<rt>wèn</rt></ruby><ruby>道<rt>dào</rt></ruby>。"<ruby>什<rt>shén</rt></ruby><ruby>么<rt>me</rt></ruby><ruby>事<rt>shì</rt></ruby><ruby>呀<rt>ya</rt></ruby>？"</p>
+<p>"<ruby>你<rt>nǐ</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>回<rt>huí</rt></ruby><ruby>去<rt>qù</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby>，<ruby>帮<rt>bāng</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>跟<rt>gēn</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>说<rt>shuō</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>声<rt>shēng</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>安<rt>ān</rt></ruby>，<ruby>好<rt>hǎo</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>好<rt>hǎo</rt></ruby>？"</p>
+<p><ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>笑<rt>xiào</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>光<rt>guāng</rt></ruby><ruby>芒<rt>máng</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>闪<rt>shǎn</rt></ruby>："<ruby>好<rt>hǎo</rt></ruby><ruby>呀<rt>ya</rt></ruby>！<ruby>我<rt>wǒ</rt></ruby><ruby>每<rt>měi</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>来<rt>lái</rt></ruby>，<ruby>每<rt>měi</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>帮<rt>bāng</rt></ruby><ruby>你<rt>nǐ</rt></ruby><ruby>带<rt>dài</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>句<rt>jù</rt></ruby><ruby>话<rt>huà</rt></ruby><ruby>下<rt>xià</rt></ruby><ruby>去<rt>qù</rt></ruby>。"</p>
+<div class="page-num">05</div>
+</div></div>
+<!-- Page 6: 温暖的陪伴 -->
+<div class="page" data-page="6">
+<div class="page-img-wrap"><img alt="温暖的陪伴" height="800" loading="lazy" src="images/07_companion.webp" width="800"/></div>
+<div class="page-text">
+<p><ruby>从<rt>cóng</rt></ruby><ruby>那<rt>nà</rt></ruby><ruby>以<rt>yǐ</rt></ruby><ruby>后<rt>hòu</rt></ruby>，<ruby>每<rt>měi</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>上<rt>shàng</rt></ruby>，<ruby>小<rt>xiǎo</rt></ruby><ruby>闪<rt>shǎn</rt></ruby><ruby>都<rt>dōu</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>从<rt>cóng</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>来<rt>lái</rt></ruby>，<ruby>给<rt>gěi</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>讲<rt>jiǎng</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>故<rt>gù</rt></ruby><ruby>事<rt>shì</rt></ruby>——<ruby>有<rt>yǒu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>今<rt>jīn</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>学<rt>xué</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>骑<rt>qí</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>行<rt>xíng</rt></ruby><ruby>车<rt>chē</rt></ruby>，<ruby>有<rt>yǒu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>今<rt>jīn</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>考<rt>kǎo</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>百<rt>bǎi</rt></ruby><ruby>分<rt>fēn</rt></ruby>，<ruby>有<rt>yǒu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>今<rt>jīn</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>帮<rt>bāng</rt></ruby><ruby>助<rt>zhù</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>同<rt>tóng</rt></ruby><ruby>学<rt>xué</rt></ruby>……</p>
+<p><ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>听<rt>tīng</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>这<rt>zhè</rt></ruby><ruby>些<rt>xiē</rt></ruby><ruby>故<rt>gù</rt></ruby><ruby>事<rt>shì</rt></ruby>，<ruby>觉<rt>jué</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>像<rt>xiàng</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>经<rt>jīng</rt></ruby><ruby>历<rt>lì</rt></ruby><ruby>了<rt>le</rt></ruby><ruby>这<rt>zhè</rt></ruby><ruby>些<rt>xiē</rt></ruby><ruby>开<rt>kāi</rt></ruby><ruby>心<rt>xīn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>事<rt>shì</rt></ruby>。<ruby>他<rt>tā</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>更<rt>gèng</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>劲<rt>jìn</rt></ruby><ruby>了<rt>le</rt></ruby>，<ruby>因<rt>yīn</rt></ruby><ruby>为<rt>wèi</rt></ruby><ruby>他<rt>tā</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>道<rt>dào</rt></ruby>，<ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>正<rt>zhèng</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>陪<rt>péi</rt></ruby><ruby>伴<rt>bàn</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>每<rt>měi</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>仰<rt>yǎng</rt></ruby><ruby>望<rt>wàng</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>空<rt>kōng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>孩<rt>hái</rt></ruby><ruby>子<rt>zi</rt></ruby>。</p>
+<p><ruby>而<rt>ér</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>呢<rt>ne</rt></ruby>，<ruby>每<rt>měi</rt></ruby><ruby>次<rt>cì</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>那<rt>nà</rt></ruby><ruby>颗<rt>kē</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>又<rt>yòu</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby>，<ruby>都<rt>dōu</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>露<rt>lù</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>微<rt>wēi</rt></ruby><ruby>笑<rt>xiào</rt></ruby>，<ruby>然<rt>rán</rt></ruby><ruby>后<rt>hòu</rt></ruby><ruby>安<rt>ān</rt></ruby><ruby>心<rt>xīn</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>闭<rt>bì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>眼<rt>yǎn</rt></ruby><ruby>睛<rt>jīng</rt></ruby>，<ruby>做<rt>zuò</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>梦<rt>mèng</rt></ruby>。</p>
+<div class="page-num">06</div>
+</div></div>
+<!-- Moral -->
+<div class="page page-moral" data-page="7">
+<div class="page-text">
+<div class="moral-box">
+<div class="moral-title">🌟 <ruby>小<rt>xiǎo</rt></ruby><ruby>寓<rt>yù</rt></ruby><ruby>意<rt>yì</rt></ruby></div>
+<div class="moral-text">
+<ruby>有<rt>yǒu</rt></ruby><ruby>时<rt>shí</rt></ruby><ruby>候<rt>hòu</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>觉<rt>jué</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>孤<rt>gū</rt></ruby><ruby>单<rt>dān</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>但<rt>dàn</rt></ruby><ruby>其<rt>qí</rt></ruby><ruby>实<rt>shí</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>直<rt>zhí</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>默<rt>mò</rt></ruby><ruby>默<rt>mò</rt></ruby><ruby>关<rt>guān</rt></ruby><ruby>注<rt>zhù</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>们<rt>men</rt></ruby>、<ruby>陪<rt>péi</rt></ruby><ruby>伴<rt>bàn</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>们<rt>men</rt></ruby>。<ruby>就<rt>jiù</rt></ruby><ruby>像<rt>xiàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>样<rt>yàng</rt></ruby>，<ruby>我<rt>wǒ</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>善<rt>shàn</rt></ruby><ruby>意<rt>yì</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>努<rt>nǔ</rt></ruby><ruby>力<rt>lì</rt></ruby>，<ruby>也<rt>yě</rt></ruby><ruby>许<rt>xǔ</rt></ruby><ruby>正<rt>zhèng</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>着<rt>zhe</rt></ruby><ruby>某<rt>mǒu</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>们<rt>men</rt></ruby><ruby>看<rt>kàn</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>见<rt>jiàn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>人<rt>rén</rt></ruby>。<ruby>只<rt>zhǐ</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>坚<rt>jiān</rt></ruby><ruby>持<rt>chí</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>光<rt>guāng</rt></ruby>，<ruby>就<rt>jiù</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>定<rt>dìng</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>照<rt>zhào</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>方<rt>fāng</rt></ruby>。✨
+<br/><br/>
+<ruby>晚<rt>wǎn</rt></ruby><ruby>安<rt>ān</rt></ruby>，<ruby>小<rt>xiǎo</rt></ruby><ruby>宝<rt>bǎo</rt></ruby><ruby>贝<rt>bèi</rt></ruby>，<ruby>今<rt>jīn</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>做<rt>zuò</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>甜<rt>tián</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>梦<rt>mèng</rt></ruby><ruby>吧<rt>ba</rt></ruby> 🌙💫
+</div>
+<div class="moral-emojis">⭐ ✨ 🪲 🌙 💫</div>
+<a class="back-to-list" href="../index.html"><ruby>返<rt>fǎn</rt></ruby><ruby>回<rt>huí</rt></ruby><ruby>绘<rt>huì</rt></ruby><ruby>本<rt>běn</rt></ruby><ruby>列<rt>liè</rt></ruby><ruby>表<rt>biǎo</rt></ruby> 📚</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Navigation -->
+<div class="nav">
+<button id="prevBtn" onclick="changePage(-1)">‹</button>
+<div class="nav-dots" id="navDots"></div>
+<button class="tts-btn" id="ttsBtn" title="朗读全书">🔊</button>
+<button class="tts-stop-btn" id="ttsStopBtn" style="display:none;" title="停止朗读">⏹</button>
+<button id="nextBtn" onclick="changePage(1)">›</button>
+</div>
+<script>
+// ===== Page Navigation =====
+let currentPage = 0;
+const pages = document.querySelectorAll('.page');
+const totalPages = pages.length;
+const navDots = document.getElementById('navDots');
+const progressBar = document.getElementById('progressBar');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+for (let i = 0; i < totalPages; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goToPage(i);
+  navDots.appendChild(dot);
+}
+
+function updateUI() {
+  pages.forEach((p, i) => {
+    p.classList.remove('active', 'prev');
+    if (i === currentPage) p.classList.add('active');
+    else if (i < currentPage) p.classList.add('prev');
+  });
+  document.querySelectorAll('.nav-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === currentPage);
+  });
+  progressBar.style.width = ((currentPage + 1) / totalPages * 100) + '%';
+  prevBtn.disabled = currentPage === 0;
+  nextBtn.disabled = currentPage === totalPages - 1;
+}
+
+function goToPage(idx) {
+  currentPage = Math.max(0, Math.min(totalPages - 1, idx));
+  updateUI();
+}
+
+function changePage(dir) { goToPage(currentPage + dir); }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changePage(-1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') changePage(1);
+});
+
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', (e) => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) changePage(diff > 0 ? 1 : -1);
+});
+
+// ===== Animated Background =====
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+const stars = [];
+for (let i = 0; i < 80; i++) {
+  stars.push({
+    x: Math.random() * W, y: Math.random() * H * 0.7,
+    r: Math.random() * 1.5 + 0.3,
+    twinkle: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.02 + 0.01,
+    color: ['#ffd97d', '#a8c8ff', '#ffb3ba', '#ffffff', '#c6ff7b'][Math.floor(Math.random() * 5)]
+  });
+}
+
+// Fireflies
+const fireflies = [];
+for (let i = 0; i < 8; i++) {
+  fireflies.push({
+    x: Math.random() * W, y: H * 0.5 + Math.random() * H * 0.5,
+    r: Math.random() * 2 + 1,
+    phase: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.03 + 0.01,
+    vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4
+  });
+}
+
+let shootingStar = null;
+let shootingTimer = 0;
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+
+  stars.forEach(s => {
+    s.twinkle += s.speed;
+    const opacity = 0.3 + Math.abs(Math.sin(s.twinkle)) * 0.7;
+    ctx.save();
+    ctx.globalAlpha = opacity;
+    ctx.fillStyle = s.color;
+    ctx.shadowBlur = 8; ctx.shadowColor = s.color;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+
+  fireflies.forEach(f => {
+    f.phase += f.speed;
+    f.x += Math.sin(f.phase * 0.7) * f.vx;
+    f.y += Math.cos(f.phase * 0.7) * f.vy;
+    if (f.x < 0) f.x = W; if (f.x > W) f.x = 0;
+    if (f.y < H * 0.3) f.y = H * 0.3; if (f.y > H) f.y = H * 0.3;
+    const opacity = 0.3 + Math.abs(Math.sin(f.phase)) * 0.7;
+    ctx.save();
+    ctx.globalAlpha = opacity * 0.7;
+    ctx.fillStyle = '#c6ff7b';
+    ctx.shadowBlur = 14; ctx.shadowColor = '#c6ff7b';
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+
+  shootingTimer++;
+  if (shootingTimer > 400 && !shootingStar && Math.random() < 0.008) {
+    shootingStar = {
+      x: Math.random() * W * 0.6, y: Math.random() * H * 0.3,
+      len: 0, maxLen: 80 + Math.random() * 60,
+      angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3
+    };
+  }
+  if (shootingStar) {
+    shootingStar.len += 6;
+    const sx = shootingStar.x + Math.cos(shootingStar.angle) * shootingStar.len;
+    const sy = shootingStar.y + Math.sin(shootingStar.angle) * shootingStar.len;
+    const grad = ctx.createLinearGradient(
+      shootingStar.x + Math.cos(shootingStar.angle) * Math.max(0, shootingStar.len - shootingStar.maxLen),
+      shootingStar.y + Math.sin(shootingStar.angle) * Math.max(0, shootingStar.len - shootingStar.maxLen),
+      sx, sy
+    );
+    grad.addColorStop(0, 'rgba(255, 217, 125, 0)');
+    grad.addColorStop(1, 'rgba(255, 217, 125, 0.8)');
+    ctx.strokeStyle = grad; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(shootingStar.x + Math.cos(shootingStar.angle) * Math.max(0, shootingStar.len - shootingStar.maxLen),
+      shootingStar.y + Math.sin(shootingStar.angle) * Math.max(0, shootingStar.len - shootingStar.maxLen));
+    ctx.lineTo(sx, sy);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255, 217, 125, 0.9)';
+    ctx.shadowBlur = 10; ctx.shadowColor = '#ffd97d';
+    ctx.beginPath(); ctx.arc(sx, sy, 1.5, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+    if (shootingStar.len > shootingStar.maxLen + 100) { shootingStar = null; shootingTimer = 0; }
+  }
+
+  requestAnimationFrame(animate);
+}
+animate();
+updateUI();
+
+// ===== TTS =====
+(function() {
+  if (!('speechSynthesis' in window)) {
+    var btn = document.getElementById('ttsBtn');
+    if (btn) {
+      btn.style.opacity = '0.4'; btn.title = '浏览器不支持语音朗读';
+      btn.addEventListener('click', function() { alert('您的浏览器不支持语音朗读功能，请使用 Chrome 或 Edge 浏览器打开。'); });
+    }
+    return;
+  }
+  var ttsFlat = [], ttsCurrentIdx = 0, ttsSpeaking = false, ttsPaused = false, ttsKeepAlive = null, ttsCurrentUtterance = null, ttsAutoNav = false, ttsVoice = null, ttsRetryCount = 0;
+  var ttsBtn = document.getElementById('ttsBtn'), ttsStopBtn = document.getElementById('ttsStopBtn'), ttsProgressWrap = document.getElementById('ttsProgressWrap'), ttsProgressBar = document.getElementById('ttsProgressBar'), ttsProgressText = document.getElementById('ttsProgressText');
+
+  function showToast(msg, duration) {
+    duration = duration || 3000;
+    var old = document.getElementById('ttsToast'); if (old) old.remove();
+    var toast = document.createElement('div');
+    toast.id = 'ttsToast'; toast.textContent = msg;
+    toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(20,20,40,0.92);color:#fff;padding:18px 32px;border-radius:14px;font-size:1.1rem;z-index:99999;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.4);max-width:80vw;text-align:center;line-height:1.6;';
+    document.body.appendChild(toast);
+    setTimeout(function() { toast.style.transition = 'opacity 0.4s'; toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 400); }, duration);
+  }
+
+  function extractPageText(pageEl) {
+    if (!pageEl) return '';
+    var clone = pageEl.cloneNode(true);
+    var rtEls = clone.querySelectorAll('rt');
+    for (var i = 0; i < rtEls.length; i++) { var rt = rtEls[i]; if (rt.parentNode) rt.parentNode.removeChild(rt); }
+    var rubyEls = clone.querySelectorAll('ruby');
+    for (var i = 0; i < rubyEls.length; i++) {
+      var ruby = rubyEls[i];
+      while (ruby.firstChild) { ruby.parentNode.insertBefore(ruby.firstChild, ruby); }
+      ruby.parentNode.removeChild(ruby);
+    }
+    var backLinks = clone.querySelectorAll('.back-to-list');
+    for (var i = 0; i < backLinks.length; i++) { backLinks[i].parentNode.removeChild(backLinks[i]); }
+    var pageNums = clone.querySelectorAll('.page-num');
+    for (var i = 0; i < pageNums.length; i++) { pageNums[i].parentNode.removeChild(pageNums[i]); }
+    var pageText = clone.querySelector('.page-text');
+    if (pageText) {
+      var moralTitle = pageText.querySelector('.moral-title'); if (moralTitle) pageText.removeChild(moralTitle);
+      var moralEmojis = pageText.querySelector('.moral-emojis'); if (moralEmojis) pageText.removeChild(moralEmojis);
+      return pageText.textContent.trim();
+    }
+    return '';
+  }
+
+  function splitIntoSentences(text) {
+    return text.split(/[\u3002\uFF01\uFF1F\uFF1B\n]+/).map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+  }
+
+  function buildBookContent() {
+    ttsFlat = [];
+    var allPages = document.querySelectorAll('.page');
+    allPages.forEach(function(pageEl, idx) {
+      var text = extractPageText(pageEl);
+      if (text) {
+        var sentences = splitIntoSentences(text);
+        sentences.forEach(function(s) { ttsFlat.push({ pageIdx: idx, text: s }); });
+      }
+    });
+    console.log('[TTS] Built content:', ttsFlat.length, 'sentences');
+  }
+
+  function selectVoice() {
+    var voices = window.speechSynthesis.getVoices();
+    var zhVoices = voices.filter(function(v) { return v.lang && v.lang.toLowerCase().startsWith('zh'); });
+    if (zhVoices.length === 0) { return voices.length > 0 ? voices[0] : null; }
+    var femaleNames = ['xiaoxiao', 'yaoyao', 'huihui', 'xiaoyi', 'tingting', 'ting-ting', 'mei-jia', 'meijia', 'sin-ji', 'female'];
+    for (var i = 0; i < femaleNames.length; i++) {
+      var match = zhVoices.find(function(v) { return v.name.toLowerCase().indexOf(femaleNames[i].toLowerCase()) >= 0; });
+      if (match) { console.log('[TTS] Voice:', match.name); return match; }
+    }
+    var nonMale = zhVoices.find(function(v) { var n = v.name.toLowerCase(); return n.indexOf('male') < 0 && n.indexOf('kangkang') < 0 && n.indexOf('yunxi') < 0; });
+    if (nonMale) return nonMale;
+    return zhVoices[0];
+  }
+
+  function updateButton() {
+    if (!ttsBtn) return;
+    if (ttsSpeaking && !ttsPaused) {
+      ttsBtn.textContent = '\u23F8'; ttsBtn.classList.add('tts-active'); ttsBtn.classList.remove('tts-paused'); ttsBtn.title = '\u6682\u505C\u6717\u8BFB';
+      if (ttsStopBtn) ttsStopBtn.style.display = '';
+    } else if (ttsSpeaking && ttsPaused) {
+      ttsBtn.textContent = '\u25B6'; ttsBtn.classList.add('tts-paused'); ttsBtn.classList.remove('tts-active'); ttsBtn.title = '\u7EE7\u7EED\u6717\u8BFB';
+      if (ttsStopBtn) ttsStopBtn.style.display = '';
+    } else {
+      ttsBtn.textContent = '\uD83D\uDD0A'; ttsBtn.classList.remove('tts-active', 'tts-paused'); ttsBtn.title = '\u6717\u8BFB\u5168\u4E66';
+      if (ttsStopBtn) ttsStopBtn.style.display = 'none';
+    }
+  }
+
+  function updateProgress() {
+    if (!ttsProgressWrap || !ttsProgressBar) return;
+    if (!ttsSpeaking) {
+      ttsProgressWrap.classList.remove('tts-visible'); ttsProgressBar.style.width = '0%';
+      if (ttsProgressText) { ttsProgressText.classList.remove('tts-visible'); ttsProgressText.textContent = ''; }
+      return;
+    }
+    ttsProgressWrap.classList.add('tts-visible');
+    var pct = ttsFlat.length > 0 ? (ttsCurrentIdx / ttsFlat.length) * 100 : 0;
+    ttsProgressBar.style.width = pct + '%';
+    if (ttsProgressText) {
+      var entry = ttsFlat[Math.min(ttsCurrentIdx, ttsFlat.length - 1)];
+      if (entry) { var allPages = document.querySelectorAll('.page'); ttsProgressText.textContent = '\u7B2C ' + (entry.pageIdx + 1) + ' / ' + allPages.length + ' \u9875'; ttsProgressText.classList.add('tts-visible'); }
+    }
+  }
+
+  function navigateToPage(pageIdx) {
+    if (typeof goToPage === 'function') { ttsAutoNav = true; goToPage(pageIdx); setTimeout(function() { ttsAutoNav = false; }, 500); }
+  }
+
+  function stopTTS() {
+    window.speechSynthesis.cancel(); ttsSpeaking = false; ttsPaused = false; ttsCurrentIdx = 0;
+    if (ttsCurrentUtterance) { ttsCurrentUtterance.onend = null; ttsCurrentUtterance.onerror = null; ttsCurrentUtterance = null; }
+    if (ttsKeepAlive) { clearInterval(ttsKeepAlive); ttsKeepAlive = null; }
+    updateButton(); updateProgress();
+  }
+
+  function speakNext() {
+    if (!ttsSpeaking || ttsPaused) return;
+    if (ttsCurrentIdx >= ttsFlat.length) { ttsSpeaking = false; if (ttsKeepAlive) { clearInterval(ttsKeepAlive); ttsKeepAlive = null; } updateButton(); updateProgress(); showToast('\u6545\u4E8B\u8BB2\u5B8C\u4E86\uFF01', 2500); return; }
+    var entry = ttsFlat[ttsCurrentIdx];
+    if (typeof currentPage !== 'undefined' && entry.pageIdx !== currentPage) { navigateToPage(entry.pageIdx); }
+    var utterance = new SpeechSynthesisUtterance(entry.text);
+    utterance.lang = 'zh-CN'; utterance.rate = 0.85; utterance.pitch = 1.15; utterance.volume = 1.0;
+    if (ttsVoice) utterance.voice = ttsVoice;
+    utterance.onstart = function() { ttsRetryCount = 0; updateProgress(); };
+    utterance.onend = function() { if (!ttsSpeaking) return; ttsCurrentIdx++; updateProgress(); var next = ttsFlat[Math.min(ttsCurrentIdx, ttsFlat.length - 1)]; var cur = ttsFlat[ttsCurrentIdx - 1]; var delay = (next && cur && next.pageIdx !== cur.pageIdx) ? 900 : 350; setTimeout(speakNext, delay); };
+    utterance.onerror = function(e) { if (!ttsSpeaking) return; if (e.error === 'interrupted' || e.error === 'canceled') return; ttsRetryCount++; if (ttsRetryCount > 3) { showToast('\u6717\u8BFB\u51FA\u9519\uFF0C\u8BF7\u5237\u65B0\u91CD\u8BD5', 3000); stopTTS(); return; } ttsCurrentIdx++; setTimeout(speakNext, 300); };
+    ttsCurrentUtterance = utterance;
+    try { window.speechSynthesis.cancel(); setTimeout(function() { if (ttsSpeaking && !ttsPaused) window.speechSynthesis.speak(utterance); }, 50); } catch (err) { showToast('\u6717\u8BFB\u5F02\u5E38\uFF0C\u8BF7\u5237\u65B0\u9875\u9762', 3000); stopTTS(); }
+  }
+
+  function toggleTTS() {
+    if (ttsSpeaking && !ttsPaused) { window.speechSynthesis.pause(); ttsPaused = true; updateButton(); return; }
+    if (ttsSpeaking && ttsPaused) { window.speechSynthesis.resume(); ttsPaused = false; updateButton(); return; }
+    buildBookContent();
+    if (ttsFlat.length === 0) { showToast('\u6CA1\u6709\u627E\u5230\u53EF\u6717\u8BFB\u7684\u6587\u5B57', 2500); return; }
+    if (!ttsVoice) ttsVoice = selectVoice();
+    if (!ttsVoice) {
+      var voices = window.speechSynthesis.getVoices();
+      if (voices.length === 0) { var dummy = new SpeechSynthesisUtterance(' '); dummy.volume = 0; window.speechSynthesis.speak(dummy); window.speechSynthesis.cancel(); setTimeout(function() { ttsVoice = selectVoice(); if (!ttsVoice) { showToast('\u672A\u627E\u5230\u8BED\u97F3\u5F15\u64CE', 4000); return; } actuallyStart(); }, 500); return; }
+    }
+    actuallyStart();
+  }
+
+  function actuallyStart() {
+    var startPage = (typeof currentPage !== 'undefined') ? currentPage : 0;
+    var startIdx = 0;
+    for (var i = 0; i < ttsFlat.length; i++) { if (ttsFlat[i].pageIdx >= startPage) { startIdx = i; break; } }
+    ttsCurrentIdx = startIdx; ttsSpeaking = true; ttsPaused = false; ttsRetryCount = 0;
+    ttsKeepAlive = setInterval(function() { if (ttsSpeaking && !ttsPaused && window.speechSynthesis.speaking) { window.speechSynthesis.pause(); window.speechSynthesis.resume(); } }, 10000);
+    speakNext(); updateButton(); updateProgress();
+  }
+
+  if (ttsBtn) ttsBtn.addEventListener('click', toggleTTS);
+  if (ttsStopBtn) ttsStopBtn.addEventListener('click', stopTTS);
+
+  var pageObserver = new MutationObserver(function(mutations) {
+    if (ttsAutoNav) return;
+    for (var i = 0; i < mutations.length; i++) {
+      if (mutations[i].attributeName === 'class' && mutations[i].target.classList.contains('active')) { if (ttsSpeaking) { console.log('[TTS] Manual nav, stopping'); stopTTS(); } break; }
+    }
+  });
+  document.querySelectorAll('.page').forEach(function(page) { pageObserver.observe(page, { attributes: true, attributeFilter: ['class'] }); });
+  window.addEventListener('beforeunload', function() { if (window.speechSynthesis) window.speechSynthesis.cancel(); });
+
+  function initVoices() {
+    var voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0 && !ttsVoice) ttsVoice = selectVoice();
+    return voices.length;
+  }
+  initVoices();
+  if ('onvoiceschanged' in window.speechSynthesis) window.speechSynthesis.onvoiceschanged = function() { initVoices(); };
+  setTimeout(function() { if (!ttsVoice) initVoices(); }, 300);
+  setTimeout(function() { if (!ttsVoice) initVoices(); }, 800);
+  setTimeout(function() { if (!ttsVoice) initVoices(); }, 2000);
+  console.log('[TTS] Module initialized');
+})();
+</script>
+<div class="tts-progress-wrap" id="ttsProgressWrap"><div class="tts-progress-bar" id="ttsProgressBar"></div></div>
+<div class="tts-progress-text" id="ttsProgressText"></div>
+</body>
+</html>

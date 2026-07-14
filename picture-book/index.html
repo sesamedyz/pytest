@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>童心绘本馆</title>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&amp;family=ZCOOL+KuaiLe&amp;family=Noto+Serif+SC:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #0d1b3e;
+  --bg-mid: #1a2f5c;
+  --bg-soft: #243d6e;
+  --gold: #ffd97d;
+  --gold-warm: #ff9d4d;
+  --moon-silver: #c4d8f0;
+  --text-soft: #e8f0ff;
+  --text-dim: #8ea5cc;
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --card-border: rgba(255, 217, 125, 0.2);
+}
+
+body {
+  font-family: 'Noto Serif SC', serif;
+  background: linear-gradient(160deg, var(--bg-deep) 0%, var(--bg-mid) 50%, var(--bg-soft) 100%);
+  color: var(--text-soft);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Starfield background */
+.stars {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.star {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle 3s infinite ease-in-out;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 3rem 1.5rem 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+.header-emojis {
+  font-size: 2.5rem;
+  letter-spacing: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.header h1 {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  background: linear-gradient(135deg, var(--gold), var(--gold-warm), #ffb3ba);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+.header p {
+  font-family: 'ZCOOL KuaiLe', serif;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+}
+
+/* Book grid */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.book-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-decoration: none;
+  display: block;
+}
+.book-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--gold);
+  box-shadow: 0 12px 40px rgba(255, 217, 125, 0.2), 0 0 30px rgba(255, 217, 125, 0.1);
+}
+.book-card:active {
+  transform: translateY(-2px) scale(1.01);
+}
+
+.book-cover {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
+}
+.book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.book-card:hover .book-cover img {
+  transform: scale(1.08);
+}
+.book-cover::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(transparent, rgba(13, 27, 62, 0.8));
+  pointer-events: none;
+}
+
+.book-info {
+  padding: 1.2rem 1.2rem 1.5rem;
+  text-align: center;
+}
+.book-info h2 {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: 1.5rem;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.08em;
+}
+.book-info p {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .book-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1rem 1rem 3rem;
+  }
+  .book-info h2 { font-size: 1.15rem; }
+  .book-info p { font-size: 0.8rem; }
+  .header { padding: 2rem 1rem 1rem; }
+}
+@media (max-width: 380px) {
+  .book-grid { grid-template-columns: 1fr; }
+}
+
+/* Pinyin ruby styling */
+ruby {
+  ruby-align: center;
+  ruby-position: over;
+}
+rt {
+  font-size: 0.5em;
+  color: rgba(255, 217, 125, 0.7);
+  font-family: 'Noto Serif SC', serif;
+  font-weight: normal;
+  line-height: 1.2;
+}
+.header h1 rt {
+  font-size: 0.35em;
+  color: rgba(255, 255, 255, 0.6);
+}
+.book-info h2 rt {
+  font-size: 0.42em;
+  color: rgba(196, 216, 240, 0.65);
+}
+.footer rt {
+  font-size: 0.48em;
+}
+@media (max-width: 600px) {
+  rt { font-size: 0.45em; }
+  .book-info h2 rt { font-size: 0.38em; }
+}
+</style>
+</head>
+<body>
+<!-- Stars -->
+<div class="stars" id="stars"></div>
+<!-- Header -->
+<div class="header">
+<div class="header-emojis">🌙 ⭐ 🌟 🏮 ☁️ 🐻 🐰 ✨ 🪲 🐟</div>
+<h1><ruby>童<rt>tóng</rt></ruby><ruby>心<rt>xīn</rt></ruby><ruby>绘<rt>huì</rt></ruby><ruby>本<rt>běn</rt></ruby><ruby>馆<rt>guǎn</rt></ruby></h1>
+<p><ruby>精<rt>jīng</rt></ruby><ruby>选<rt>xuǎn</rt></ruby><ruby>原<rt>yuán</rt></ruby><ruby>创<rt>chuàng</rt></ruby><ruby>儿<rt>ér</rt></ruby><ruby>童<rt>tóng</rt></ruby><ruby>绘<rt>huì</rt></ruby><ruby>本<rt>běn</rt></ruby> · <ruby>陪<rt>péi</rt></ruby><ruby>伴<rt>bàn</rt></ruby><ruby>每<rt>měi</rt></ruby><ruby>个<rt>gè</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>夜<rt>yè</rt></ruby><ruby>晚<rt>wǎn</rt></ruby></p>
+</div>
+<!-- Book Grid -->
+<div class="book-grid">
+<a class="book-card" href="moonAndStars/index.html">
+<div class="book-cover"><img alt="月亮船和小星星" loading="lazy" src="moonAndStars/images/01_cover.webp"/></div>
+<div class="book-info">
+<h2><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>船<rt>chuán</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby></h2>
+<p><ruby>陪<rt>péi</rt></ruby><ruby>伴<rt>bàn</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby></p>
+</div>
+</a>
+<a class="book-card" href="hedgehog-book/index.html">
+<div class="book-cover"><img alt="小刺猬的晚安毯" loading="lazy" src="hedgehog-book/images/01_cover.webp"/></div>
+<div class="book-info">
+<h2><ruby>小<rt>xiǎo</rt></ruby><ruby>刺<rt>cì</rt></ruby><ruby>猬<rt>wèi</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>晚<rt>wǎn</rt></ruby><ruby>安<rt>ān</rt></ruby><ruby>毯<rt>tǎn</rt></ruby></h2>
+<p><ruby>爱<rt>ài</rt></ruby><ruby>与<rt>yǔ</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>柔<rt>róu</rt></ruby><ruby>守<rt>shǒu</rt></ruby><ruby>护<rt>hù</rt></ruby><ruby>梦<rt>mèng</rt></ruby><ruby>乡<rt>xiāng</rt></ruby></p>
+</div>
+</a>
+<a class="book-card" href="lantern-book/index.html">
+<div class="book-cover"><img alt="亮亮的小灯笼" loading="lazy" src="lantern-book/images/01_cover.webp"/></div>
+<div class="book-info">
+<h2><ruby>亮<rt>liàng</rt></ruby><ruby>亮<rt>liàng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>灯<rt>dēng</rt></ruby><ruby>笼<rt>lóng</rt></ruby></h2>
+<p><ruby>勇<rt>yǒng</rt></ruby><ruby>敢<rt>gǎn</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>出<rt>chū</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>己<rt>jǐ</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby></p>
+</div>
+</a>
+<a class="book-card" href="cloud-boat-book/index.html">
+<div class="book-cover"><img alt="云朵小船" loading="lazy" src="cloud-boat-book/images/01_cover.webp"/></div>
+<div class="book-info">
+<h2><ruby>云<rt>yún</rt></ruby><ruby>朵<rt>duǒ</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>船<rt>chuán</rt></ruby></h2>
+<p><ruby>勇<rt>yǒng</rt></ruby><ruby>敢<rt>gǎn</rt></ruby><ruby>探<rt>tàn</rt></ruby><ruby>索<rt>suǒ</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>辰<rt>chén</rt></ruby><ruby>大<rt>dà</rt></ruby><ruby>海<rt>hǎi</rt></ruby></p>
+</div>
+</a>
+<a class="book-card" href="bear-birthday-book/index.html">
+<div class="book-cover"><img alt="小熊的生日派对" loading="lazy" src="bear-birthday-book/images/01_cover.webp"/></div>
+<div class="book-info">
+<h2><ruby>小<rt>xiǎo</rt></ruby><ruby>熊<rt>xióng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>生<rt>shēng</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>派<rt>pài</rt></ruby><ruby>对<rt>duì</rt></ruby></h2>
+<p><ruby>分<rt>fēn</rt></ruby><ruby>享<rt>xiǎng</rt></ruby><ruby>让<rt>ràng</rt></ruby><ruby>快<rt>kuài</rt></ruby><ruby>乐<rt>lè</rt></ruby><ruby>加<rt>jiā</rt></ruby><ruby>倍<rt>bèi</rt></ruby></p>
+</div>
+</a>
+<a class="book-card" href="moon-rabbit-book/index.html">
+<div class="book-cover"><img alt="小兔子找月亮" loading="lazy" src="moon-rabbit-book/images/01_cover.webp"/></div>
+<div class="book-info">
+<h2><ruby>小<rt>xiǎo</rt></ruby><ruby>兔<rt>tù</rt></ruby><ruby>子<rt>zi</rt></ruby><ruby>找<rt>zhǎo</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>亮<rt>liàng</rt></ruby></h2>
+<p><ruby>坚<rt>jiān</rt></ruby><ruby>持<rt>chí</rt></ruby><ruby>就<rt>jiù</rt></ruby><ruby>能<rt>néng</rt></ruby><ruby>找<rt>zhǎo</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>光<rt>guāng</rt></ruby><ruby>芒<rt>máng</rt></ruby></p>
+</div>
+</a>
+<a class="book-card" href="star-friend-book/index.html">
+<div class="book-cover"><img alt="小星星找朋友" loading="lazy" src="star-friend-book/images/01_cover.webp"/></div>
+<div class="book-info">
+<h2><ruby>小<rt>xiǎo</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>星<rt>xīng</rt></ruby><ruby>找<rt>zhǎo</rt></ruby><ruby>朋<rt>péng</rt></ruby><ruby>友<rt>yǒu</rt></ruby></h2>
+<p><ruby>陪<rt>péi</rt></ruby><ruby>伴<rt>bàn</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>最<rt>zuì</rt></ruby><ruby>温<rt>wēn</rt></ruby><ruby>暖<rt>nuǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>光<rt>guāng</rt></ruby></p>
+</div>
+</a>
+<a class="book-card" href="river-fish-book/index.html">
+<div class="book-cover"><img alt="小河与勇敢的小鱼" loading="lazy" src="river-fish-book/images/01_cover.webp"/></div>
+<div class="book-info">
+<h2><ruby>小<rt>xiǎo</rt></ruby><ruby>河<rt>hé</rt></ruby><ruby>与<rt>yǔ</rt></ruby><ruby>勇<rt>yǒng</rt></ruby><ruby>敢<rt>gǎn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>小<rt>xiǎo</rt></ruby><ruby>鱼<rt>yú</rt></ruby></h2>
+<p><ruby>勇<rt>yǒng</rt></ruby><ruby>敢<rt>gǎn</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>害<rt>hài</rt></ruby><ruby>怕<rt>pà</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>往<rt>wǎng</rt></ruby><ruby>前<rt>qián</rt></ruby><ruby>走<rt>zǒu</rt></ruby></p>
+</div>
+</a>
+</div>
+<!-- Footer -->
+<div class="footer">🌙 <ruby>晚<rt>wǎn</rt></ruby><ruby>安<rt>ān</rt></ruby>，<ruby>好<rt>hǎo</rt></ruby><ruby>梦<rt>mèng</rt></ruby> 🌙</div>
+<script>
+// Generate twinkling stars
+const starsContainer = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const star = document.createElement('div');
+  star.className = 'star';
+  star.style.left = Math.random() * 100 + '%';
+  star.style.top = Math.random() * 100 + '%';
+  star.style.animationDelay = Math.random() * 3 + 's';
+  star.style.animationDuration = (2 + Math.random() * 3) + 's';
+  if (Math.random() > 0.7) {
+    star.style.width = '3px';
+    star.style.height = '3px';
+  }
+  starsContainer.appendChild(star);
+}
+</script>
+</body>
+</html>
